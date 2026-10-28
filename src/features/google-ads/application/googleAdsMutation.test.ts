@@ -1,6 +1,7 @@
 import { expect, test } from 'bun:test';
 
 import { executeApprovedGoogleAdsMutationAsync } from './executeApprovedGoogleAdsMutationAsync.js';
+import { reconcileApprovedGoogleAdsMutationAsync } from './executeApprovedGoogleAdsMutationAsync.js';
 import { prepareGoogleAdsMutationAsync } from './prepareGoogleAdsMutationAsync.js';
 
 const mutation = {
@@ -65,7 +66,7 @@ test('rejects stale proposals before approval or mutation', async () => {
 function executeWithStaleStateAsync(
   proposal: Awaited<ReturnType<typeof prepareGoogleAdsMutationAsync>>,
   calls: string[],
-): Promise<void> {
+): Promise<unknown> {
   return executeApprovedGoogleAdsMutationAsync({
     approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
     approvals: {
@@ -93,8 +94,8 @@ function executeWithStaleStateAsync(
   });
 }
 
-/*** Fail a successful transport write when its re-read value is not the approved value. */
-test('rejects a wrong post-write value and records an indeterminate outcome', async () => {
+/*** Return a reconcilable indeterminate result when a post-write read proves neither outcome. */
+test('records an indeterminate outcome for a wrong post-write value', async () => {
   const proposal = await prepareGoogleAdsMutationAsync({
     customerId: '8810770460',
     mutation: {
@@ -114,30 +115,27 @@ test('rejects a wrong post-write value and records an indeterminate outcome', as
     },
   });
   const outcomes: string[] = [];
-  await assertRejectsAsync(
-    () =>
-      executeApprovedGoogleAdsMutationAsync({
-        approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
-        approvals: { consumeAsync: () => Promise.resolve(true) },
-        audit: {
-          recordAsync: ({ outcome }) => {
-            outcomes.push(outcome);
-            return Promise.resolve();
-          },
-        },
-        mutations: { mutateAsync: () => Promise.resolve({}) },
-        proposal,
-        reads: {
-          findKeywordDuplicatesAsync: () => Promise.resolve([]),
-          readResourceAsync: () =>
-            Promise.resolve({
-              resourceName: proposal.resourceName,
-              values: { amountMicros: '1000000' },
-            }),
-        },
-      }),
-    'post-write',
-  );
+  const result = await executeApprovedGoogleAdsMutationAsync({
+    approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+    approvals: { consumeAsync: () => Promise.resolve(true) },
+    audit: {
+      recordAsync: ({ outcome }) => {
+        outcomes.push(outcome);
+        return Promise.resolve();
+      },
+    },
+    mutations: { mutateAsync: () => Promise.resolve({}) },
+    proposal,
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () =>
+        Promise.resolve({
+          resourceName: proposal.resourceName,
+          values: { amountMicros: '1000000' },
+        }),
+    },
+  });
+  expect(result.outcome).toBe('indeterminate');
   expect(outcomes).toEqual(['intent', 'indeterminate']);
 });
 
@@ -188,6 +186,102 @@ test('fails closed when external approval is rejected', async () => {
     'approval',
   );
   expect(writes).toEqual([]);
+});
+
+/*** Verify a created criterion by its returned resource ID and exact expected snapshot. */
+test('verifies successful keyword creation by its exact criterion identity', async () => {
+  const proposal = await createProposalAsync();
+  const result = await executeApprovedGoogleAdsMutationAsync({
+    approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+    approvals: { consumeAsync: () => Promise.resolve(true) },
+    audit: { recordAsync: () => Promise.resolve() },
+    mutations: {
+      mutateAsync: () =>
+        Promise.resolve({ resourceName: 'customers/8810770460/adGroupCriteria/99' }),
+    },
+    proposal,
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: ({ resourceName }) =>
+        Promise.resolve({
+          resourceName,
+          values: { keyword: { matchType: 'EXACT', text: 'airport taxi' }, negative: false },
+        }),
+    },
+  });
+  expect(result).toEqual({ outcome: 'executed' });
+});
+
+/*** Reconciliation reads the original approved identity and never invokes another mutation. */
+test('reconciles a lost mutation response without retrying the write', async () => {
+  const proposal = await createProposalAsync();
+  const outcome = await reconcileApprovedGoogleAdsMutationAsync({
+    approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+    audit: { recordAsync: () => Promise.resolve() },
+    proposal,
+    reads: {
+      findKeywordDuplicatesAsync: () =>
+        Promise.resolve([{ resourceName: 'customers/8810770460/adGroupCriteria/99', values: {} }]),
+      readResourceAsync: () => Promise.resolve(null),
+    },
+  });
+  expect(outcome).toEqual({ outcome: 'applied' });
+});
+
+/*** Reject every locally altered field before the external one-time approval is consumed. */
+test('fails closed for a tampered proposal fingerprint binding', async () => {
+  const proposal = await createProposalAsync();
+  const tampered = {
+    ...proposal,
+    mutation: { ...proposal.mutation, text: 'different keyword' },
+  };
+  const calls: string[] = [];
+  await assertRejectsAsync(
+    () =>
+      executeApprovedGoogleAdsMutationAsync({
+        approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+        approvals: {
+          consumeAsync: () => {
+            calls.push('approval');
+            return Promise.resolve(true);
+          },
+        },
+        audit: { recordAsync: () => Promise.resolve() },
+        mutations: { mutateAsync: () => Promise.resolve({}) },
+        proposal: tampered,
+        reads: {
+          findKeywordDuplicatesAsync: () => Promise.resolve([]),
+          readResourceAsync: () => Promise.resolve(null),
+        },
+      }),
+    'integrity',
+  );
+  expect(calls).toEqual([]);
+});
+
+/*** Attribute campaign negative removals to the campaign while retaining the Google criterion type. */
+test('describes campaign negative removal with the campaign portable resource kind', async () => {
+  const proposal = await prepareGoogleAdsMutationAsync({
+    customerId: '8810770460',
+    mutation: {
+      criterionResourceName: 'customers/8810770460/campaignCriteria/9',
+      kind: 'remove-campaign-negative-keyword',
+    },
+    mutations: { mutateAsync: () => Promise.resolve({}) },
+    now: () => '2026-10-29T00:00:00.000Z',
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () =>
+        Promise.resolve({
+          resourceName: 'customers/8810770460/campaignCriteria/9',
+          values: { negative: true, keyword: { text: 'free taxi' } },
+        }),
+    },
+  });
+  expect(proposal.change.resource.kind).toBe('campaign');
+  expect(proposal.change.extensions).toEqual([
+    { provider: 'google-ads', values: { resourceKind: 'campaign-criterion' } },
+  ]);
 });
 
 /*** Prepare a deterministic fixture proposal for approval-pipeline tests. */

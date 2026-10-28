@@ -1,7 +1,10 @@
 import type { AdsChangeDescriptor } from '@ankhorage/contracts/ads';
 
 import type { GoogleAdsMutation, GoogleAdsMutationProposal } from '../../../types/googleAds.js';
-import { createMutationFingerprint } from '../domain/createMutationFingerprint.js';
+import {
+  createMutationFingerprint,
+  createProposalFingerprint,
+} from '../domain/createMutationFingerprint.js';
 import type { GoogleAdsMutationPort, GoogleAdsReadPort } from '../ports/googleAdsPorts.js';
 
 /*** Read, diff, duplicate-check, and API-validate a mutation before external approval. */
@@ -28,20 +31,19 @@ export async function prepareGoogleAdsMutationAsync(input: {
     before?.values ?? null,
     after,
   );
-  const fingerprint = createMutationFingerprint({
-    accountId: input.customerId,
-    change,
-    mutation: input.mutation,
-  });
-  const proposal = {
+  const proposalWithoutFingerprint = {
     accountId: input.customerId,
     after,
     before: before?.values ?? null,
     change,
-    createdAt: input.now(),
-    fingerprint,
     mutation: input.mutation,
     resourceName,
+  };
+  const fingerprint = createProposalFingerprint(proposalWithoutFingerprint);
+  const proposal = {
+    createdAt: input.now(),
+    fingerprint,
+    ...proposalWithoutFingerprint,
   };
   await input.mutations.mutateAsync({
     customerId: input.customerId,
@@ -101,7 +103,10 @@ function createChange(
 
 /*** Map each mutable Google resource to its truthful portable hierarchy kind. */
 function getPortableResourceKind(mutation: GoogleAdsMutation): 'campaign' | 'ad-group' {
-  return 'campaignResourceName' in mutation || 'campaignBudgetResourceName' in mutation
+  return 'campaignResourceName' in mutation ||
+    'campaignBudgetResourceName' in mutation ||
+    ('criterionResourceName' in mutation &&
+      mutation.criterionResourceName.includes('/campaignCriteria/'))
     ? 'campaign'
     : 'ad-group';
 }

@@ -52,11 +52,52 @@ async function verifyScopedReadAsync(
     expect.objectContaining({
       body: JSON.stringify({
         query:
-          "SELECT campaign.resource_name, campaign.status, campaign.cpc_bid_micros FROM campaign WHERE campaign.resource_name = 'customers/8810770460/campaigns/7'",
+          "SELECT campaign.resource_name, campaign.status FROM campaign WHERE campaign.resource_name = 'customers/8810770460/campaigns/7'",
       }),
     }),
   );
 }
+
+/*** Keep every mutable v26 resource projection limited to fields owned by that resource. */
+test('uses schema-grounded v26 read projections for every mutable resource', async () => {
+  const fetchSpy = spyOn(globalThis, 'fetch');
+  const ports = createGoogleAdsRestPorts(configuration);
+  const cases = [
+    ['campaigns/7', 'campaign.resource_name, campaign.status'],
+    ['adGroups/7', 'ad_group.resource_name, ad_group.status, ad_group.cpc_bid_micros'],
+    ['campaignBudgets/7', 'campaign_budget.resource_name, campaign_budget.amount_micros'],
+    [
+      'adGroupCriteria/7',
+      'ad_group_criterion.resource_name, ad_group_criterion.negative, ad_group_criterion.cpc_bid_micros, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type',
+    ],
+    [
+      'campaignCriteria/7',
+      'campaign_criterion.resource_name, campaign_criterion.negative, campaign_criterion.keyword.text, campaign_criterion.keyword.match_type',
+    ],
+  ] as const;
+  try {
+    for (const [path, fields] of cases) {
+      const resourceName = `customers/${configuration.allowedCustomerId}/${path}`;
+      const resource = fields.split('.').at(0);
+      if (resource === undefined) throw new Error('Fixture must declare a GAQL resource.');
+      fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }));
+      await ports.readResourceAsync({
+        customerId: configuration.allowedCustomerId,
+        resourceName,
+      });
+      expect(fetchSpy).toHaveBeenLastCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          body: JSON.stringify({
+            query: `SELECT ${fields} FROM ${resource} WHERE ${resource}.resource_name = '${resourceName}'`,
+          }),
+        }),
+      );
+    }
+  } finally {
+    fetchSpy.mockRestore();
+  }
+});
 
 async function verifyValidateOnlyMutationAsync(
   ports: ReturnType<typeof createGoogleAdsRestPorts>,
@@ -100,6 +141,7 @@ async function verifyValidateOnlyMutationAsync(
   );
   expect(fetchSpy).toHaveBeenCalledTimes(2);
   await verifyForeignMutationRejectedAsync(ports);
+  await verifyWrongResourceKindRejectedAsync(ports);
   expect(fetchSpy).toHaveBeenCalledTimes(2);
 }
 
@@ -119,6 +161,25 @@ function verifyForeignMutationRejectedAsync(
         validateOnly: true,
       }),
     'outside',
+  );
+}
+
+/*** Reject a permitted customer resource when its collection cannot carry the requested operation. */
+function verifyWrongResourceKindRejectedAsync(
+  ports: ReturnType<typeof createGoogleAdsRestPorts>,
+): Promise<void> {
+  return assertRejectsAsync(
+    () =>
+      ports.mutateAsync({
+        customerId: '8810770460',
+        mutation: {
+          criterionResourceName: 'customers/8810770460/campaignCriteria/7',
+          cpcBidMicros: '1000000',
+          kind: 'set-keyword-cpc',
+        },
+        validateOnly: true,
+      }),
+    'kind',
   );
 }
 

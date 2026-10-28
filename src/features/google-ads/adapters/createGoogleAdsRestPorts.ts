@@ -4,6 +4,7 @@ import type {
   GoogleAdsProviderConfiguration,
 } from '../../../types/googleAds.js';
 import type { GoogleAdsMutationPort, GoogleAdsReadPort } from '../ports/googleAdsPorts.js';
+import { assertGoogleAdsMutationResourceKind } from './assertGoogleAdsMutationResourceKind.js';
 
 /*** Create v26 REST ports scoped to one configured Google Ads customer. */
 export function createGoogleAdsRestPorts(
@@ -104,7 +105,10 @@ function assertMutationResources(
   const resources = Object.entries(mutation)
     .filter(([key, value]) => key.endsWith('ResourceName') && typeof value === 'string')
     .map(([, value]) => value);
-  resources.forEach((resourceName) => assertResourceCustomer(configuration, resourceName));
+  resources.forEach((resourceName) => {
+    assertResourceCustomer(configuration, resourceName);
+    assertGoogleAdsMutationResourceKind(mutation, resourceName);
+  });
 }
 
 /*** Build authorization headers without serializing secrets into errors or audit data. */
@@ -222,11 +226,14 @@ function createResourceReadQuery(resourceName: string): string {
 
 /*** Select only the mutable state needed to prepare and verify each supported resource. */
 function getResourceReadFields(field: string): string {
-  if (field === 'campaign' || field === 'ad_group')
+  if (field === 'ad_group')
     return `${field}.resource_name, ${field}.status, ${field}.cpc_bid_micros`;
+  if (field === 'campaign') return `${field}.resource_name, ${field}.status`;
   if (field === 'campaign_budget') return `${field}.resource_name, ${field}.amount_micros`;
-  if (field.endsWith('_criterion'))
+  if (field === 'ad_group_criterion')
     return `${field}.resource_name, ${field}.negative, ${field}.cpc_bid_micros, ${field}.keyword.text, ${field}.keyword.match_type`;
+  if (field === 'campaign_criterion')
+    return `${field}.resource_name, ${field}.negative, ${field}.keyword.text, ${field}.keyword.match_type`;
   return `${field}.resource_name`;
 }
 

@@ -44,7 +44,7 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "typescript": "^7"
+    "typescript": "^6.0.3"
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.tsbuildinfo && tsc -p tsconfig.build.json",

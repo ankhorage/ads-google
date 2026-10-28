@@ -70,6 +70,20 @@ export interface GoogleAdsMutationProposal {
   readonly resourceName: string;
 }
 
+/*** The terminal outcome of one approved mutation attempt. */
+export type GoogleAdsMutationExecutionResult =
+  | { readonly outcome: 'executed' }
+  | {
+      readonly outcome: 'indeterminate';
+      readonly reason: string;
+    };
+
+/*** The evidence-based settlement of an indeterminate approved mutation. */
+export type GoogleAdsMutationReconciliationResult =
+  | { readonly outcome: 'applied' }
+  | { readonly outcome: 'not-applied' }
+  | { readonly outcome: 'indeterminate'; readonly reason: string };
+
 /*** The exact provider resource affected by one validated mutation. */
 export interface GoogleAdsMutationResult {
   readonly resourceName?: string;
@@ -86,7 +100,13 @@ export interface GoogleAdsAuditEvent {
   readonly accountId: string;
   readonly approvalId?: string;
   readonly fingerprint: string;
-  readonly outcome: 'intent' | 'executed' | 'failed' | 'indeterminate';
+  readonly outcome:
+    | 'intent'
+    | 'executed'
+    | 'failed'
+    | 'indeterminate'
+    | 'reconciled-applied'
+    | 'reconciled-not-applied';
   readonly resourceName: string;
 }
 
@@ -95,4 +115,20 @@ export interface GoogleAdsReadResult {
   readonly extensions?: readonly AdsProviderExtension[];
   readonly resourceName: string;
   readonly values: Readonly<Record<string, unknown>>;
+}
+
+/*** The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation. */
+export interface GoogleAdsProvider {
+  prepareMutationAsync(input: {
+    readonly customerId: string;
+    readonly mutation: GoogleAdsMutation;
+  }): Promise<GoogleAdsMutationProposal>;
+  executeApprovedMutationAsync(input: {
+    readonly approval: GoogleAdsApproval;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationExecutionResult>;
+  reconcileApprovedMutationAsync(input: {
+    readonly approval: GoogleAdsApproval;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationReconciliationResult>;
 }
