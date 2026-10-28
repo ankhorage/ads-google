@@ -19,7 +19,7 @@ test('prepares an exact mutation with validate-only after reading its target', a
     mutations: {
       mutateAsync: ({ validateOnly }) => {
         calls.push(validateOnly ? 'validate' : 'write');
-        return Promise.resolve();
+        return Promise.resolve({});
       },
     },
     now: () => '2026-10-28T00:00:00.000Z',
@@ -31,9 +31,114 @@ test('prepares an exact mutation with validate-only after reading its target', a
       },
     },
   });
-  expect(calls).toEqual(['read', 'validate']);
+  expect(calls).toEqual(['validate']);
   expect(proposal.before).toBeNull();
-  expect(proposal.after).toMatchObject({ text: 'airport taxi' });
+  expect(proposal.after).toMatchObject({ keyword: { text: 'airport taxi' } });
+});
+
+/*** Reject a proposal if the validated provider state changes before approval is consumed. */
+test('rejects stale proposals before approval or mutation', async () => {
+  const proposal = await prepareGoogleAdsMutationAsync({
+    customerId: '8810770460',
+    mutation: {
+      campaignResourceName: 'customers/8810770460/campaigns/7',
+      kind: 'set-campaign-status',
+      status: 'ENABLED',
+    },
+    mutations: { mutateAsync: () => Promise.resolve({}) },
+    now: () => '2026-10-28T00:00:00.000Z',
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () =>
+        Promise.resolve({
+          resourceName: 'customers/8810770460/campaigns/7',
+          values: { status: 'PAUSED' },
+        }),
+    },
+  });
+  const calls: string[] = [];
+  await assertRejectsAsync(() => executeWithStaleStateAsync(proposal, calls), 'stale');
+  expect(calls).toEqual([]);
+});
+
+/*** Invoke execution with a current provider state that differs from the approved snapshot. */
+function executeWithStaleStateAsync(
+  proposal: Awaited<ReturnType<typeof prepareGoogleAdsMutationAsync>>,
+  calls: string[],
+): Promise<void> {
+  return executeApprovedGoogleAdsMutationAsync({
+    approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+    approvals: {
+      consumeAsync: () => {
+        calls.push('approve');
+        return Promise.resolve(true);
+      },
+    },
+    audit: { recordAsync: () => Promise.resolve() },
+    mutations: {
+      mutateAsync: () => {
+        calls.push('write');
+        return Promise.resolve({});
+      },
+    },
+    proposal,
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () =>
+        Promise.resolve({
+          resourceName: proposal.resourceName,
+          values: { status: 'PAUSED_EXTERNALLY' },
+        }),
+    },
+  });
+}
+
+/*** Fail a successful transport write when its re-read value is not the approved value. */
+test('rejects a wrong post-write value and records an indeterminate outcome', async () => {
+  const proposal = await prepareGoogleAdsMutationAsync({
+    customerId: '8810770460',
+    mutation: {
+      campaignBudgetResourceName: 'customers/8810770460/campaignBudgets/7',
+      kind: 'set-budget',
+      amountMicros: '2000000',
+    },
+    mutations: { mutateAsync: () => Promise.resolve({}) },
+    now: () => '2026-10-28T00:00:00.000Z',
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () =>
+        Promise.resolve({
+          resourceName: 'customers/8810770460/campaignBudgets/7',
+          values: { amountMicros: '1000000' },
+        }),
+    },
+  });
+  const outcomes: string[] = [];
+  await assertRejectsAsync(
+    () =>
+      executeApprovedGoogleAdsMutationAsync({
+        approval: { approvalId: 'approval-1', fingerprint: proposal.fingerprint },
+        approvals: { consumeAsync: () => Promise.resolve(true) },
+        audit: {
+          recordAsync: ({ outcome }) => {
+            outcomes.push(outcome);
+            return Promise.resolve();
+          },
+        },
+        mutations: { mutateAsync: () => Promise.resolve({}) },
+        proposal,
+        reads: {
+          findKeywordDuplicatesAsync: () => Promise.resolve([]),
+          readResourceAsync: () =>
+            Promise.resolve({
+              resourceName: proposal.resourceName,
+              values: { amountMicros: '1000000' },
+            }),
+        },
+      }),
+    'post-write',
+  );
+  expect(outcomes).toEqual(['intent', 'indeterminate']);
 });
 
 /*** Reject duplicate criteria before validation or approval can be requested. */
@@ -43,7 +148,7 @@ test('rejects a duplicate keyword', async () => {
       prepareGoogleAdsMutationAsync({
         customerId: '8810770460',
         mutation,
-        mutations: { mutateAsync: () => Promise.resolve() },
+        mutations: { mutateAsync: () => Promise.resolve({}) },
         now: () => '2026-10-28T00:00:00.000Z',
         reads: {
           findKeywordDuplicatesAsync: () =>
@@ -70,7 +175,7 @@ test('fails closed when external approval is rejected', async () => {
         mutations: {
           mutateAsync: ({ validateOnly }) => {
             writes.push(validateOnly);
-            return Promise.resolve();
+            return Promise.resolve({});
           },
         },
         proposal,
@@ -91,7 +196,7 @@ function createProposalAsync() {
     customerId: '8810770460',
     mutation,
     now: () => '2026-10-28T00:00:00.000Z',
-    mutations: { mutateAsync: () => Promise.resolve() },
+    mutations: { mutateAsync: () => Promise.resolve({}) },
     reads: {
       findKeywordDuplicatesAsync: () => Promise.resolve([]),
       readResourceAsync: () => Promise.resolve(null),

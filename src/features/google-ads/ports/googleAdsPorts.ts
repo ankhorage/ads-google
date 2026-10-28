@@ -4,6 +4,7 @@ import type {
   GoogleAdsKeywordMatchType,
   GoogleAdsMutation,
   GoogleAdsMutationProposal,
+  GoogleAdsMutationResult,
   GoogleAdsReadResult,
 } from '../../../types/googleAds.js';
 
@@ -28,7 +29,7 @@ export interface GoogleAdsMutationPort {
     readonly customerId: string;
     readonly mutation: GoogleAdsMutation;
     readonly validateOnly: boolean;
-  }): Promise<void>;
+  }): Promise<GoogleAdsMutationResult>;
 }
 
 /*** Consumes a human approval which was issued by infrastructure outside this package. */

@@ -70,6 +70,11 @@ export interface GoogleAdsMutationProposal {
   readonly resourceName: string;
 }
 
+/*** The exact provider resource affected by one validated mutation. */
+export interface GoogleAdsMutationResult {
+  readonly resourceName?: string;
+}
+
 /*** A consumed external approval bound to exactly one proposed mutation. */
 export interface GoogleAdsApproval {
   readonly approvalId: string;

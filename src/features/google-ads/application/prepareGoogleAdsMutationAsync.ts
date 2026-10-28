@@ -13,10 +13,9 @@ export async function prepareGoogleAdsMutationAsync(input: {
   readonly reads: GoogleAdsReadPort;
 }): Promise<GoogleAdsMutationProposal> {
   const resourceName = getMutationResourceName(input.mutation);
-  const before = await input.reads.readResourceAsync({
-    customerId: input.customerId,
-    resourceName,
-  });
+  const before = isCreateKeyword(input.mutation)
+    ? null
+    : await input.reads.readResourceAsync({ customerId: input.customerId, resourceName });
   if (before === null && !isCreateKeyword(input.mutation))
     throw new Error('Google Ads resource was not found.');
   if (isCreateKeyword(input.mutation))
@@ -87,7 +86,10 @@ function createChange(
       : mutation.kind.startsWith('remove-')
         ? 'delete'
         : 'update',
-    resource: { accountId, kind: 'ad-group', resourceId: resourceName },
+    resource: { accountId, kind: getPortableResourceKind(mutation), resourceId: resourceName },
+    extensions: [
+      { provider: 'google-ads', values: { resourceKind: getGoogleResourceKind(mutation) } },
+    ],
     stage: 'prepare',
     values: {
       after: JSON.stringify(after),
@@ -95,6 +97,24 @@ function createChange(
       operation: mutation.kind,
     },
   };
+}
+
+/*** Map each mutable Google resource to its truthful portable hierarchy kind. */
+function getPortableResourceKind(mutation: GoogleAdsMutation): 'campaign' | 'ad-group' {
+  return 'campaignResourceName' in mutation || 'campaignBudgetResourceName' in mutation
+    ? 'campaign'
+    : 'ad-group';
+}
+
+/*** Preserve the exact Google resource kind without falsifying the portable descriptor. */
+function getGoogleResourceKind(mutation: GoogleAdsMutation): string {
+  if ('criterionResourceName' in mutation)
+    return mutation.criterionResourceName.includes('/campaignCriteria/')
+      ? 'campaign-criterion'
+      : 'ad-group-criterion';
+  if ('campaignBudgetResourceName' in mutation) return 'campaign-budget';
+  if ('campaignResourceName' in mutation) return 'campaign';
+  return 'ad-group';
 }
 
 /*** Identify the single Google resource changed by a mutation. */
@@ -118,5 +138,14 @@ function describeAfter(
   before: Readonly<Record<string, unknown>> | null,
 ): Readonly<Record<string, unknown>> | null {
   if (mutation.kind.startsWith('remove-')) return null;
-  return { ...before, ...mutation };
+  if ('text' in mutation)
+    return {
+      keyword: { matchType: mutation.matchType, text: mutation.text },
+      negative: mutation.kind !== 'create-keyword',
+    };
+  if (mutation.kind === 'set-keyword-cpc' || mutation.kind === 'set-ad-group-cpc')
+    return { ...before, cpcBidMicros: mutation.cpcBidMicros };
+  if (mutation.kind === 'set-budget') return { ...before, amountMicros: mutation.amountMicros };
+  if ('status' in mutation) return { ...before, status: mutation.status };
+  throw new Error('Unsupported Google Ads mutation state.');
 }

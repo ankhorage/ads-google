@@ -1,5 +1,6 @@
 import type {
   GoogleAdsMutation,
+  GoogleAdsMutationResult,
   GoogleAdsProviderConfiguration,
 } from '../../../types/googleAds.js';
 import type { GoogleAdsMutationPort, GoogleAdsReadPort } from '../ports/googleAdsPorts.js';
@@ -12,6 +13,7 @@ export function createGoogleAdsRestPorts(
   return {
     async readResourceAsync({ customerId, resourceName }) {
       assertCustomer(configuration, customerId);
+      assertResourceCustomer(configuration, resourceName);
       const query = createResourceReadQuery(resourceName);
       const response = await requestAsync(`customers/${customerId}/googleAds:searchStream`, {
         query,
@@ -26,6 +28,7 @@ export function createGoogleAdsRestPorts(
       text,
     }) {
       assertCustomer(configuration, customerId);
+      assertResourceCustomer(configuration, parentResourceName);
       const query = createKeywordDuplicateQuery({ matchType, negative, parentResourceName, text });
       const results = await requestAsync(`customers/${customerId}/googleAds:searchStream`, {
         query,
@@ -34,11 +37,13 @@ export function createGoogleAdsRestPorts(
     },
     async mutateAsync({ customerId, mutation, validateOnly }) {
       assertCustomer(configuration, customerId);
+      assertMutationResources(configuration, mutation);
       const request = toMutationRequest(mutation);
-      await requestAsync(`customers/${customerId}/${request.service}:mutate`, {
+      const response = await requestAsync(`customers/${customerId}/${request.service}:mutate`, {
         operations: [request.operation],
         validateOnly,
       });
+      return decodeMutationResult(response);
     },
   };
 }
@@ -76,6 +81,30 @@ function createGoogleAdsRequestAsync(
 function assertCustomer(configuration: GoogleAdsProviderConfiguration, customerId: string): void {
   if (customerId !== configuration.allowedCustomerId)
     throw new Error('Google Ads customer is outside this provider scope.');
+}
+
+/*** Reject a resource name unless it belongs to the single configured customer. */
+function assertResourceCustomer(
+  configuration: GoogleAdsProviderConfiguration,
+  resourceName: string,
+): void {
+  const match =
+    /^customers\/([^/]+)\/(?:adGroups|adGroupCriteria|campaigns|campaignBudgets|campaignCriteria)\/[^/]+$/.exec(
+      resourceName,
+    );
+  if (match?.[1] !== configuration.allowedCustomerId)
+    throw new Error('Google Ads resource is outside this provider scope.');
+}
+
+/*** Validate every resource carried by an operation before any provider request is made. */
+function assertMutationResources(
+  configuration: GoogleAdsProviderConfiguration,
+  mutation: GoogleAdsMutation,
+): void {
+  const resources = Object.entries(mutation)
+    .filter(([key, value]) => key.endsWith('ResourceName') && typeof value === 'string')
+    .map(([, value]) => value);
+  resources.forEach((resourceName) => assertResourceCustomer(configuration, resourceName));
 }
 
 /*** Build authorization headers without serializing secrets into errors or audit data. */
@@ -188,7 +217,17 @@ function escapeGaql(value: string): string {
 /*** Build a resource-scoped GAQL lookup for a supported mutable resource name. */
 function createResourceReadQuery(resourceName: string): string {
   const { field, resource } = getResourceQuery(resourceName);
-  return `SELECT ${field}.resource_name FROM ${resource} WHERE ${field}.resource_name = '${escapeGaql(resourceName)}'`;
+  return `SELECT ${getResourceReadFields(field)} FROM ${resource} WHERE ${field}.resource_name = '${escapeGaql(resourceName)}'`;
+}
+
+/*** Select only the mutable state needed to prepare and verify each supported resource. */
+function getResourceReadFields(field: string): string {
+  if (field === 'campaign' || field === 'ad_group')
+    return `${field}.resource_name, ${field}.status, ${field}.cpc_bid_micros`;
+  if (field === 'campaign_budget') return `${field}.resource_name, ${field}.amount_micros`;
+  if (field.endsWith('_criterion'))
+    return `${field}.resource_name, ${field}.negative, ${field}.cpc_bid_micros, ${field}.keyword.text, ${field}.keyword.match_type`;
+  return `${field}.resource_name`;
 }
 
 /*** Select the correct GAQL resource and field namespace from its canonical name. */
@@ -237,14 +276,31 @@ function decodeSearchStreamBatch(batch: unknown): readonly {
   return batch['results'].flatMap(decodeSearchStreamResult);
 }
 
-/*** Decode one resource record while retaining only its public resource name. */
+/*** Decode one resource record while retaining the selected provider state. */
 function decodeSearchStreamResult(result: unknown): readonly {
   readonly resourceName: string;
   readonly values: Readonly<Record<string, unknown>>;
 }[] {
   if (!isRecord(result)) return [];
   const resourceName = findResourceName(result);
-  return resourceName === undefined ? [] : [{ resourceName, values: { resourceName } }];
+  return resourceName === undefined ? [] : [{ resourceName, values: extractReadValues(result) }];
+}
+
+/*** Retain JSON-compatible selected resource fields without preserving untrusted envelopes. */
+function extractReadValues(
+  result: Readonly<Record<string, unknown>>,
+): Readonly<Record<string, unknown>> {
+  const resource = Object.values(result).find(isRecord);
+  return resource ?? {};
+}
+
+/*** Extract the canonical created resource name returned by a Google Ads mutate response. */
+function decodeMutationResult(value: unknown): GoogleAdsMutationResult {
+  const results = isRecord(value) && Array.isArray(value['results']) ? value['results'] : [];
+  const result: unknown = results.at(0);
+  return isRecord(result) && typeof result['resourceName'] === 'string'
+    ? { resourceName: result['resourceName'] }
+    : {};
 }
 
 /*** Return the first decoded read result, if the API selected a resource. */

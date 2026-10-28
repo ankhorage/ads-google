@@ -1,4 +1,3 @@
-export { createGoogleAdsRestPorts } from './features/google-ads/adapters/createGoogleAdsRestPorts.js';
 export { executeApprovedGoogleAdsMutationAsync } from './features/google-ads/application/executeApprovedGoogleAdsMutationAsync.js';
 export { prepareGoogleAdsMutationAsync } from './features/google-ads/application/prepareGoogleAdsMutationAsync.js';
 export type {
@@ -12,6 +11,7 @@ export type {
   GoogleAdsAuditEvent,
   GoogleAdsMutation,
   GoogleAdsMutationProposal,
+  GoogleAdsMutationResult,
   GoogleAdsProviderConfiguration,
   GoogleAdsReadResult,
 } from './types/googleAds.js';

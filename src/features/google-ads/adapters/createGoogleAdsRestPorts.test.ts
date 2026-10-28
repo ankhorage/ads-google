@@ -30,7 +30,11 @@ async function verifyScopedReadAsync(
   fetchSpy.mockResolvedValueOnce(
     new Response(
       JSON.stringify([
-        { results: [{ campaign: { resourceName: 'customers/8810770460/campaigns/7' } }] },
+        {
+          results: [
+            { campaign: { resourceName: 'customers/8810770460/campaigns/7', status: 'PAUSED' } },
+          ],
+        },
       ]),
       { status: 200 },
     ),
@@ -41,14 +45,14 @@ async function verifyScopedReadAsync(
   });
   expect(result).toEqual({
     resourceName: 'customers/8810770460/campaigns/7',
-    values: { resourceName: 'customers/8810770460/campaigns/7' },
+    values: { resourceName: 'customers/8810770460/campaigns/7', status: 'PAUSED' },
   });
   expect(fetchSpy).toHaveBeenLastCalledWith(
     'https://googleads.googleapis.com/v26/customers/8810770460/googleAds:searchStream',
     expect.objectContaining({
       body: JSON.stringify({
         query:
-          "SELECT campaign.resource_name FROM campaign WHERE campaign.resource_name = 'customers/8810770460/campaigns/7'",
+          "SELECT campaign.resource_name, campaign.status, campaign.cpc_bid_micros FROM campaign WHERE campaign.resource_name = 'customers/8810770460/campaigns/7'",
       }),
     }),
   );
@@ -95,6 +99,27 @@ async function verifyValidateOnlyMutationAsync(
     'outside',
   );
   expect(fetchSpy).toHaveBeenCalledTimes(2);
+  await verifyForeignMutationRejectedAsync(ports);
+  expect(fetchSpy).toHaveBeenCalledTimes(2);
+}
+
+/*** Ensure resource names cannot escape the configured customer even on a permitted request URL. */
+function verifyForeignMutationRejectedAsync(
+  ports: ReturnType<typeof createGoogleAdsRestPorts>,
+): Promise<void> {
+  return assertRejectsAsync(
+    () =>
+      ports.mutateAsync({
+        customerId: '8810770460',
+        mutation: {
+          campaignResourceName: 'customers/other/campaigns/7',
+          kind: 'set-campaign-status',
+          status: 'PAUSED',
+        },
+        validateOnly: true,
+      }),
+    'outside',
+  );
 }
 
 async function verifyRedactedFailureAsync(
