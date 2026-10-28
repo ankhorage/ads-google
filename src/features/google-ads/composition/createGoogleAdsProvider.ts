@@ -4,14 +4,13 @@ import type {
 } from '../../../types/googleAds.js';
 import { createGoogleAdsRestPorts } from '../adapters/createGoogleAdsRestPorts.js';
 import { executeApprovedGoogleAdsMutationAsync } from '../application/executeApprovedGoogleAdsMutationAsync.js';
-import { reconcileApprovedGoogleAdsMutationAsync } from '../application/executeApprovedGoogleAdsMutationAsync.js';
 import { prepareGoogleAdsMutationAsync } from '../application/prepareGoogleAdsMutationAsync.js';
-import type { GoogleAdsApprovalPort, GoogleAdsAuditPort } from '../ports/googleAdsPorts.js';
+import { reconcileApprovedGoogleAdsMutationAsync } from '../application/reconcileApprovedGoogleAdsMutationAsync.js';
+import type { GoogleAdsMutationAttemptPort } from '../ports/googleAdsPorts.js';
 
 /*** Compose the real v26 REST adapter behind the approval-gated public provider boundary. */
 export function createGoogleAdsProvider(input: {
-  readonly approvals: GoogleAdsApprovalPort;
-  readonly audit: GoogleAdsAuditPort;
+  readonly attempts: GoogleAdsMutationAttemptPort;
   readonly configuration: GoogleAdsProviderConfiguration;
   readonly now?: () => string;
 }): GoogleAdsProvider {
@@ -23,8 +22,7 @@ export function createGoogleAdsProvider(input: {
     executeApprovedMutationAsync: ({ approval, proposal }) =>
       executeApprovedGoogleAdsMutationAsync({
         approval,
-        approvals: input.approvals,
-        audit: input.audit,
+        attempts: input.attempts,
         mutations: ports,
         proposal,
         reads: ports,
@@ -32,7 +30,7 @@ export function createGoogleAdsProvider(input: {
     reconcileApprovedMutationAsync: ({ approval, proposal }) =>
       reconcileApprovedGoogleAdsMutationAsync({
         approval,
-        audit: input.audit,
+        attempts: input.attempts,
         proposal,
         reads: ports,
       }),

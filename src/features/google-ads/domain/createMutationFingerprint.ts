@@ -11,7 +11,7 @@ export function createMutationFingerprint(value: unknown): string {
 
 /*** Recompute the immutable approval binding from the proposal that will be executed. */
 export function createProposalFingerprint(
-  proposal: Omit<GoogleAdsMutationProposal, 'createdAt' | 'fingerprint'>,
+  proposal: Omit<GoogleAdsMutationProposal, 'fingerprint'>,
 ): string {
   return createMutationFingerprint(proposal);
 }

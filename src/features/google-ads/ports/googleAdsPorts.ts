@@ -1,8 +1,8 @@
 import type {
   GoogleAdsApproval,
-  GoogleAdsAuditEvent,
   GoogleAdsKeywordMatchType,
   GoogleAdsMutation,
+  GoogleAdsMutationAttempt,
   GoogleAdsMutationProposal,
   GoogleAdsMutationResult,
   GoogleAdsReadResult,
@@ -32,15 +32,23 @@ export interface GoogleAdsMutationPort {
   }): Promise<GoogleAdsMutationResult>;
 }
 
-/*** Consumes a human approval which was issued by infrastructure outside this package. */
-export interface GoogleAdsApprovalPort {
-  consumeAsync(input: {
+/*** Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt. */
+export interface GoogleAdsMutationAttemptPort {
+  consumeApprovalAndCreateIntentAsync(input: {
     readonly approval: GoogleAdsApproval;
     readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationAttempt | null>;
+  markIndeterminateAsync(input: {
+    readonly attempt: GoogleAdsMutationAttempt;
+    readonly providerResourceName?: string;
   }): Promise<boolean>;
-}
-
-/*** Persists audit intent and outcome durably; failures deliberately stop writes. */
-export interface GoogleAdsAuditPort {
-  recordAsync(event: GoogleAdsAuditEvent): Promise<void>;
+  settleExecutedAsync(input: { readonly attempt: GoogleAdsMutationAttempt }): Promise<boolean>;
+  claimIndeterminateAttemptAsync(input: {
+    readonly approval: GoogleAdsApproval;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationAttempt | null>;
+  completeReconciliationAsync(input: {
+    readonly attempt: GoogleAdsMutationAttempt;
+    readonly outcome: 'applied' | 'not-applied' | 'indeterminate';
+  }): Promise<boolean>;
 }

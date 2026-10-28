@@ -36,12 +36,12 @@ export async function prepareGoogleAdsMutationAsync(input: {
     after,
     before: before?.values ?? null,
     change,
+    createdAt: input.now(),
     mutation: input.mutation,
     resourceName,
   };
   const fingerprint = createProposalFingerprint(proposalWithoutFingerprint);
   const proposal = {
-    createdAt: input.now(),
     fingerprint,
     ...proposalWithoutFingerprint,
   };

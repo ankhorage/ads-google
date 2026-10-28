@@ -9,8 +9,13 @@ test('exports an approval-gated public Google Ads provider factory', async () =>
     .mockResolvedValueOnce(new Response(JSON.stringify({ results: [] }), { status: 200 }));
   try {
     const provider = createGoogleAdsProvider({
-      approvals: { consumeAsync: () => Promise.resolve(true) },
-      audit: { recordAsync: () => Promise.resolve() },
+      attempts: {
+        claimIndeterminateAttemptAsync: () => Promise.resolve(null),
+        completeReconciliationAsync: () => Promise.resolve(true),
+        consumeApprovalAndCreateIntentAsync: () => Promise.resolve(null),
+        markIndeterminateAsync: () => Promise.resolve(true),
+        settleExecutedAsync: () => Promise.resolve(true),
+      },
       configuration: {
         accessToken: 'access-token',
         allowedCustomerId: '8810770460',

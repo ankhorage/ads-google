@@ -70,6 +70,17 @@ export interface GoogleAdsMutationProposal {
   readonly resourceName: string;
 }
 
+/*** A durable, approval-bound write attempt owned by the trusted host runtime. */
+export interface GoogleAdsMutationAttempt {
+  readonly accountId: string;
+  readonly approvalId: string;
+  readonly attemptId: string;
+  readonly fingerprint: string;
+  readonly operation: GoogleAdsMutation['kind'];
+  readonly providerResourceName?: string;
+  readonly resourceName: string;
+}
+
 /*** The terminal outcome of one approved mutation attempt. */
 export type GoogleAdsMutationExecutionResult =
   | { readonly outcome: 'executed' }
@@ -93,21 +104,6 @@ export interface GoogleAdsMutationResult {
 export interface GoogleAdsApproval {
   readonly approvalId: string;
   readonly fingerprint: string;
-}
-
-/*** The durable audit payload emitted around a write attempt. */
-export interface GoogleAdsAuditEvent {
-  readonly accountId: string;
-  readonly approvalId?: string;
-  readonly fingerprint: string;
-  readonly outcome:
-    | 'intent'
-    | 'executed'
-    | 'failed'
-    | 'indeterminate'
-    | 'reconciled-applied'
-    | 'reconciled-not-applied';
-  readonly resourceName: string;
 }
 
 /*** Sanitized Google Ads read result retaining provider-only values explicitly. */
