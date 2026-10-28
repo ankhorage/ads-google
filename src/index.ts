@@ -13,6 +13,7 @@ export type {
   GoogleAdsMutationAttempt,
   GoogleAdsMutationExecutionResult,
   GoogleAdsMutationProposal,
+  GoogleAdsMutationReconciliationClaim,
   GoogleAdsMutationReconciliationResult,
   GoogleAdsMutationResult,
   GoogleAdsProvider,

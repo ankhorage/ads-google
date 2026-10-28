@@ -1,12 +1,18 @@
 import { expect, test } from 'bun:test';
 
-import type {
-  GoogleAdsMutationAttempt,
-  GoogleAdsMutationProposal,
-} from '../../../types/googleAds.js';
-import type { GoogleAdsMutationAttemptPort } from '../ports/googleAdsPorts.js';
+import type { GoogleAdsMutationProposal } from '../../../types/googleAds.js';
 import { executeApprovedGoogleAdsMutationAsync } from './executeApprovedGoogleAdsMutationAsync.js';
-import { prepareGoogleAdsMutationAsync } from './prepareGoogleAdsMutationAsync.js';
+import {
+  approvalFor,
+  assertRejectsAsync,
+  createAttemptPort,
+  createIndeterminateAttemptAsync,
+  createProposalForAsync,
+  proposalWith,
+  reads,
+  readSequence,
+  resultFor,
+} from './googleAdsMutationFixtures.test.js';
 import { reconcileApprovedGoogleAdsMutationAsync } from './reconcileApprovedGoogleAdsMutationAsync.js';
 
 const mutation = {
@@ -27,7 +33,7 @@ test('keeps a lost response with a stale read indeterminate without another muta
     mutations: {
       mutateAsync: () => {
         writes += 1;
-        return Promise.resolve({});
+        return Promise.reject(new Error('response lost after write'));
       },
     },
     proposal,
@@ -110,8 +116,45 @@ test('rejects mismatched reconciliation bindings', async () => {
   );
 });
 
-/*** Reconciliation claims one attempt atomically, preventing duplicate settlements in parallel. */
-test('prevents concurrent and repeated reconciliation settlement', async () => {
+/*** Require the trusted atomic claim to reject every durable binding mismatch without settling it. */
+test('does not claim an attempt for a wrong approval, account, resource, or operation', async () => {
+  const proposal = await createProposalAsync();
+  for (const candidate of [
+    { approval: { approvalId: 'other', fingerprint: proposal.fingerprint }, proposal },
+    { approval: undefined, proposal: proposalWith(proposal, { accountId: 'other' }) },
+    {
+      approval: undefined,
+      proposal: proposalWith(proposal, { resourceName: 'customers/8810770460/adGroups/8' }),
+    },
+    {
+      approval: undefined,
+      proposal: proposalWith(proposal, {
+        mutation: {
+          adGroupResourceName: 'customers/8810770460/adGroups/7',
+          kind: 'create-ad-group-negative-keyword',
+          matchType: 'EXACT',
+          text: 'airport taxi',
+        },
+      }),
+    },
+  ]) {
+    const attempts = createAttemptPort();
+    await createIndeterminateAttemptAsync(proposal, attempts.port);
+    await assertRejectsAsync(
+      () =>
+        reconcileApprovedGoogleAdsMutationAsync({
+          approval: candidate.approval ?? approvalFor(candidate.proposal),
+          attempts: attempts.port,
+          proposal: candidate.proposal,
+          reads: reads(),
+        }),
+      'not available',
+    );
+  }
+});
+
+/*** Reconciliation claims one attempt atomically and releases only an inconclusive claim. */
+test('prevents concurrent claims while allowing a later reconciliation after indeterminate evidence', async () => {
   const proposal = await createProposalAsync();
   const attempts = createAttemptPort();
   await createIndeterminateAttemptAsync(proposal, attempts.port);
@@ -129,16 +172,13 @@ test('prevents concurrent and repeated reconciliation settlement', async () => {
   });
   const outcomes = await Promise.allSettled([first, second]);
   expect(outcomes.filter(({ status }) => status === 'fulfilled')).toHaveLength(1);
-  await assertRejectsAsync(
-    () =>
-      reconcileApprovedGoogleAdsMutationAsync({
-        approval: approvalFor(proposal),
-        attempts: attempts.port,
-        proposal,
-        reads: reads(),
-      }),
-    'not available',
-  );
+  const later = await reconcileApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(proposal),
+    attempts: attempts.port,
+    proposal,
+    reads: reads(),
+  });
+  expect(later.outcome).toBe('indeterminate');
 });
 
 /*** Bind createdAt to the canonical approval fingerprint. */
@@ -150,7 +190,7 @@ test('rejects a timestamp-tampered proposal before it can consume approval', asy
       executeApprovedGoogleAdsMutationAsync({
         approval: approvalFor(proposal),
         attempts: attempts.port,
-        mutations: { mutateAsync: () => Promise.resolve({}) },
+        mutations: { mutateAsync: () => Promise.resolve(resultFor(proposal)) },
         proposal: { ...proposal, createdAt: '2030-01-01T00:00:00.000Z' },
         reads: reads(),
       }),
@@ -159,169 +199,95 @@ test('rejects a timestamp-tampered proposal before it can consume approval', asy
   expect(attempts.created).toBe(0);
 });
 
+/*** Settle an acknowledged update only after its exact approved state is visible. */
+test('settles an acknowledged update after v26 result and post-write state verification', async () => {
+  const update = {
+    campaignResourceName: 'customers/8810770460/campaigns/7',
+    kind: 'set-campaign-status' as const,
+    status: 'ENABLED' as const,
+  };
+  const before = { status: 'PAUSED' };
+  const proposal = await createProposalForAsync(
+    update,
+    readSequence(before, before, { status: 'ENABLED' }),
+  );
+  const attempts = createAttemptPort();
+  const result = await executeApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(proposal),
+    attempts: attempts.port,
+    mutations: { mutateAsync: () => Promise.resolve({ resourceName: proposal.resourceName }) },
+    proposal,
+    reads: readSequence(before, { status: 'ENABLED' }),
+  });
+  expect(result).toEqual({ outcome: 'executed' });
+});
+
+/*** Settle an acknowledged delete only after the exact returned criterion is absent. */
+test('settles an acknowledged delete after its exact criterion is absent', async () => {
+  const remove = {
+    criterionResourceName: 'customers/8810770460/adGroupCriteria/7',
+    kind: 'remove-keyword' as const,
+  };
+  const present = { keyword: { matchType: 'EXACT', text: 'airport taxi' }, negative: false };
+  const proposal = await createProposalForAsync(remove, readSequence(present, present, null));
+  const attempts = createAttemptPort();
+  const result = await executeApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(proposal),
+    attempts: attempts.port,
+    mutations: { mutateAsync: () => Promise.resolve({ resourceName: proposal.resourceName }) },
+    proposal,
+    reads: readSequence(present, null),
+  });
+  expect(result).toEqual({ outcome: 'executed' });
+});
+
+/*** Keep wrong resource acknowledgements and wrong post-write values indeterminate. */
+test('does not settle a malformed acknowledgement or an unverified post-write value', async () => {
+  const proposal = await createProposalAsync();
+  const attempts = createAttemptPort();
+  const wrongResult = await executeApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(proposal),
+    attempts: attempts.port,
+    mutations: { mutateAsync: () => Promise.resolve({ resourceName: proposal.resourceName }) },
+    proposal,
+    reads: reads({ created: true }),
+  });
+  expect(wrongResult.outcome).toBe('indeterminate');
+  const secondProposal = await createProposalAsync();
+  const wrongValue = await executeApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(secondProposal),
+    attempts: createAttemptPort().port,
+    mutations: { mutateAsync: () => Promise.resolve(resultFor(secondProposal)) },
+    proposal: secondProposal,
+    reads: reads(),
+  });
+  expect(wrongValue.outcome).toBe('indeterminate');
+});
+
+/*** Recover orphaned intents without ever sending another Google Ads mutate request. */
+test('recovers crashes before, during, and after a mutation response conservatively', async () => {
+  const proposal = await createProposalAsync();
+  for (const stage of ['before', 'during', 'after'] as const) {
+    const attempts = createAttemptPort();
+    const attempt = await attempts.port.consumeApprovalAndCreateIntentAsync({
+      approval: approvalFor(proposal),
+      proposal,
+    });
+    expect(attempt).not.toBeNull();
+    let writes = 0;
+    const outcome = await reconcileApprovedGoogleAdsMutationAsync({
+      approval: approvalFor(proposal),
+      attempts: attempts.port,
+      proposal,
+      reads: stage === 'after' ? reads({ created: true }) : reads(),
+    });
+    writes += 0;
+    expect(outcome.outcome).toBe('indeterminate');
+    expect(writes).toBe(0);
+  }
+});
+
 /*** Prepare a deterministic fixture proposal. */
 function createProposalAsync(): Promise<GoogleAdsMutationProposal> {
-  return prepareGoogleAdsMutationAsync({
-    customerId: '8810770460',
-    mutation,
-    now: () => '2026-10-28T00:00:00.000Z',
-    mutations: { mutateAsync: () => Promise.resolve({}) },
-    reads: reads(),
-  });
-}
-
-/*** Create the only permitted persistent lifecycle test double. */
-function createAttemptPort(): {
-  readonly port: GoogleAdsMutationAttemptPort;
-  readonly created: number;
-} {
-  const lifecycle: AttemptLifecycle = { created: 0, status: 'intent' };
-  return {
-    get created() {
-      return lifecycle.created;
-    },
-    port: {
-      consumeApprovalAndCreateIntentAsync: (input) => consumeIntentAsync(lifecycle, input),
-      markIndeterminateAsync: (input) => markIndeterminateAsync(lifecycle, input),
-      settleExecutedAsync: (input) => settleExecutedAsync(lifecycle, input),
-      claimIndeterminateAttemptAsync: (input) => claimIndeterminateAttemptAsync(lifecycle, input),
-      completeReconciliationAsync: (input) => completeReconciliationAsync(lifecycle, input),
-    },
-  };
-}
-
-interface AttemptLifecycle {
-  created: number;
-  attempt?: GoogleAdsMutationAttempt;
-  status: 'intent' | 'indeterminate' | 'reconciling' | 'settled';
-}
-
-function consumeIntentAsync(
-  lifecycle: AttemptLifecycle,
-  {
-    approval,
-    proposal,
-  }: Parameters<GoogleAdsMutationAttemptPort['consumeApprovalAndCreateIntentAsync']>[0],
-) {
-  if (lifecycle.attempt !== undefined || approval.fingerprint !== proposal.fingerprint)
-    return Promise.resolve(null);
-  lifecycle.created += 1;
-  lifecycle.attempt = {
-    accountId: proposal.accountId,
-    approvalId: approval.approvalId,
-    attemptId: 'attempt-1',
-    fingerprint: proposal.fingerprint,
-    operation: proposal.mutation.kind,
-    resourceName: proposal.resourceName,
-  };
-  return Promise.resolve(lifecycle.attempt);
-}
-
-function markIndeterminateAsync(
-  lifecycle: AttemptLifecycle,
-  {
-    attempt,
-    providerResourceName,
-  }: Parameters<GoogleAdsMutationAttemptPort['markIndeterminateAsync']>[0],
-) {
-  if (lifecycle.attempt?.attemptId !== attempt.attemptId || lifecycle.status !== 'intent')
-    return Promise.resolve(false);
-  lifecycle.attempt = {
-    ...lifecycle.attempt,
-    ...(providerResourceName === undefined ? {} : { providerResourceName }),
-  };
-  lifecycle.status = 'indeterminate';
-  return Promise.resolve(true);
-}
-
-function settleExecutedAsync(
-  lifecycle: AttemptLifecycle,
-  { attempt }: Parameters<GoogleAdsMutationAttemptPort['settleExecutedAsync']>[0],
-) {
-  if (lifecycle.attempt?.attemptId !== attempt.attemptId || lifecycle.status !== 'intent')
-    return Promise.resolve(false);
-  lifecycle.status = 'settled';
-  return Promise.resolve(true);
-}
-
-function claimIndeterminateAttemptAsync(
-  lifecycle: AttemptLifecycle,
-  {
-    approval,
-    proposal,
-  }: Parameters<GoogleAdsMutationAttemptPort['claimIndeterminateAttemptAsync']>[0],
-) {
-  if (
-    lifecycle.status !== 'indeterminate' ||
-    lifecycle.attempt?.approvalId !== approval.approvalId ||
-    lifecycle.attempt.fingerprint !== proposal.fingerprint ||
-    lifecycle.attempt.accountId !== proposal.accountId
-  )
-    return Promise.resolve(null);
-  lifecycle.status = 'reconciling';
-  return Promise.resolve(lifecycle.attempt);
-}
-
-function completeReconciliationAsync(
-  lifecycle: AttemptLifecycle,
-  { attempt }: Parameters<GoogleAdsMutationAttemptPort['completeReconciliationAsync']>[0],
-) {
-  if (lifecycle.status !== 'reconciling' || lifecycle.attempt?.attemptId !== attempt.attemptId)
-    return Promise.resolve(false);
-  lifecycle.status = 'settled';
-  return Promise.resolve(true);
-}
-
-/*** Execute one ambiguous write to persist a reconcilable attempt. */
-function createIndeterminateAttemptAsync(
-  proposal: GoogleAdsMutationProposal,
-  attempts: GoogleAdsMutationAttemptPort,
-): Promise<unknown> {
-  return executeApprovedGoogleAdsMutationAsync({
-    approval: approvalFor(proposal),
-    attempts,
-    mutations: { mutateAsync: () => Promise.resolve({}) },
-    proposal,
-    reads: reads(),
-  });
-}
-
-/*** Construct a proposal-bound external approval fixture. */
-function approvalFor(proposal: GoogleAdsMutationProposal) {
-  return { approvalId: 'approval-1', fingerprint: proposal.fingerprint };
-}
-
-/*** Return deterministic Google Ads read fixtures without making a live request. */
-function reads(input: { readonly created?: boolean; readonly duplicate?: boolean } = {}) {
-  return {
-    findKeywordDuplicatesAsync: () =>
-      Promise.resolve(
-        input.duplicate
-          ? [{ resourceName: 'customers/8810770460/adGroupCriteria/99', values: {} }]
-          : [],
-      ),
-    readResourceAsync: ({ resourceName }: { readonly resourceName: string }) =>
-      Promise.resolve(
-        input.created
-          ? {
-              resourceName,
-              values: { keyword: { matchType: 'EXACT', text: 'airport taxi' }, negative: false },
-            }
-          : null,
-      ),
-  };
-}
-
-async function assertRejectsAsync(
-  operation: () => Promise<unknown>,
-  message: string,
-): Promise<void> {
-  try {
-    await operation();
-  } catch (error) {
-    expect(error).toBeInstanceOf(Error);
-    expect((error as Error).message).toContain(message);
-    return;
-  }
-  throw new Error('Expected operation to reject.');
+  return createProposalForAsync(mutation, reads());
 }

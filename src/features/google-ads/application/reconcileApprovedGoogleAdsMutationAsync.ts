@@ -1,7 +1,7 @@
 import type {
   GoogleAdsApproval,
-  GoogleAdsMutationAttempt,
   GoogleAdsMutationProposal,
+  GoogleAdsMutationReconciliationClaim,
   GoogleAdsMutationReconciliationResult,
 } from '../../../types/googleAds.js';
 import { createProposalFingerprint } from '../domain/createMutationFingerprint.js';
@@ -16,25 +16,24 @@ export async function reconcileApprovedGoogleAdsMutationAsync(input: {
   readonly reads: GoogleAdsReadPort;
 }): Promise<GoogleAdsMutationReconciliationResult> {
   assertProposalIntegrity(input.proposal, input.approval);
-  const attempt = await input.attempts.claimIndeterminateAttemptAsync({
+  const claim = await input.attempts.claimRecoverableAttemptAsync({
     approval: input.approval,
     proposal: input.proposal,
   });
-  if (attempt === null)
+  if (claim === null)
     throw new Error('Google Ads indeterminate attempt was not available for reconciliation.');
-  assertAttemptBinding(attempt, input.proposal, input.approval);
   try {
     const outcome = await getGoogleAdsMutationEvidenceAsync({
       proposal: input.proposal,
-      providerResourceName: attempt.providerResourceName,
+      providerResourceName: claim.attempt.providerResourceName,
       reads: input.reads,
     });
-    await completeReconciliationAsync(input.attempts, attempt, outcome);
+    await completeReconciliationAsync(input.attempts, claim, outcome);
     return outcome === 'indeterminate'
       ? { outcome, reason: 'Google Ads state is not causal evidence of this write attempt.' }
       : { outcome };
   } catch {
-    await completeReconciliationAsync(input.attempts, attempt, 'indeterminate');
+    await completeReconciliationAsync(input.attempts, claim, 'indeterminate');
     return {
       outcome: 'indeterminate',
       reason: 'Google Ads reconciliation could not establish causal evidence.',
@@ -53,28 +52,12 @@ function assertProposalIntegrity(
     throw new Error('Google Ads proposal integrity check failed.');
 }
 
-/*** Ensure the claimed durable record belongs to exactly this approval and immutable operation. */
-function assertAttemptBinding(
-  attempt: GoogleAdsMutationAttempt,
-  proposal: GoogleAdsMutationProposal,
-  approval: GoogleAdsApproval,
-): void {
-  if (
-    attempt.approvalId !== approval.approvalId ||
-    attempt.accountId !== proposal.accountId ||
-    attempt.fingerprint !== proposal.fingerprint ||
-    attempt.resourceName !== proposal.resourceName ||
-    attempt.operation !== proposal.mutation.kind
-  )
-    throw new Error('Google Ads indeterminate attempt does not match the approved proposal.');
-}
-
 /*** Release or settle the exclusive reconciliation claim through one atomic host transition. */
 async function completeReconciliationAsync(
   attempts: GoogleAdsMutationAttemptPort,
-  attempt: GoogleAdsMutationAttempt,
+  claim: GoogleAdsMutationReconciliationClaim,
   outcome: 'applied' | 'not-applied' | 'indeterminate',
 ): Promise<void> {
-  if (!(await attempts.completeReconciliationAsync({ attempt, outcome })))
+  if (!(await attempts.completeReconciliationAsync({ claim, outcome })))
     throw new Error('Google Ads indeterminate attempt could not be settled.');
 }

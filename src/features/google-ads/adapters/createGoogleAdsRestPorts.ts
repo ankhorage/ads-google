@@ -303,11 +303,16 @@ function extractReadValues(
 
 /*** Extract the canonical created resource name returned by a Google Ads mutate response. */
 function decodeMutationResult(value: unknown): GoogleAdsMutationResult {
-  const results = isRecord(value) && Array.isArray(value['results']) ? value['results'] : [];
+  if (!isRecord(value)) throw new Error('Google Ads mutation response was incomplete.');
+  if (value['partialFailureError'] !== undefined)
+    throw new Error('Google Ads mutation response reported a partial failure.');
+  const results = Array.isArray(value['results']) ? value['results'] : [];
+  if (results.length !== 1)
+    throw new Error('Google Ads mutation response did not contain exactly one result.');
   const result: unknown = results.at(0);
-  return isRecord(result) && typeof result['resourceName'] === 'string'
-    ? { resourceName: result['resourceName'] }
-    : {};
+  if (!isRecord(result) || typeof result['resourceName'] !== 'string')
+    throw new Error('Google Ads mutation response did not identify its resource.');
+  return { resourceName: result['resourceName'] };
 }
 
 /*** Return the first decoded read result, if the API selected a resource. */

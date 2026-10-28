@@ -4,6 +4,7 @@ import type {
   GoogleAdsMutation,
   GoogleAdsMutationAttempt,
   GoogleAdsMutationProposal,
+  GoogleAdsMutationReconciliationClaim,
   GoogleAdsMutationResult,
   GoogleAdsReadResult,
 } from '../../../types/googleAds.js';
@@ -43,12 +44,18 @@ export interface GoogleAdsMutationAttemptPort {
     readonly providerResourceName?: string;
   }): Promise<boolean>;
   settleExecutedAsync(input: { readonly attempt: GoogleAdsMutationAttempt }): Promise<boolean>;
-  claimIndeterminateAttemptAsync(input: {
+  /*** Atomically bind and lease only this approval's orphaned intent or indeterminate attempt.
+   *
+   * The trusted host validates approval ID, account, fingerprint, resource, and operation in the
+   * same transition, returns an opaque fencing token, and never causes another provider write.
+   */
+  claimRecoverableAttemptAsync(input: {
     readonly approval: GoogleAdsApproval;
     readonly proposal: GoogleAdsMutationProposal;
-  }): Promise<GoogleAdsMutationAttempt | null>;
+  }): Promise<GoogleAdsMutationReconciliationClaim | null>;
+  /*** Fence a reconciliation transition; indeterminate releases the lease, terminal outcomes settle it. */
   completeReconciliationAsync(input: {
-    readonly attempt: GoogleAdsMutationAttempt;
+    readonly claim: GoogleAdsMutationReconciliationClaim;
     readonly outcome: 'applied' | 'not-applied' | 'indeterminate';
   }): Promise<boolean>;
 }

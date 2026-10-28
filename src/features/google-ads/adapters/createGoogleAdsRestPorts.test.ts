@@ -99,11 +99,52 @@ test('uses schema-grounded v26 read projections for every mutable resource', asy
   }
 });
 
+/*** Reject incomplete, multi-result, and partial-failure v26 mutate acknowledgements. */
+test('rejects mutation responses that cannot acknowledge exactly one operation', async () => {
+  const fetchSpy = spyOn(globalThis, 'fetch');
+  const ports = createGoogleAdsRestPorts(configuration);
+  const request = {
+    customerId: configuration.allowedCustomerId,
+    mutation: {
+      adGroupResourceName: 'customers/8810770460/adGroups/7',
+      kind: 'create-keyword' as const,
+      matchType: 'EXACT' as const,
+      text: 'airport taxi',
+    },
+    validateOnly: false,
+  };
+  try {
+    for (const response of [
+      { results: [] },
+      {
+        results: [
+          { resourceName: 'customers/8810770460/adGroupCriteria/1' },
+          { resourceName: 'customers/8810770460/adGroupCriteria/2' },
+        ],
+      },
+      {
+        partialFailureError: { code: 3, message: 'invalid criterion' },
+        results: [{ resourceName: 'customers/8810770460/adGroupCriteria/1' }],
+      },
+    ]) {
+      fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(response), { status: 200 }));
+      await assertRejectsAsync(() => ports.mutateAsync(request), 'mutation response');
+    }
+  } finally {
+    fetchSpy.mockRestore();
+  }
+});
+
 async function verifyValidateOnlyMutationAsync(
   ports: ReturnType<typeof createGoogleAdsRestPorts>,
   fetchSpy: FetchSpy,
 ): Promise<void> {
-  fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify({ results: [] }), { status: 200 }));
+  fetchSpy.mockResolvedValueOnce(
+    new Response(
+      JSON.stringify({ results: [{ resourceName: 'customers/8810770460/adGroupCriteria/99' }] }),
+      { status: 200 },
+    ),
+  );
   await ports.mutateAsync({
     customerId: '8810770460',
     mutation: {

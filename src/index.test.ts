@@ -6,11 +6,16 @@ import { createGoogleAdsProvider } from './index.js';
 test('exports an approval-gated public Google Ads provider factory', async () => {
   const fetchSpy = spyOn(globalThis, 'fetch')
     .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
-    .mockResolvedValueOnce(new Response(JSON.stringify({ results: [] }), { status: 200 }));
+    .mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({ results: [{ resourceName: 'customers/8810770460/adGroupCriteria/99' }] }),
+        { status: 200 },
+      ),
+    );
   try {
     const provider = createGoogleAdsProvider({
       attempts: {
-        claimIndeterminateAttemptAsync: () => Promise.resolve(null),
+        claimRecoverableAttemptAsync: () => Promise.resolve(null),
         completeReconciliationAsync: () => Promise.resolve(true),
         consumeApprovalAndCreateIntentAsync: () => Promise.resolve(null),
         markIndeterminateAsync: () => Promise.resolve(true),

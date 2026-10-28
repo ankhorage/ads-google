@@ -81,6 +81,12 @@ export interface GoogleAdsMutationAttempt {
   readonly resourceName: string;
 }
 
+/*** An exclusively leased host-owned attempt recovery claim, fenced by an opaque token. */
+export interface GoogleAdsMutationReconciliationClaim {
+  readonly attempt: GoogleAdsMutationAttempt;
+  readonly fenceToken: string;
+}
+
 /*** The terminal outcome of one approved mutation attempt. */
 export type GoogleAdsMutationExecutionResult =
   | { readonly outcome: 'executed' }
@@ -97,7 +103,7 @@ export type GoogleAdsMutationReconciliationResult =
 
 /*** The exact provider resource affected by one validated mutation. */
 export interface GoogleAdsMutationResult {
-  readonly resourceName?: string;
+  readonly resourceName: string;
 }
 
 /*** A consumed external approval bound to exactly one proposed mutation. */
