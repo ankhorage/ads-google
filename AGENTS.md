@@ -4,9 +4,9 @@
 
 ## Repository
 
-Package: `ads-google-issue-1`
+Package: `@ankhorage/ads-google`
 
-No package description is declared.
+Google Ads provider with externally approved, account-scoped mutations.
 
 ## Current architecture only
 

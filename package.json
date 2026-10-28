@@ -2,6 +2,20 @@
   "name": "@ankhorage/ads-google",
   "version": "0.1.0",
   "description": "Google Ads provider with externally approved, account-scoped mutations.",
+  "license": "MIT",
+  "homepage": "https://github.com/ankhorage/ads-google#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankhorage/ads-google.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ankhorage/ads-google/issues"
+  },
+  "keywords": [
+    "ads",
+    "google-ads",
+    "ankhorage"
+  ],
   "module": "./dist/index.js",
   "type": "module",
   "sideEffects": false,
@@ -24,7 +38,10 @@
   },
   "devDependencies": {
     "@ankhorage/devtools": "^2.3.33",
-    "@types/bun": "^1.4.2"
+    "@ankhorage/paradox": "^0.1.24",
+    "@types/bun": "^1.4.2",
+    "@types/node": "^24.10.1",
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "typescript": "^7"
@@ -32,6 +49,8 @@
   "scripts": {
     "build": "rm -rf dist tsconfig.tsbuildinfo && tsc -p tsconfig.build.json",
     "check-types": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "bun run check-types",
+    "docs": "paradox && ankhorage-prettier --write README.md paradox",
     "test": "bun test src",
     "doctor": "ankhorage-structure check .",
     "changeset": "ankhorage-changeset",
