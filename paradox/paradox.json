@@ -1,0 +1,2976 @@
+{
+  "packageName": "@ankhorage/ads-google",
+  "packageId": "@ankhorage/ads-google",
+  "description": "Google Ads provider with externally approved, account-scoped mutations.",
+  "collaborators": null,
+  "donation": null,
+  "badges": [
+    {
+      "id": "license",
+      "label": "license",
+      "value": "MIT",
+      "color": "2563eb"
+    },
+    {
+      "id": "npm",
+      "label": "npm",
+      "value": "v0.2.0",
+      "color": "cb3837"
+    },
+    {
+      "id": "runtime",
+      "label": "runtime",
+      "value": "bun",
+      "color": "f59e0b"
+    },
+    {
+      "id": "typescript",
+      "label": "typescript",
+      "value": "strict",
+      "color": "2563eb"
+    },
+    {
+      "id": "eslint",
+      "label": "eslint",
+      "value": "checked",
+      "color": "0a7f3f"
+    },
+    {
+      "id": "prettier",
+      "label": "prettier",
+      "value": "checked",
+      "color": "0a7f3f"
+    },
+    {
+      "id": "build",
+      "label": "build",
+      "value": "checked",
+      "color": "0a7f3f"
+    },
+    {
+      "id": "tests",
+      "label": "tests",
+      "value": "checked",
+      "color": "0a7f3f"
+    },
+    {
+      "id": "docs",
+      "label": "docs",
+      "value": "paradox",
+      "color": "0f766e"
+    }
+  ],
+  "usage": null,
+  "readmeUsageDescription": null,
+  "readmeUsage": [],
+  "readmeCli": null,
+  "readmeConfig": null,
+  "config": null,
+  "entrypoints": [
+    "src/index.ts"
+  ],
+  "modules": [
+    {
+      "path": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "assertGoogleAdsMutationResourceKind"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "createGoogleAdsRestPorts"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "executeApprovedGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "getGoogleAdsMutationEvidenceAsync"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/googleAdsMutation.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "approvalFor",
+        "assertRejectsAsync",
+        "createAttemptPort",
+        "createIndeterminateAttemptAsync",
+        "createProposalForAsync",
+        "proposalWith",
+        "reads",
+        "readSequence",
+        "resultFor"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "prepareGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "reconcileApprovedGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "createGoogleAdsProvider"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/domain/createMutationFingerprint.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "createMutationFingerprint",
+        "createProposalFingerprint"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "GoogleAdsMutationAttemptPort",
+        "GoogleAdsMutationPort",
+        "GoogleAdsReadPort"
+      ]
+    },
+    {
+      "path": "src/index.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/index.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/index.ts",
+      "isEntrypoint": true,
+      "dependencies": [],
+      "exports": [
+        "createGoogleAdsProvider",
+        "executeApprovedGoogleAdsMutationAsync",
+        "GoogleAdsApproval",
+        "GoogleAdsMutation",
+        "GoogleAdsMutationAttempt",
+        "GoogleAdsMutationAttemptPort",
+        "GoogleAdsMutationExecutionResult",
+        "GoogleAdsMutationPort",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsMutationReconciliationClaim",
+        "GoogleAdsMutationReconciliationResult",
+        "GoogleAdsMutationResult",
+        "GoogleAdsProvider",
+        "GoogleAdsProviderConfiguration",
+        "GoogleAdsReadPort",
+        "GoogleAdsReadResult",
+        "prepareGoogleAdsMutationAsync",
+        "reconcileApprovedGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/types/googleAds.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": [
+        "GoogleAdsApproval",
+        "GoogleAdsKeywordMatchType",
+        "GoogleAdsMutation",
+        "GoogleAdsMutationAttempt",
+        "GoogleAdsMutationExecutionResult",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsMutationReconciliationClaim",
+        "GoogleAdsMutationReconciliationResult",
+        "GoogleAdsMutationResult",
+        "GoogleAdsProvider",
+        "GoogleAdsProviderConfiguration",
+        "GoogleAdsReadResult"
+      ]
+    }
+  ],
+  "exports": [
+    {
+      "name": "createGoogleAdsProvider",
+      "description": "Compose the real v26 REST adapter behind the approval-gated public provider boundary.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "function",
+      "modulePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "line": 12,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsMutationAttemptPort",
+        "GoogleAdsProvider",
+        "GoogleAdsProviderConfiguration"
+      ],
+      "signatures": [
+        {
+          "label": "(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }) => GoogleAdsProvider",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }",
+              "required": true,
+              "description": null
+            }
+          ],
+          "returnType": "GoogleAdsProvider",
+          "returnDescription": null
+        }
+      ],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "executeApprovedGoogleAdsMutationAsync",
+      "description": "Consume approval with a durable intent before issuing exactly one Google Ads mutation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "function",
+      "modulePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 15,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsApproval",
+        "GoogleAdsMutationAttemptPort",
+        "GoogleAdsMutationExecutionResult",
+        "GoogleAdsMutationPort",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsReadPort"
+      ],
+      "signatures": [
+        {
+          "label": "(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationExecutionResult>",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }",
+              "required": true,
+              "description": null
+            }
+          ],
+          "returnType": "Promise<GoogleAdsMutationExecutionResult>",
+          "returnDescription": null
+        }
+      ],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsApproval",
+      "description": "A consumed external approval bound to exactly one proposed mutation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 110,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "approvalId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "fingerprint",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutation",
+      "description": "Explicit resources and fields that this provider can mutate.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "unknown",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 17,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationAttempt",
+      "description": "A durable, approval-bound write attempt owned by the trusted host runtime.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 74,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "accountId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "approvalId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "attemptId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "fingerprint",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "operation",
+          "kind": "property",
+          "type": "\"create-keyword\" | \"create-ad-group-negative-keyword\" | \"create-campaign-negative-keyword\" | \"remove-keyword\" | \"remove-ad-group-negative-keyword\" | \"remove-campaign-negative-keyword\" | \"set-keyword-cpc\" | \"set-ad-group-cpc\" | \"set-budget\" | \"set-campaign-status\" | \"set-ad-group-status\"",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "providerResourceName",
+          "kind": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "resourceName",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationAttemptPort",
+      "description": "Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "line": 37,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsApproval",
+        "GoogleAdsMutationAttempt",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsMutationReconciliationClaim"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "claimRecoverableAttemptAsync",
+          "kind": "method",
+          "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationReconciliationClaim | null>",
+          "required": true,
+          "description": "Atomically bind and lease only this approval's orphaned intent or indeterminate attempt.\n\nThe trusted host validates approval ID, account, fingerprint, resource, and operation in the\nsame transition, returns an opaque fencing token, and never causes another provider write."
+        },
+        {
+          "name": "completeReconciliationAsync",
+          "kind": "method",
+          "type": "(input: { readonly claim: GoogleAdsMutationReconciliationClaim; readonly outcome: \"applied\" | \"not-applied\" | \"indeterminate\"; }) => Promise<boolean>",
+          "required": true,
+          "description": "Fence a reconciliation transition; indeterminate releases the lease, terminal outcomes settle it."
+        },
+        {
+          "name": "consumeApprovalAndCreateIntentAsync",
+          "kind": "method",
+          "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationAttempt | null>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "markIndeterminateAsync",
+          "kind": "method",
+          "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; readonly providerResourceName?: string; }) => Promise<boolean>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "settleExecutedAsync",
+          "kind": "method",
+          "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; }) => Promise<boolean>",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationExecutionResult",
+      "description": "The terminal outcome of one approved mutation attempt.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "unknown",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 91,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationPort",
+      "description": "Validates and applies an exact Google Ads mutation at the provider boundary.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "line": 28,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsMutation",
+        "GoogleAdsMutationResult"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "mutateAsync",
+          "kind": "method",
+          "type": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly validateOnly: boolean; }) => Promise<GoogleAdsMutationResult | undefined>",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationProposal",
+      "description": "Immutable proposal which must be approved outside this provider before execution.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 62,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsMutation"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "accountId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "after",
+          "kind": "property",
+          "type": "Readonly<Record<string, unknown>> | null",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "before",
+          "kind": "property",
+          "type": "Readonly<Record<string, unknown>> | null",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "change",
+          "kind": "property",
+          "type": "AdsChangeDescriptor",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "createdAt",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "fingerprint",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "mutation",
+          "kind": "property",
+          "type": "GoogleAdsMutation",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "resourceName",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationReconciliationClaim",
+      "description": "An exclusively leased host-owned attempt recovery claim, fenced by an opaque token.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 85,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsMutationAttempt"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "attempt",
+          "kind": "property",
+          "type": "GoogleAdsMutationAttempt",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "fenceToken",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationReconciliationResult",
+      "description": "The evidence-based settlement of an indeterminate approved mutation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "unknown",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 99,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsMutationResult",
+      "description": "The exact provider resource affected by one validated mutation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 105,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "resourceName",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsProvider",
+      "description": "The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 123,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsApproval",
+        "GoogleAdsMutation",
+        "GoogleAdsMutationExecutionResult",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsMutationReconciliationResult"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "executeApprovedMutationAsync",
+          "kind": "method",
+          "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationExecutionResult>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "prepareMutationAsync",
+          "kind": "method",
+          "type": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; }) => Promise<GoogleAdsMutationProposal>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "reconcileApprovedMutationAsync",
+          "kind": "method",
+          "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationReconciliationResult>",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsProviderConfiguration",
+      "description": "A Google Ads account explicitly permitted for one provider instance.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 4,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "accessToken",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "allowedCustomerId",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "apiVersion",
+          "kind": "property",
+          "type": "\"v26\" | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "developerToken",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "loginCustomerId",
+          "kind": "property",
+          "type": "string | undefined",
+          "required": false,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsReadPort",
+      "description": "Reads an exact Google Ads resource within an already isolated customer scope.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "line": 13,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsReadResult"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "findKeywordDuplicatesAsync",
+          "kind": "method",
+          "type": "(input: { readonly customerId: string; readonly matchType: GoogleAdsKeywordMatchType; readonly negative: boolean; readonly parentResourceName: string; readonly text: string; }) => Promise<readonly GoogleAdsReadResult[]>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "readResourceAsync",
+          "kind": "method",
+          "type": "(input: { readonly customerId: string; readonly resourceName: string; }) => Promise<GoogleAdsReadResult | null>",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GoogleAdsReadResult",
+      "description": "Sanitized Google Ads read result retaining provider-only values explicitly.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "type",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 116,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "extensions",
+          "kind": "property",
+          "type": "readonly AdsProviderExtension[] | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "resourceName",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "values",
+          "kind": "property",
+          "type": "Readonly<Record<string, unknown>>",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "prepareGoogleAdsMutationAsync",
+      "description": "Read, diff, duplicate-check, and API-validate a mutation before external approval.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "function",
+      "modulePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 11,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsMutation",
+        "GoogleAdsMutationPort",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsReadPort"
+      ],
+      "signatures": [
+        {
+          "label": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () => string; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationProposal>",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "{ readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () => string; readonly reads: GoogleAdsReadPort; }",
+              "required": true,
+              "description": null
+            }
+          ],
+          "returnType": "Promise<GoogleAdsMutationProposal>",
+          "returnDescription": null
+        }
+      ],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "reconcileApprovedGoogleAdsMutationAsync",
+      "description": "Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "function",
+      "modulePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "line": 12,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [
+        "GoogleAdsApproval",
+        "GoogleAdsMutationAttemptPort",
+        "GoogleAdsMutationProposal",
+        "GoogleAdsMutationReconciliationResult",
+        "GoogleAdsReadPort"
+      ],
+      "signatures": [
+        {
+          "label": "(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationReconciliationResult>",
+          "parameters": [
+            {
+              "name": "input",
+              "type": "{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }",
+              "required": true,
+              "description": null
+            }
+          ],
+          "returnType": "Promise<GoogleAdsMutationReconciliationResult>",
+          "returnDescription": null
+        }
+      ],
+      "members": [],
+      "structuredRows": []
+    }
+  ],
+  "components": [],
+  "sourceFunctions": [
+    {
+      "name": "assertGoogleAdsMutationResourceKind",
+      "description": "Reject a resource whose canonical Google collection cannot carry the requested mutation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+        "line": 4,
+        "column": 1
+      }
+    },
+    {
+      "name": "getExpectedResourceCollection",
+      "description": "Map each supported operation to the one canonical Google resource collection it may mutate.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+        "line": 14,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyScopedReadAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 26,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyValidateOnlyMutationAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 138,
+        "column": 1
+      }
+    },
+    {
+      "name": "createValidateOnlyMutation",
+      "description": "Return a valid scoped mutation for Google Ads validate-only request assertions.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 177,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyValidateOnlyPartialFailureAsync",
+      "description": "Reject partial failures even when the Google Ads request is validate-only.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 191,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyForeignMutationRejectedAsync",
+      "description": "Ensure resource names cannot escape the configured customer even on a permitted request URL.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 208,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyWrongResourceKindRejectedAsync",
+      "description": "Reject a permitted customer resource when its collection cannot carry the requested operation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 227,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyRedactedFailureAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 245,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertRejectsAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 260,
+        "column": 1
+      }
+    },
+    {
+      "name": "getErrorAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "line": 268,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGoogleAdsRestPorts",
+      "description": "Create v26 REST ports scoped to one configured Google Ads customer.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 10,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGoogleAdsRequestAsync",
+      "description": "Create the one authenticated request boundary without exposing secret values in errors.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 65,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertCustomer",
+      "description": "Refuse every customer except the explicitly configured account.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 82,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertResourceCustomer",
+      "description": "Reject a resource name unless it belongs to the single configured customer.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 88,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertMutationResources",
+      "description": "Validate every resource carried by an operation before any provider request is made.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 101,
+        "column": 1
+      }
+    },
+    {
+      "name": "createHeaders",
+      "description": "Build authorization headers without serializing secrets into errors or audit data.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 115,
+        "column": 1
+      }
+    },
+    {
+      "name": "toMutationRequest",
+      "description": "Translate one supported provider mutation to its precise Google Ads mutate service.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 129,
+        "column": 1
+      }
+    },
+    {
+      "name": "createAdGroupCriterionRequest",
+      "description": "Map an ad-group criterion creation to the v26 operation payload.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 162,
+        "column": 1
+      }
+    },
+    {
+      "name": "createCampaignCriterionRequest",
+      "description": "Map a campaign criterion creation to the v26 operation payload.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 181,
+        "column": 1
+      }
+    },
+    {
+      "name": "createUpdateRequest",
+      "description": "Build a field-mask update operation for one v26 resource service.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 200,
+        "column": 1
+      }
+    },
+    {
+      "name": "escapeGaql",
+      "description": "Escape a GAQL string literal.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 217,
+        "column": 1
+      }
+    },
+    {
+      "name": "createResourceReadQuery",
+      "description": "Build a resource-scoped GAQL lookup for a supported mutable resource name.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 222,
+        "column": 1
+      }
+    },
+    {
+      "name": "getResourceReadFields",
+      "description": "Select only the mutable state needed to prepare and verify each supported resource.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 228,
+        "column": 1
+      }
+    },
+    {
+      "name": "getResourceQuery",
+      "description": "Select the correct GAQL resource and field namespace from its canonical name.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 241,
+        "column": 1
+      }
+    },
+    {
+      "name": "createKeywordDuplicateQuery",
+      "description": "Build the criterion query shared by keyword and negative-keyword duplicate detection.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 256,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeResources",
+      "description": "Decode a supported v26 search-stream response without trusting its JSON shape.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 269,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeSearchStreamBatch",
+      "description": "Decode one REST search-stream batch into provider read values.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 278,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeSearchStreamResult",
+      "description": "Decode one resource record while retaining the selected provider state.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 287,
+        "column": 1
+      }
+    },
+    {
+      "name": "extractReadValues",
+      "description": "Retain JSON-compatible selected resource fields without preserving untrusted envelopes.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 297,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeMutationResult",
+      "description": "Decode a validation acknowledgement or the exact result of one productive mutation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 305,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeFirstResource",
+      "description": "Return the first decoded read result, if the API selected a resource.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 323,
+        "column": 1
+      }
+    },
+    {
+      "name": "findResourceName",
+      "description": "Find a resource name in a typed Google Ads result without an unsafe JSON cast.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 330,
+        "column": 1
+      }
+    },
+    {
+      "name": "isRecord",
+      "description": "Narrow untrusted JSON to a record before accessing fields.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "line": 342,
+        "column": 1
+      }
+    },
+    {
+      "name": "executeApprovedGoogleAdsMutationAsync",
+      "description": "Consume approval with a durable intent before issuing exactly one Google Ads mutation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 15,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertProposalIntegrity",
+      "description": "Reject locally tampered proposals before their trusted approval lifecycle is entered.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 51,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertUnchangedAsync",
+      "description": "Re-read the approved target and reject proposals that changed before approval consumption.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 62,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertNoDuplicateAtExecutionAsync",
+      "description": "Re-check the keyword uniqueness invariant immediately before approval is atomically consumed.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 79,
+        "column": 1
+      }
+    },
+    {
+      "name": "recordIndeterminateAsync",
+      "description": "Preserve an ambiguous outcome durably; no caller may use it to retry a Google Ads write.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "line": 101,
+        "column": 1
+      }
+    },
+    {
+      "name": "getGoogleAdsMutationEvidenceAsync",
+      "description": "Return applied only for an acknowledged result identity whose approved post-state is readable.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "line": 5,
+        "column": 1
+      }
+    },
+    {
+      "name": "matchesMutationResult",
+      "description": "Bind the only acknowledged v26 mutate result to the exact approved operation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "line": 24,
+        "column": 1
+      }
+    },
+    {
+      "name": "getExpectedResultCollection",
+      "description": "Map each supported operation to the collection returned by its v26 mutate result.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "line": 34,
+        "column": 1
+      }
+    },
+    {
+      "name": "escapeRegularExpression",
+      "description": "Escape a literal account identifier before using it in the fixed resource-name expression.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "line": 50,
+        "column": 1
+      }
+    },
+    {
+      "name": "matchesExpectedState",
+      "description": "Compare every approved after-value to the exact resource identity returned by Google Ads.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "line": 55,
+        "column": 1
+      }
+    },
+    {
+      "name": "createProposalAsync",
+      "description": "Prepare a deterministic fixture proposal.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "line": 324,
+        "column": 1
+      }
+    },
+    {
+      "name": "createAttemptPort",
+      "description": "Create a host lifecycle double that enforces the production claim invariants.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 12,
+        "column": 1
+      }
+    },
+    {
+      "name": "consumeIntentAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 37,
+        "column": 1
+      }
+    },
+    {
+      "name": "markIndeterminateAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 58,
+        "column": 1
+      }
+    },
+    {
+      "name": "settleExecutedAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 75,
+        "column": 1
+      }
+    },
+    {
+      "name": "claimRecoverableAttemptAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 85,
+        "column": 1
+      }
+    },
+    {
+      "name": "completeReconciliationAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 106,
+        "column": 1
+      }
+    },
+    {
+      "name": "createIndeterminateAttemptAsync",
+      "description": "Execute one ambiguous write to persist a reconcilable attempt.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 121,
+        "column": 1
+      }
+    },
+    {
+      "name": "createProposalForAsync",
+      "description": "Prepare a proposal for a supported mutation against deterministic read fixtures.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 135,
+        "column": 1
+      }
+    },
+    {
+      "name": "approvalFor",
+      "description": "Construct a proposal-bound external approval fixture.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 151,
+        "column": 1
+      }
+    },
+    {
+      "name": "reads",
+      "description": "Return deterministic Google Ads read fixtures without making a live request.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 156,
+        "column": 1
+      }
+    },
+    {
+      "name": "readSequence",
+      "description": "Return one resource state per consecutive read, retaining the resource identity.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 177,
+        "column": 1
+      }
+    },
+    {
+      "name": "resultFor",
+      "description": "Return the canonical resource name that a successful v26 fixture would acknowledge.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 190,
+        "column": 1
+      }
+    },
+    {
+      "name": "proposalWith",
+      "description": "Rebind a deliberately different proposal so the host claim, rather than integrity, rejects it.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 197,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertRejectsAsync",
+      "description": "Assert that an async operation rejects with the expected safe message fragment.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 206,
+        "column": 1
+      }
+    },
+    {
+      "name": "expectMessage",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "line": 222,
+        "column": 1
+      }
+    },
+    {
+      "name": "prepareGoogleAdsMutationAsync",
+      "description": "Read, diff, duplicate-check, and API-validate a mutation before external approval.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 11,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertNoDuplicateAsync",
+      "description": "Reject a keyword that Google Ads would otherwise add as a duplicate criterion.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 57,
+        "column": 1
+      }
+    },
+    {
+      "name": "createChange",
+      "description": "Build a portable change record without exposing provider credentials or headers.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 77,
+        "column": 1
+      }
+    },
+    {
+      "name": "getPortableResourceKind",
+      "description": "Map each mutable Google resource to its truthful portable hierarchy kind.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 105,
+        "column": 1
+      }
+    },
+    {
+      "name": "getGoogleResourceKind",
+      "description": "Preserve the exact Google resource kind without falsifying the portable descriptor.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 115,
+        "column": 1
+      }
+    },
+    {
+      "name": "getMutationResourceName",
+      "description": "Identify the single Google resource changed by a mutation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 126,
+        "column": 1
+      }
+    },
+    {
+      "name": "isCreateKeyword",
+      "description": "Identify mutations whose target does not exist until the API creates it.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 134,
+        "column": 1
+      }
+    },
+    {
+      "name": "describeAfter",
+      "description": "Produce the exact changed fields for a reviewable before/after diff.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "line": 141,
+        "column": 1
+      }
+    },
+    {
+      "name": "reconcileApprovedGoogleAdsMutationAsync",
+      "description": "Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "line": 12,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertProposalIntegrity",
+      "description": "Reject a proposal whose canonical timestamp, operation, or approval differs from the approved data.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "line": 45,
+        "column": 1
+      }
+    },
+    {
+      "name": "completeReconciliationAsync",
+      "description": "Release or settle the exclusive reconciliation claim through one atomic host transition.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "line": 56,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGoogleAdsProvider",
+      "description": "Compose the real v26 REST adapter behind the approval-gated public provider boundary.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "line": 12,
+        "column": 1
+      }
+    },
+    {
+      "name": "createMutationFingerprint",
+      "description": "Create a stable fingerprint over the complete immutable operation proposal.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "line": 6,
+        "column": 1
+      }
+    },
+    {
+      "name": "createProposalFingerprint",
+      "description": "Recompute the immutable approval binding from the proposal that will be executed.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "line": 13,
+        "column": 1
+      }
+    },
+    {
+      "name": "sortValue",
+      "description": "Recursively sort object keys so equivalent proposals have one fingerprint.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "line": 20,
+        "column": 1
+      }
+    }
+  ],
+  "sequenceScenarios": [
+    {
+      "kind": "export",
+      "name": "createGoogleAdsProvider",
+      "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+      "symbolName": "createGoogleAdsProvider",
+      "description": "Compose the real v26 REST adapter behind the approval-gated public provider boundary.",
+      "isReadme": false
+    },
+    {
+      "kind": "export",
+      "name": "executeApprovedGoogleAdsMutationAsync",
+      "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+      "symbolName": "executeApprovedGoogleAdsMutationAsync",
+      "description": "Consume approval with a durable intent before issuing exactly one Google Ads mutation.",
+      "isReadme": false
+    },
+    {
+      "kind": "export",
+      "name": "prepareGoogleAdsMutationAsync",
+      "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+      "symbolName": "prepareGoogleAdsMutationAsync",
+      "description": "Read, diff, duplicate-check, and API-validate a mutation before external approval.",
+      "isReadme": false
+    },
+    {
+      "kind": "export",
+      "name": "reconcileApprovedGoogleAdsMutationAsync",
+      "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+      "symbolName": "reconcileApprovedGoogleAdsMutationAsync",
+      "description": "Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.",
+      "isReadme": false
+    }
+  ],
+  "graphs": {
+    "imports": [
+      {
+        "fromPath": "src/index.test.ts",
+        "toPath": "src/index.ts",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/index.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/index.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toPath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "toPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts",
+        "toPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/domain/createMutationFingerprint.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      }
+    ],
+    "calls": [
+      {
+        "fromSymbol": "src/index.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/index.test.ts",
+        "toSymbol": "spyOn",
+        "callExpression": "spyOn",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/index.test.ts",
+        "toSymbol": "createGoogleAdsProvider",
+        "callExpression": "createGoogleAdsProvider",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/index.test.ts",
+        "toSymbol": "prepareMutationAsync",
+        "callExpression": "provider.prepareMutationAsync",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/index.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "assertGoogleAdsMutationResourceKind",
+        "toSymbol": "getExpectedResourceCollection",
+        "callExpression": "getExpectedResourceCollection",
+        "sourcePath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "spyOn",
+        "callExpression": "spyOn",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "verifyScopedReadAsync",
+        "callExpression": "verifyScopedReadAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "verifyValidateOnlyMutationAsync",
+        "callExpression": "verifyValidateOnlyMutationAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "verifyRedactedFailureAsync",
+        "callExpression": "verifyRedactedFailureAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyScopedReadAsync",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "ports.readResourceAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyScopedReadAsync",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "ports.readResourceAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "mutateAsync",
+        "callExpression": "ports.mutateAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "mutateAsync",
+        "callExpression": "ports.mutateAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "createValidateOnlyMutation",
+        "callExpression": "createValidateOnlyMutation",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "verifyValidateOnlyPartialFailureAsync",
+        "callExpression": "verifyValidateOnlyPartialFailureAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "verifyForeignMutationRejectedAsync",
+        "callExpression": "verifyForeignMutationRejectedAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyMutationAsync",
+        "toSymbol": "verifyWrongResourceKindRejectedAsync",
+        "callExpression": "verifyWrongResourceKindRejectedAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyValidateOnlyPartialFailureAsync",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "createValidateOnlyMutation",
+        "callExpression": "createValidateOnlyMutation",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyForeignMutationRejectedAsync",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyWrongResourceKindRejectedAsync",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyRedactedFailureAsync",
+        "toSymbol": "getErrorAsync",
+        "callExpression": "getErrorAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "verifyRedactedFailureAsync",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "assertRejectsAsync",
+        "toSymbol": "getErrorAsync",
+        "callExpression": "getErrorAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "assertRejectsAsync",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "getErrorAsync",
+        "toSymbol": "operation",
+        "callExpression": "operation",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsRestPorts",
+        "toSymbol": "createGoogleAdsRequestAsync",
+        "callExpression": "createGoogleAdsRequestAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "readResourceAsync",
+        "toSymbol": "assertCustomer",
+        "callExpression": "assertCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "readResourceAsync",
+        "toSymbol": "assertResourceCustomer",
+        "callExpression": "assertResourceCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "readResourceAsync",
+        "toSymbol": "createResourceReadQuery",
+        "callExpression": "createResourceReadQuery",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "readResourceAsync",
+        "toSymbol": "requestAsync",
+        "callExpression": "requestAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "readResourceAsync",
+        "toSymbol": "decodeFirstResource",
+        "callExpression": "decodeFirstResource",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "findKeywordDuplicatesAsync",
+        "toSymbol": "assertCustomer",
+        "callExpression": "assertCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "findKeywordDuplicatesAsync",
+        "toSymbol": "assertResourceCustomer",
+        "callExpression": "assertResourceCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "findKeywordDuplicatesAsync",
+        "toSymbol": "createKeywordDuplicateQuery",
+        "callExpression": "createKeywordDuplicateQuery",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "findKeywordDuplicatesAsync",
+        "toSymbol": "requestAsync",
+        "callExpression": "requestAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "findKeywordDuplicatesAsync",
+        "toSymbol": "decodeResources",
+        "callExpression": "decodeResources",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "assertCustomer",
+        "callExpression": "assertCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "assertMutationResources",
+        "callExpression": "assertMutationResources",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "toMutationRequest",
+        "callExpression": "toMutationRequest",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "requestAsync",
+        "callExpression": "requestAsync",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "decodeMutationResult",
+        "callExpression": "decodeMutationResult",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toSymbol": "createHeaders",
+        "callExpression": "createHeaders",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toSymbol": "assertResourceCustomer",
+        "callExpression": "assertResourceCustomer",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toSymbol": "assertGoogleAdsMutationResourceKind",
+        "callExpression": "assertGoogleAdsMutationResourceKind",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "toMutationRequest",
+        "toSymbol": "createAdGroupCriterionRequest",
+        "callExpression": "createAdGroupCriterionRequest",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "toMutationRequest",
+        "toSymbol": "createCampaignCriterionRequest",
+        "callExpression": "createCampaignCriterionRequest",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "toMutationRequest",
+        "toSymbol": "createUpdateRequest",
+        "callExpression": "createUpdateRequest",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "createResourceReadQuery",
+        "toSymbol": "getResourceQuery",
+        "callExpression": "getResourceQuery",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "createResourceReadQuery",
+        "toSymbol": "getResourceReadFields",
+        "callExpression": "getResourceReadFields",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "createResourceReadQuery",
+        "toSymbol": "escapeGaql",
+        "callExpression": "escapeGaql",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "createKeywordDuplicateQuery",
+        "toSymbol": "escapeGaql",
+        "callExpression": "escapeGaql",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeSearchStreamBatch",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeSearchStreamResult",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeSearchStreamResult",
+        "toSymbol": "findResourceName",
+        "callExpression": "findResourceName",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeSearchStreamResult",
+        "toSymbol": "extractReadValues",
+        "callExpression": "extractReadValues",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeMutationResult",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "decodeFirstResource",
+        "toSymbol": "decodeResources",
+        "callExpression": "decodeResources",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "assertProposalIntegrity",
+        "callExpression": "assertProposalIntegrity",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "assertUnchangedAsync",
+        "callExpression": "assertUnchangedAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "consumeApprovalAndCreateIntentAsync",
+        "callExpression": "input.attempts.consumeApprovalAndCreateIntentAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "mutateAsync",
+        "callExpression": "input.mutations.mutateAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "recordIndeterminateAsync",
+        "callExpression": "recordIndeterminateAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "callExpression": "getGoogleAdsMutationEvidenceAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toSymbol": "settleExecutedAsync",
+        "callExpression": "input.attempts.settleExecutedAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertProposalIntegrity",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertUnchangedAsync",
+        "toSymbol": "assertNoDuplicateAtExecutionAsync",
+        "callExpression": "assertNoDuplicateAtExecutionAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertUnchangedAsync",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "input.reads.readResourceAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertNoDuplicateAtExecutionAsync",
+        "toSymbol": "findKeywordDuplicatesAsync",
+        "callExpression": "input.reads.findKeywordDuplicatesAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "recordIndeterminateAsync",
+        "toSymbol": "markIndeterminateAsync",
+        "callExpression": "input.attempts.markIndeterminateAsync",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "toSymbol": "matchesMutationResult",
+        "callExpression": "matchesMutationResult",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "input.reads.readResourceAsync",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "toSymbol": "matchesExpectedState",
+        "callExpression": "matchesExpectedState",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromSymbol": "matchesMutationResult",
+        "toSymbol": "getExpectedResultCollection",
+        "callExpression": "getExpectedResultCollection",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromSymbol": "matchesMutationResult",
+        "toSymbol": "escapeRegularExpression",
+        "callExpression": "escapeRegularExpression",
+        "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "createProposalAsync",
+        "callExpression": "createProposalAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "createAttemptPort",
+        "callExpression": "createAttemptPort",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "callExpression": "executeApprovedGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "approvalFor",
+        "callExpression": "approvalFor",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "reads",
+        "callExpression": "reads",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "callExpression": "reconcileApprovedGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "assertRejectsAsync",
+        "callExpression": "assertRejectsAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "createIndeterminateAttemptAsync",
+        "callExpression": "createIndeterminateAttemptAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "proposalWith",
+        "callExpression": "proposalWith",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "mutateAsync",
+        "toSymbol": "resultFor",
+        "callExpression": "resultFor",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "createProposalForAsync",
+        "callExpression": "createProposalForAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "readSequence",
+        "callExpression": "readSequence",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/application/googleAdsMutation.test.ts",
+        "toSymbol": "consumeApprovalAndCreateIntentAsync",
+        "callExpression": "attempts.port.consumeApprovalAndCreateIntentAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "createProposalAsync",
+        "toSymbol": "createProposalForAsync",
+        "callExpression": "createProposalForAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "createProposalAsync",
+        "toSymbol": "reads",
+        "callExpression": "reads",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutation.test.ts"
+      },
+      {
+        "fromSymbol": "consumeApprovalAndCreateIntentAsync",
+        "toSymbol": "consumeIntentAsync",
+        "callExpression": "consumeIntentAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "markIndeterminateAsync",
+        "toSymbol": "markIndeterminateAsync",
+        "callExpression": "markIndeterminateAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "settleExecutedAsync",
+        "toSymbol": "settleExecutedAsync",
+        "callExpression": "settleExecutedAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "claimRecoverableAttemptAsync",
+        "toSymbol": "claimRecoverableAttemptAsync",
+        "callExpression": "claimRecoverableAttemptAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "completeReconciliationAsync",
+        "toSymbol": "completeReconciliationAsync",
+        "callExpression": "completeReconciliationAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "createIndeterminateAttemptAsync",
+        "toSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "callExpression": "executeApprovedGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "createIndeterminateAttemptAsync",
+        "toSymbol": "approvalFor",
+        "callExpression": "approvalFor",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "createIndeterminateAttemptAsync",
+        "toSymbol": "reads",
+        "callExpression": "reads",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "createProposalForAsync",
+        "toSymbol": "prepareGoogleAdsMutationAsync",
+        "callExpression": "prepareGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "proposalWith",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "assertRejectsAsync",
+        "toSymbol": "operation",
+        "callExpression": "operation",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "assertRejectsAsync",
+        "toSymbol": "expectMessage",
+        "callExpression": "expectMessage",
+        "sourcePath": "src/features/google-ads/application/googleAdsMutationFixtures.test.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "getMutationResourceName",
+        "callExpression": "getMutationResourceName",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "isCreateKeyword",
+        "callExpression": "isCreateKeyword",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "input.reads.readResourceAsync",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "assertNoDuplicateAsync",
+        "callExpression": "assertNoDuplicateAsync",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "describeAfter",
+        "callExpression": "describeAfter",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "createChange",
+        "callExpression": "createChange",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "now",
+        "callExpression": "input.now",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toSymbol": "mutateAsync",
+        "callExpression": "input.mutations.mutateAsync",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertNoDuplicateAsync",
+        "toSymbol": "findKeywordDuplicatesAsync",
+        "callExpression": "reads.findKeywordDuplicatesAsync",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "createChange",
+        "toSymbol": "createMutationFingerprint",
+        "callExpression": "createMutationFingerprint",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "createChange",
+        "toSymbol": "getPortableResourceKind",
+        "callExpression": "getPortableResourceKind",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "createChange",
+        "toSymbol": "getGoogleResourceKind",
+        "callExpression": "getGoogleResourceKind",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toSymbol": "assertProposalIntegrity",
+        "callExpression": "assertProposalIntegrity",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toSymbol": "claimRecoverableAttemptAsync",
+        "callExpression": "input.attempts.claimRecoverableAttemptAsync",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "callExpression": "getGoogleAdsMutationEvidenceAsync",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toSymbol": "completeReconciliationAsync",
+        "callExpression": "completeReconciliationAsync",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "assertProposalIntegrity",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "completeReconciliationAsync",
+        "toSymbol": "completeReconciliationAsync",
+        "callExpression": "attempts.completeReconciliationAsync",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsProvider",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "prepareMutationAsync",
+        "toSymbol": "prepareGoogleAdsMutationAsync",
+        "callExpression": "prepareGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedMutationAsync",
+        "toSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "callExpression": "executeApprovedGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedMutationAsync",
+        "toSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "callExpression": "reconcileApprovedGoogleAdsMutationAsync",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "createMutationFingerprint",
+        "toSymbol": "createHash",
+        "callExpression": "createHash",
+        "sourcePath": "src/features/google-ads/domain/createMutationFingerprint.ts"
+      },
+      {
+        "fromSymbol": "createMutationFingerprint",
+        "toSymbol": "sortValue",
+        "callExpression": "sortValue",
+        "sourcePath": "src/features/google-ads/domain/createMutationFingerprint.ts"
+      },
+      {
+        "fromSymbol": "createProposalFingerprint",
+        "toSymbol": "createMutationFingerprint",
+        "callExpression": "createMutationFingerprint",
+        "sourcePath": "src/features/google-ads/domain/createMutationFingerprint.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "toSymbol": "sortValue",
+        "callExpression": "sortValue",
+        "sourcePath": "src/features/google-ads/domain/createMutationFingerprint.ts"
+      }
+    ],
+    "typeReferences": [
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsApproval",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationAttemptPort",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationExecutionResult",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationPort",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationProposal",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executeApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsReadPort",
+        "sourcePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutation",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationPort",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationProposal",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMutationAsync",
+        "toType": "GoogleAdsReadPort",
+        "sourcePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsApproval",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationAttemptPort",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationProposal",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsMutationReconciliationResult",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "reconcileApprovedGoogleAdsMutationAsync",
+        "toType": "GoogleAdsReadPort",
+        "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsProvider",
+        "toType": "GoogleAdsMutationAttemptPort",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsProvider",
+        "toType": "GoogleAdsProvider",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsProvider",
+        "toType": "GoogleAdsProviderConfiguration",
+        "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationAttemptPort",
+        "toType": "GoogleAdsApproval",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationAttemptPort",
+        "toType": "GoogleAdsMutationAttempt",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationAttemptPort",
+        "toType": "GoogleAdsMutationProposal",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationAttemptPort",
+        "toType": "GoogleAdsMutationReconciliationClaim",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationPort",
+        "toType": "GoogleAdsMutation",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationPort",
+        "toType": "GoogleAdsMutationResult",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsReadPort",
+        "toType": "GoogleAdsKeywordMatchType",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsReadPort",
+        "toType": "GoogleAdsReadResult",
+        "sourcePath": "src/features/google-ads/ports/googleAdsPorts.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationProposal",
+        "toType": "AdsChangeDescriptor",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationProposal",
+        "toType": "GoogleAdsMutation",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationProposal",
+        "toType": "Readonly",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsMutationReconciliationClaim",
+        "toType": "GoogleAdsMutationAttempt",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProvider",
+        "toType": "GoogleAdsApproval",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProvider",
+        "toType": "GoogleAdsMutation",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProvider",
+        "toType": "GoogleAdsMutationExecutionResult",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProvider",
+        "toType": "GoogleAdsMutationProposal",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProvider",
+        "toType": "GoogleAdsMutationReconciliationResult",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsReadResult",
+        "toType": "AdsProviderExtension",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsReadResult",
+        "toType": "Readonly",
+        "sourcePath": "src/types/googleAds.ts"
+      }
+    ],
+    "componentComposition": []
+  }
+}

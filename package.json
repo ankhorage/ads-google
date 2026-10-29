@@ -1,6 +1,6 @@
 {
   "name": "@ankhorage/ads-google",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Google Ads provider with externally approved, account-scoped mutations.",
   "license": "MIT",
   "homepage": "https://github.com/ankhorage/ads-google#readme",

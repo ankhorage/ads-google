@@ -1,0 +1,8 @@
+sequenceDiagram
+  participant participant_createGoogleAdsProvider as createGoogleAdsProvider
+  participant participant_createGoogleAdsRequestAsync as createGoogleAdsRequestAsync
+  participant participant_createGoogleAdsRestPorts as createGoogleAdsRestPorts
+  participant_createGoogleAdsProvider->>participant_createGoogleAdsRestPorts: createGoogleAdsRestPorts()
+  participant_createGoogleAdsRestPorts->>participant_createGoogleAdsRequestAsync: createGoogleAdsRequestAsync()
+  participant_createGoogleAdsRequestAsync-->>participant_createGoogleAdsRestPorts: return
+  participant_createGoogleAdsRestPorts-->>participant_createGoogleAdsProvider: return

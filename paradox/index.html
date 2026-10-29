@@ -1,0 +1,1677 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ankhorage/ads-google • Paradox</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f7fb;
+        color: #11203b;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      a { color: #2459d3; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      button { font: inherit; }
+      code, pre { font-family: "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+        min-height: 100vh;
+      }
+      .sidebar {
+        padding: 1.5rem;
+        border-right: 1px solid #d8dfec;
+        background: #ffffff;
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow: auto;
+      }
+      .content { padding: 2rem; }
+      .panel, .item {
+        background: #ffffff;
+        border: 1px solid #d8dfec;
+        border-radius: 0.9rem;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 8px 24px rgba(17, 32, 59, 0.06);
+      }
+      .summary {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      }
+      .summary strong {
+        display: block;
+        font-size: 1.5rem;
+      }
+      .search {
+        width: 100%;
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.75rem;
+        border: 1px solid #c7d2e5;
+        margin: 1rem 0 1.5rem;
+      }
+      .nav-list, .meta-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .nav-list li + li { margin-top: 0.5rem; }
+      .nav-button {
+        width: 100%;
+        display: block;
+        border: 0;
+        border-radius: 0.7rem;
+        background: transparent;
+        color: #24427a;
+        cursor: pointer;
+        padding: 0.55rem 0.7rem;
+        text-align: left;
+      }
+      .nav-button:hover, .nav-button[aria-current="page"] {
+        background: #e8eefb;
+        text-decoration: none;
+      }
+      .nav-button small {
+        display: block;
+        color: #5e6d8c;
+        margin-top: 0.15rem;
+      }
+      .view[hidden] { display: none; }
+      .muted { color: #5e6d8c; }
+      .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0; list-style: none; }
+      .chip {
+        border-radius: 999px;
+        background: #e8eefb;
+        color: #24427a;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.85rem;
+      }
+      table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; }
+      th, td { padding: 0.6rem; border-bottom: 1px solid #e2e7f2; text-align: left; vertical-align: top; }
+      pre {
+        overflow: auto;
+        border-radius: 0.75rem;
+        background: #0f1729;
+        color: #e7edf7;
+        padding: 1rem;
+      }
+      .empty { font-style: italic; color: #6f7f9c; }
+      .mermaid { margin: 1rem 0; overflow: auto; }
+      details > summary { cursor: pointer; color: #5e6d8c; font-size: 0.9rem; margin-top: 0.5rem; user-select: none; }
+      @media (max-width: 900px) {
+        .layout { grid-template-columns: 1fr; }
+        .sidebar { position: static; max-height: none; border-right: 0; border-bottom: 1px solid #d8dfec; }
+        .content { padding: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <p class="muted">Generated with Paradox</p>
+        <h1>@ankhorage/ads-google</h1>
+        <p>Google Ads provider with externally approved, account-scoped mutations.</p>
+        <input id="search" class="search" type="search" placeholder="Search current view" />
+        <nav aria-label="Documentation sections">
+          <ul class="nav-list">
+            <li>
+              <button class="nav-button" type="button" data-target="home" aria-current="page">
+                Home
+                <small>Overview, CLI, public API, diagrams</small>
+              </button>
+            </li>
+            <li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts">
+      src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts
+      <small>2 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts">
+      src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts
+      <small>9 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/adapters/createGoogleAdsRestPorts.ts">
+      src/features/google-ads/adapters/createGoogleAdsRestPorts.ts
+      <small>23 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts">
+      src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts
+      <small>5 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts">
+      src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts
+      <small>5 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/googleAdsMutation.test.ts">
+      src/features/google-ads/application/googleAdsMutation.test.ts
+      <small>1 function</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/googleAdsMutationFixtures.test.ts">
+      src/features/google-ads/application/googleAdsMutationFixtures.test.ts
+      <small>15 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts">
+      src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts
+      <small>8 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts">
+      src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts
+      <small>3 functions</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/composition/createGoogleAdsProvider.ts">
+      src/features/google-ads/composition/createGoogleAdsProvider.ts
+      <small>1 function</small>
+    </button>
+  </li><li>
+    <button class="nav-button" type="button" data-target="src/features/google-ads/domain/createMutationFingerprint.ts">
+      src/features/google-ads/domain/createMutationFingerprint.ts
+      <small>3 functions</small>
+    </button>
+  </li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="content">
+        <section id="view-home" class="view" data-view="home">
+          
+    <section class="panel">
+      <h2>Package overview</h2>
+      <div class="summary">
+        <div><strong>18</strong><span class="muted">public exports</span></div>
+        <div><strong>0</strong><span class="muted">components</span></div>
+        <div><strong>15</strong><span class="muted">modules</span></div>
+        <div><strong>1</strong><span class="muted">entrypoints</span></div>
+      </div>
+      <h3>Entrypoints</h3>
+      <ul class="meta-list">
+        <li><code>src/index.ts</code></li>
+      </ul>
+    </section>
+    
+    <section class="panel">
+      <h2>Modules</h2>
+      <article class="item" data-search="src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts src/types/googleAds.ts assertGoogleAdsMutationResourceKind">
+    <h3>src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>assertGoogleAdsMutationResourceKind</code></p>
+  </article><article class="item" data-search="src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts src/features/google-ads/adapters/createGoogleAdsRestPorts.ts">
+    <h3>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts</code></p>
+    <p><strong>Exports:</strong> <span class="empty">None</span></p>
+  </article><article class="item" data-search="src/features/google-ads/adapters/createGoogleAdsRestPorts.ts src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts createGoogleAdsRestPorts">
+    <h3>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>createGoogleAdsRestPorts</code></p>
+  </article><article class="item" data-search="src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts src/features/google-ads/domain/createMutationFingerprint.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts executeApprovedGoogleAdsMutationAsync">
+    <h3>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts</code>, <code>src/features/google-ads/domain/createMutationFingerprint.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>executeApprovedGoogleAdsMutationAsync</code></p>
+  </article><article class="item" data-search="src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts getGoogleAdsMutationEvidenceAsync">
+    <h3>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>getGoogleAdsMutationEvidenceAsync</code></p>
+  </article><article class="item" data-search="src/features/google-ads/application/googleAdsMutation.test.ts src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts src/features/google-ads/application/googleAdsMutationFixtures.test.ts src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts src/types/googleAds.ts">
+    <h3>src/features/google-ads/application/googleAdsMutation.test.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts</code>, <code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <span class="empty">None</span></p>
+  </article><article class="item" data-search="src/features/google-ads/application/googleAdsMutationFixtures.test.ts src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts src/features/google-ads/domain/createMutationFingerprint.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts approvalFor assertRejectsAsync createAttemptPort createIndeterminateAttemptAsync createProposalForAsync proposalWith reads readSequence resultFor">
+    <h3>src/features/google-ads/application/googleAdsMutationFixtures.test.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/domain/createMutationFingerprint.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>approvalFor</code>, <code>assertRejectsAsync</code>, <code>createAttemptPort</code>, <code>createIndeterminateAttemptAsync</code>, <code>createProposalForAsync</code>, <code>proposalWith</code>, <code>reads</code>, <code>readSequence</code>, <code>resultFor</code></p>
+  </article><article class="item" data-search="src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts src/features/google-ads/domain/createMutationFingerprint.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts prepareGoogleAdsMutationAsync">
+    <h3>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/domain/createMutationFingerprint.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>prepareGoogleAdsMutationAsync</code></p>
+  </article><article class="item" data-search="src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts src/features/google-ads/domain/createMutationFingerprint.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts reconcileApprovedGoogleAdsMutationAsync">
+    <h3>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts</code>, <code>src/features/google-ads/domain/createMutationFingerprint.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>reconcileApprovedGoogleAdsMutationAsync</code></p>
+  </article><article class="item" data-search="src/features/google-ads/composition/createGoogleAdsProvider.ts src/features/google-ads/adapters/createGoogleAdsRestPorts.ts src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts createGoogleAdsProvider">
+    <h3>src/features/google-ads/composition/createGoogleAdsProvider.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts</code>, <code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts</code>, <code>src/features/google-ads/ports/googleAdsPorts.ts</code>, <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>createGoogleAdsProvider</code></p>
+  </article><article class="item" data-search="src/features/google-ads/domain/createMutationFingerprint.ts src/types/googleAds.ts createMutationFingerprint createProposalFingerprint">
+    <h3>src/features/google-ads/domain/createMutationFingerprint.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>createMutationFingerprint</code>, <code>createProposalFingerprint</code></p>
+  </article><article class="item" data-search="src/features/google-ads/ports/googleAdsPorts.ts src/types/googleAds.ts GoogleAdsMutationAttemptPort GoogleAdsMutationPort GoogleAdsReadPort">
+    <h3>src/features/google-ads/ports/googleAdsPorts.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/types/googleAds.ts</code></p>
+    <p><strong>Exports:</strong> <code>GoogleAdsMutationAttemptPort</code>, <code>GoogleAdsMutationPort</code>, <code>GoogleAdsReadPort</code></p>
+  </article><article class="item" data-search="src/index.test.ts src/index.ts">
+    <h3>src/index.test.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <code>src/index.ts</code></p>
+    <p><strong>Exports:</strong> <span class="empty">None</span></p>
+  </article><article class="item" data-search="src/index.ts createGoogleAdsProvider executeApprovedGoogleAdsMutationAsync GoogleAdsApproval GoogleAdsMutation GoogleAdsMutationAttempt GoogleAdsMutationAttemptPort GoogleAdsMutationExecutionResult GoogleAdsMutationPort GoogleAdsMutationProposal GoogleAdsMutationReconciliationClaim GoogleAdsMutationReconciliationResult GoogleAdsMutationResult GoogleAdsProvider GoogleAdsProviderConfiguration GoogleAdsReadPort GoogleAdsReadResult prepareGoogleAdsMutationAsync reconcileApprovedGoogleAdsMutationAsync">
+    <h3>src/index.ts</h3>
+    <p class="muted">Configured entrypoint</p>
+    <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
+    <p><strong>Exports:</strong> <code>createGoogleAdsProvider</code>, <code>executeApprovedGoogleAdsMutationAsync</code>, <code>GoogleAdsApproval</code>, <code>GoogleAdsMutation</code>, <code>GoogleAdsMutationAttempt</code>, <code>GoogleAdsMutationAttemptPort</code>, <code>GoogleAdsMutationExecutionResult</code>, <code>GoogleAdsMutationPort</code>, <code>GoogleAdsMutationProposal</code>, <code>GoogleAdsMutationReconciliationClaim</code>, <code>GoogleAdsMutationReconciliationResult</code>, <code>GoogleAdsMutationResult</code>, <code>GoogleAdsProvider</code>, <code>GoogleAdsProviderConfiguration</code>, <code>GoogleAdsReadPort</code>, <code>GoogleAdsReadResult</code>, <code>prepareGoogleAdsMutationAsync</code>, <code>reconcileApprovedGoogleAdsMutationAsync</code></p>
+  </article><article class="item" data-search="src/types/googleAds.ts GoogleAdsApproval GoogleAdsKeywordMatchType GoogleAdsMutation GoogleAdsMutationAttempt GoogleAdsMutationExecutionResult GoogleAdsMutationProposal GoogleAdsMutationReconciliationClaim GoogleAdsMutationReconciliationResult GoogleAdsMutationResult GoogleAdsProvider GoogleAdsProviderConfiguration GoogleAdsReadResult">
+    <h3>src/types/googleAds.ts</h3>
+    <p class="muted">Referenced module</p>
+    <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
+    <p><strong>Exports:</strong> <code>GoogleAdsApproval</code>, <code>GoogleAdsKeywordMatchType</code>, <code>GoogleAdsMutation</code>, <code>GoogleAdsMutationAttempt</code>, <code>GoogleAdsMutationExecutionResult</code>, <code>GoogleAdsMutationProposal</code>, <code>GoogleAdsMutationReconciliationClaim</code>, <code>GoogleAdsMutationReconciliationResult</code>, <code>GoogleAdsMutationResult</code>, <code>GoogleAdsProvider</code>, <code>GoogleAdsProviderConfiguration</code>, <code>GoogleAdsReadResult</code></p>
+  </article>
+    </section>
+    <section class="panel">
+      <h2>Public API</h2>
+      
+            <section>
+              <h3>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</h3>
+              <article class="item" id="symbol-executeapprovedgoogleadsmutationasync" data-search="executeApprovedGoogleAdsMutationAsync function src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Consume approval with a durable intent before issuing exactly one Google Ads mutation. GoogleAdsApproval GoogleAdsMutationAttemptPort GoogleAdsMutationExecutionResult GoogleAdsMutationPort GoogleAdsMutationProposal GoogleAdsReadPort (input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationExecutionResult&gt;">
+    <h4>executeApprovedGoogleAdsMutationAsync</h4>
+    <p class="muted">function • <code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:15:1</code></p>
+    <p>Consume approval with a durable intent before issuing exactly one Google Ads mutation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsApproval</li><li class="chip">GoogleAdsMutationAttemptPort</li><li class="chip">GoogleAdsMutationExecutionResult</li><li class="chip">GoogleAdsMutationPort</li><li class="chip">GoogleAdsMutationProposal</li><li class="chip">GoogleAdsReadPort</li></ul></div>
+    <div>
+        <h5>Signature</h5>
+        <pre>(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationExecutionResult&gt;</pre>
+        <table>
+                <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr>
+                        <td><code>input</code></td>
+                        <td><code>{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }</code></td>
+                        <td>yes</td>
+                        <td></td>
+                      </tr>
+                </tbody>
+              </table>
+        <p><strong>Returns:</strong> <code>Promise&lt;GoogleAdsMutationExecutionResult&gt;</code></p>
+      </div>
+    
+  </article>
+            </section>
+            <section>
+              <h3>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts</h3>
+              <article class="item" id="symbol-preparegoogleadsmutationasync" data-search="prepareGoogleAdsMutationAsync function src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Read, diff, duplicate-check, and API-validate a mutation before external approval. GoogleAdsMutation GoogleAdsMutationPort GoogleAdsMutationProposal GoogleAdsReadPort (input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () =&gt; string; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationProposal&gt;">
+    <h4>prepareGoogleAdsMutationAsync</h4>
+    <p class="muted">function • <code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:11:1</code></p>
+    <p>Read, diff, duplicate-check, and API-validate a mutation before external approval.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsMutation</li><li class="chip">GoogleAdsMutationPort</li><li class="chip">GoogleAdsMutationProposal</li><li class="chip">GoogleAdsReadPort</li></ul></div>
+    <div>
+        <h5>Signature</h5>
+        <pre>(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () =&gt; string; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationProposal&gt;</pre>
+        <table>
+                <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr>
+                        <td><code>input</code></td>
+                        <td><code>{ readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () =&gt; string; readonly reads: GoogleAdsReadPort; }</code></td>
+                        <td>yes</td>
+                        <td></td>
+                      </tr>
+                </tbody>
+              </table>
+        <p><strong>Returns:</strong> <code>Promise&lt;GoogleAdsMutationProposal&gt;</code></p>
+      </div>
+    
+  </article>
+            </section>
+            <section>
+              <h3>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts</h3>
+              <article class="item" id="symbol-reconcileapprovedgoogleadsmutationasync" data-search="reconcileApprovedGoogleAdsMutationAsync function src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation. GoogleAdsApproval GoogleAdsMutationAttemptPort GoogleAdsMutationProposal GoogleAdsMutationReconciliationResult GoogleAdsReadPort (input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationReconciliationResult&gt;">
+    <h4>reconcileApprovedGoogleAdsMutationAsync</h4>
+    <p class="muted">function • <code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts:12:1</code></p>
+    <p>Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsApproval</li><li class="chip">GoogleAdsMutationAttemptPort</li><li class="chip">GoogleAdsMutationProposal</li><li class="chip">GoogleAdsMutationReconciliationResult</li><li class="chip">GoogleAdsReadPort</li></ul></div>
+    <div>
+        <h5>Signature</h5>
+        <pre>(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) =&gt; Promise&lt;GoogleAdsMutationReconciliationResult&gt;</pre>
+        <table>
+                <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr>
+                        <td><code>input</code></td>
+                        <td><code>{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }</code></td>
+                        <td>yes</td>
+                        <td></td>
+                      </tr>
+                </tbody>
+              </table>
+        <p><strong>Returns:</strong> <code>Promise&lt;GoogleAdsMutationReconciliationResult&gt;</code></p>
+      </div>
+    
+  </article>
+            </section>
+            <section>
+              <h3>src/features/google-ads/composition/createGoogleAdsProvider.ts</h3>
+              <article class="item" id="symbol-creategoogleadsprovider" data-search="createGoogleAdsProvider function src/features/google-ads/composition/createGoogleAdsProvider.ts Compose the real v26 REST adapter behind the approval-gated public provider boundary. GoogleAdsMutationAttemptPort GoogleAdsProvider GoogleAdsProviderConfiguration (input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () =&gt; string; }) =&gt; GoogleAdsProvider">
+    <h4>createGoogleAdsProvider</h4>
+    <p class="muted">function • <code>src/features/google-ads/composition/createGoogleAdsProvider.ts:12:1</code></p>
+    <p>Compose the real v26 REST adapter behind the approval-gated public provider boundary.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsMutationAttemptPort</li><li class="chip">GoogleAdsProvider</li><li class="chip">GoogleAdsProviderConfiguration</li></ul></div>
+    <div>
+        <h5>Signature</h5>
+        <pre>(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () =&gt; string; }) =&gt; GoogleAdsProvider</pre>
+        <table>
+                <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr>
+                        <td><code>input</code></td>
+                        <td><code>{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () =&gt; string; }</code></td>
+                        <td>yes</td>
+                        <td></td>
+                      </tr>
+                </tbody>
+              </table>
+        <p><strong>Returns:</strong> <code>GoogleAdsProvider</code></p>
+      </div>
+    
+  </article>
+            </section>
+            <section>
+              <h3>src/features/google-ads/ports/googleAdsPorts.ts</h3>
+              <article class="item" id="symbol-googleadsmutationattemptport" data-search="GoogleAdsMutationAttemptPort type src/features/google-ads/ports/googleAdsPorts.ts Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt. GoogleAdsApproval GoogleAdsMutationAttempt GoogleAdsMutationProposal GoogleAdsMutationReconciliationClaim">
+    <h4>GoogleAdsMutationAttemptPort</h4>
+    <p class="muted">type • <code>src/features/google-ads/ports/googleAdsPorts.ts:37:1</code></p>
+    <p>Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsApproval</li><li class="chip">GoogleAdsMutationAttempt</li><li class="chip">GoogleAdsMutationProposal</li><li class="chip">GoogleAdsMutationReconciliationClaim</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>claimRecoverableAttemptAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) =&gt; Promise&lt;GoogleAdsMutationReconciliationClaim | null&gt;</code></td>
+            <td>yes</td>
+            <td>Atomically bind and lease only this approval&#39;s orphaned intent or indeterminate attempt.
+
+The trusted host validates approval ID, account, fingerprint, resource, and operation in the
+same transition, returns an opaque fencing token, and never causes another provider write.</td>
+          </tr><tr>
+            <td><code>completeReconciliationAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly claim: GoogleAdsMutationReconciliationClaim; readonly outcome: &quot;applied&quot; | &quot;not-applied&quot; | &quot;indeterminate&quot;; }) =&gt; Promise&lt;boolean&gt;</code></td>
+            <td>yes</td>
+            <td>Fence a reconciliation transition; indeterminate releases the lease, terminal outcomes settle it.</td>
+          </tr><tr>
+            <td><code>consumeApprovalAndCreateIntentAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) =&gt; Promise&lt;GoogleAdsMutationAttempt | null&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>markIndeterminateAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly attempt: GoogleAdsMutationAttempt; readonly providerResourceName?: string; }) =&gt; Promise&lt;boolean&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>settleExecutedAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly attempt: GoogleAdsMutationAttempt; }) =&gt; Promise&lt;boolean&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsmutationport" data-search="GoogleAdsMutationPort type src/features/google-ads/ports/googleAdsPorts.ts Validates and applies an exact Google Ads mutation at the provider boundary. GoogleAdsMutation GoogleAdsMutationResult">
+    <h4>GoogleAdsMutationPort</h4>
+    <p class="muted">type • <code>src/features/google-ads/ports/googleAdsPorts.ts:28:1</code></p>
+    <p>Validates and applies an exact Google Ads mutation at the provider boundary.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsMutation</li><li class="chip">GoogleAdsMutationResult</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>mutateAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly validateOnly: boolean; }) =&gt; Promise&lt;GoogleAdsMutationResult | undefined&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsreadport" data-search="GoogleAdsReadPort type src/features/google-ads/ports/googleAdsPorts.ts Reads an exact Google Ads resource within an already isolated customer scope. GoogleAdsReadResult">
+    <h4>GoogleAdsReadPort</h4>
+    <p class="muted">type • <code>src/features/google-ads/ports/googleAdsPorts.ts:13:1</code></p>
+    <p>Reads an exact Google Ads resource within an already isolated customer scope.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsReadResult</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>findKeywordDuplicatesAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly customerId: string; readonly matchType: GoogleAdsKeywordMatchType; readonly negative: boolean; readonly parentResourceName: string; readonly text: string; }) =&gt; Promise&lt;readonly GoogleAdsReadResult[]&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>readResourceAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly customerId: string; readonly resourceName: string; }) =&gt; Promise&lt;GoogleAdsReadResult | null&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article>
+            </section>
+            <section>
+              <h3>src/types/googleAds.ts</h3>
+              <article class="item" id="symbol-googleadsapproval" data-search="GoogleAdsApproval type src/types/googleAds.ts A consumed external approval bound to exactly one proposed mutation.">
+    <h4>GoogleAdsApproval</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:110:1</code></p>
+    <p>A consumed external approval bound to exactly one proposed mutation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>approvalId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>fingerprint</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsmutation" data-search="GoogleAdsMutation unknown src/types/googleAds.ts Explicit resources and fields that this provider can mutate.">
+    <h4>GoogleAdsMutation</h4>
+    <p class="muted">unknown • <code>src/types/googleAds.ts:17:1</code></p>
+    <p>Explicit resources and fields that this provider can mutate.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    
+  </article><article class="item" id="symbol-googleadsmutationattempt" data-search="GoogleAdsMutationAttempt type src/types/googleAds.ts A durable, approval-bound write attempt owned by the trusted host runtime.">
+    <h4>GoogleAdsMutationAttempt</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:74:1</code></p>
+    <p>A durable, approval-bound write attempt owned by the trusted host runtime.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>accountId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>approvalId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>attemptId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>fingerprint</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>operation</code></td>
+            <td>property</td>
+            <td><code>&quot;create-keyword&quot; | &quot;create-ad-group-negative-keyword&quot; | &quot;create-campaign-negative-keyword&quot; | &quot;remove-keyword&quot; | &quot;remove-ad-group-negative-keyword&quot; | &quot;remove-campaign-negative-keyword&quot; | &quot;set-keyword-cpc&quot; | &quot;set-ad-group-cpc&quot; | &quot;set-budget&quot; | &quot;set-campaign-status&quot; | &quot;set-ad-group-status&quot;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>providerResourceName</code></td>
+            <td>property</td>
+            <td><code>string | undefined</code></td>
+            <td>no</td>
+            <td></td>
+          </tr><tr>
+            <td><code>resourceName</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsmutationexecutionresult" data-search="GoogleAdsMutationExecutionResult unknown src/types/googleAds.ts The terminal outcome of one approved mutation attempt.">
+    <h4>GoogleAdsMutationExecutionResult</h4>
+    <p class="muted">unknown • <code>src/types/googleAds.ts:91:1</code></p>
+    <p>The terminal outcome of one approved mutation attempt.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    
+  </article><article class="item" id="symbol-googleadsmutationproposal" data-search="GoogleAdsMutationProposal type src/types/googleAds.ts Immutable proposal which must be approved outside this provider before execution. GoogleAdsMutation">
+    <h4>GoogleAdsMutationProposal</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:62:1</code></p>
+    <p>Immutable proposal which must be approved outside this provider before execution.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsMutation</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>accountId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>after</code></td>
+            <td>property</td>
+            <td><code>Readonly&lt;Record&lt;string, unknown&gt;&gt; | null</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>before</code></td>
+            <td>property</td>
+            <td><code>Readonly&lt;Record&lt;string, unknown&gt;&gt; | null</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>change</code></td>
+            <td>property</td>
+            <td><code>AdsChangeDescriptor</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>createdAt</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>fingerprint</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>mutation</code></td>
+            <td>property</td>
+            <td><code>GoogleAdsMutation</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>resourceName</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsmutationreconciliationclaim" data-search="GoogleAdsMutationReconciliationClaim type src/types/googleAds.ts An exclusively leased host-owned attempt recovery claim, fenced by an opaque token. GoogleAdsMutationAttempt">
+    <h4>GoogleAdsMutationReconciliationClaim</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:85:1</code></p>
+    <p>An exclusively leased host-owned attempt recovery claim, fenced by an opaque token.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsMutationAttempt</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>attempt</code></td>
+            <td>property</td>
+            <td><code>GoogleAdsMutationAttempt</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>fenceToken</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsmutationreconciliationresult" data-search="GoogleAdsMutationReconciliationResult unknown src/types/googleAds.ts The evidence-based settlement of an indeterminate approved mutation.">
+    <h4>GoogleAdsMutationReconciliationResult</h4>
+    <p class="muted">unknown • <code>src/types/googleAds.ts:99:1</code></p>
+    <p>The evidence-based settlement of an indeterminate approved mutation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    
+  </article><article class="item" id="symbol-googleadsmutationresult" data-search="GoogleAdsMutationResult type src/types/googleAds.ts The exact provider resource affected by one validated mutation.">
+    <h4>GoogleAdsMutationResult</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:105:1</code></p>
+    <p>The exact provider resource affected by one validated mutation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>resourceName</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsprovider" data-search="GoogleAdsProvider type src/types/googleAds.ts The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation. GoogleAdsApproval GoogleAdsMutation GoogleAdsMutationExecutionResult GoogleAdsMutationProposal GoogleAdsMutationReconciliationResult">
+    <h4>GoogleAdsProvider</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:123:1</code></p>
+    <p>The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GoogleAdsApproval</li><li class="chip">GoogleAdsMutation</li><li class="chip">GoogleAdsMutationExecutionResult</li><li class="chip">GoogleAdsMutationProposal</li><li class="chip">GoogleAdsMutationReconciliationResult</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>executeApprovedMutationAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) =&gt; Promise&lt;GoogleAdsMutationExecutionResult&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>prepareMutationAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; }) =&gt; Promise&lt;GoogleAdsMutationProposal&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>reconcileApprovedMutationAsync</code></td>
+            <td>method</td>
+            <td><code>(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) =&gt; Promise&lt;GoogleAdsMutationReconciliationResult&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsproviderconfiguration" data-search="GoogleAdsProviderConfiguration type src/types/googleAds.ts A Google Ads account explicitly permitted for one provider instance.">
+    <h4>GoogleAdsProviderConfiguration</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:4:1</code></p>
+    <p>A Google Ads account explicitly permitted for one provider instance.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>accessToken</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>allowedCustomerId</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>apiVersion</code></td>
+            <td>property</td>
+            <td><code>&quot;v26&quot; | undefined</code></td>
+            <td>no</td>
+            <td></td>
+          </tr><tr>
+            <td><code>developerToken</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>loginCustomerId</code></td>
+            <td>property</td>
+            <td><code>string | undefined</code></td>
+            <td>no</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-googleadsreadresult" data-search="GoogleAdsReadResult type src/types/googleAds.ts Sanitized Google Ads read result retaining provider-only values explicitly.">
+    <h4>GoogleAdsReadResult</h4>
+    <p class="muted">type • <code>src/types/googleAds.ts:116:1</code></p>
+    <p>Sanitized Google Ads read result retaining provider-only values explicitly.</p>
+    <p><strong>Export paths:</strong> <code>src/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <span class="empty">None</span></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+            <td><code>extensions</code></td>
+            <td>property</td>
+            <td><code>readonly AdsProviderExtension[] | undefined</code></td>
+            <td>no</td>
+            <td></td>
+          </tr><tr>
+            <td><code>resourceName</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>values</code></td>
+            <td>property</td>
+            <td><code>Readonly&lt;Record&lt;string, unknown&gt;&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article>
+            </section>
+    </section>
+    <section class="panel">
+      <h2>Component registry</h2>
+      <p class="empty">No components were detected.</p>
+    </section>
+    <section class="panel">
+      <h2>Diagrams</h2>
+      <article class="item" data-search="Architecture overview diagrams/architecture-overview.mmd">
+    <h3>Architecture overview</h3>
+    <p class="muted"><code>diagrams/architecture-overview.mmd</code></p>
+    <div class="mermaid">graph TD
+  package__ankhorage_ads_google[&quot;@ankhorage/ads-google&quot;]
+  entrypoint_src_index_ts[&quot;src/index.ts&quot;]
+  package__ankhorage_ads_google --&gt; entrypoint_src_index_ts
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_googleAdsMutation_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_composition_createGoogleAdsProvider_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_index_test_ts
+  module_src_index_test_ts --&gt; module_src_index_ts
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_types_googleAds_ts
+</div>
+    <details>
+      <summary>View Mermaid source</summary>
+      <pre>graph TD
+  package__ankhorage_ads_google[&quot;@ankhorage/ads-google&quot;]
+  entrypoint_src_index_ts[&quot;src/index.ts&quot;]
+  package__ankhorage_ads_google --&gt; entrypoint_src_index_ts
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_googleAdsMutation_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_composition_createGoogleAdsProvider_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_index_test_ts
+  module_src_index_test_ts --&gt; module_src_index_ts
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  package__ankhorage_ads_google -.-&gt; module_src_types_googleAds_ts
+</pre>
+    </details>
+  </article><article class="item" data-search="Module relationships diagrams/module-relationships.mmd">
+    <h3>Module relationships</h3>
+    <p class="muted"><code>diagrams/module-relationships.mmd</code></p>
+    <div class="mermaid">graph LR
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_index_test_ts --&gt; module_src_index_ts
+</div>
+    <details>
+      <summary>View Mermaid source</summary>
+      <pre>graph LR
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutation_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_domain_createMutationFingerprint_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_features_google_ads_ports_googleAdsPorts_ts
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_domain_createMutationFingerprint_ts --&gt; module_src_types_googleAds_ts
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; module_src_types_googleAds_ts
+  module_src_index_test_ts --&gt; module_src_index_ts
+</pre>
+    </details>
+  </article><article class="item" data-search="Export graph diagrams/export-graph.mmd">
+    <h3>Export graph</h3>
+    <p class="muted"><code>diagrams/export-graph.mmd</code></p>
+    <div class="mermaid">graph LR
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  export_createGoogleAdsProvider[&quot;createGoogleAdsProvider&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; export_createGoogleAdsProvider
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsProvider
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsProviderConfiguration
+  export_executeApprovedGoogleAdsMutationAsync[&quot;executeApprovedGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; export_executeApprovedGoogleAdsMutationAsync
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsApproval
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationExecutionResult
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationPort
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+  export_GoogleAdsApproval[&quot;GoogleAdsApproval&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsApproval
+  export_GoogleAdsMutation[&quot;GoogleAdsMutation&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationAttempt[&quot;GoogleAdsMutationAttempt&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort[&quot;GoogleAdsMutationAttemptPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsMutationAttemptPort
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsApproval
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationExecutionResult[&quot;GoogleAdsMutationExecutionResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsMutationPort[&quot;GoogleAdsMutationPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsMutationPort
+  export_GoogleAdsMutationPort -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationPort -.-&gt; export_GoogleAdsMutationResult
+  export_GoogleAdsMutationProposal[&quot;GoogleAdsMutationProposal&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationProposal -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationReconciliationClaim[&quot;GoogleAdsMutationReconciliationClaim&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationReconciliationClaim -.-&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationReconciliationResult[&quot;GoogleAdsMutationReconciliationResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsMutationResult[&quot;GoogleAdsMutationResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationResult
+  export_GoogleAdsProvider[&quot;GoogleAdsProvider&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsProvider
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsApproval
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsProviderConfiguration[&quot;GoogleAdsProviderConfiguration&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsProviderConfiguration
+  export_GoogleAdsReadPort[&quot;GoogleAdsReadPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsReadPort
+  export_GoogleAdsReadPort -.-&gt; export_GoogleAdsReadResult
+  export_GoogleAdsReadResult[&quot;GoogleAdsReadResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsReadResult
+  export_prepareGoogleAdsMutationAsync[&quot;prepareGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; export_prepareGoogleAdsMutationAsync
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutation
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationPort
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+  export_reconcileApprovedGoogleAdsMutationAsync[&quot;reconcileApprovedGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; export_reconcileApprovedGoogleAdsMutationAsync
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsApproval
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationReconciliationResult
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+</div>
+    <details>
+      <summary>View Mermaid source</summary>
+      <pre>graph LR
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts[&quot;src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts&quot;]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts[&quot;src/features/google-ads/adapters/createGoogleAdsRestPorts.ts&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts[&quot;src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutation_test_ts[&quot;src/features/google-ads/application/googleAdsMutation.test.ts&quot;]
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts[&quot;src/features/google-ads/application/googleAdsMutationFixtures.test.ts&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts[&quot;src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts[&quot;src/features/google-ads/composition/createGoogleAdsProvider.ts&quot;]
+  module_src_features_google_ads_domain_createMutationFingerprint_ts[&quot;src/features/google-ads/domain/createMutationFingerprint.ts&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts[&quot;src/features/google-ads/ports/googleAdsPorts.ts&quot;]
+  module_src_index_test_ts[&quot;src/index.test.ts&quot;]
+  module_src_index_ts[&quot;src/index.ts&quot;]
+  module_src_types_googleAds_ts[&quot;src/types/googleAds.ts&quot;]
+  export_createGoogleAdsProvider[&quot;createGoogleAdsProvider&quot;]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --&gt; export_createGoogleAdsProvider
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsProvider
+  export_createGoogleAdsProvider -.-&gt; export_GoogleAdsProviderConfiguration
+  export_executeApprovedGoogleAdsMutationAsync[&quot;executeApprovedGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --&gt; export_executeApprovedGoogleAdsMutationAsync
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsApproval
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationExecutionResult
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationPort
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_executeApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+  export_GoogleAdsApproval[&quot;GoogleAdsApproval&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsApproval
+  export_GoogleAdsMutation[&quot;GoogleAdsMutation&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationAttempt[&quot;GoogleAdsMutationAttempt&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort[&quot;GoogleAdsMutationAttemptPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsMutationAttemptPort
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsApproval
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationAttemptPort -.-&gt; export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationExecutionResult[&quot;GoogleAdsMutationExecutionResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsMutationPort[&quot;GoogleAdsMutationPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsMutationPort
+  export_GoogleAdsMutationPort -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationPort -.-&gt; export_GoogleAdsMutationResult
+  export_GoogleAdsMutationProposal[&quot;GoogleAdsMutationProposal&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationProposal -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsMutationReconciliationClaim[&quot;GoogleAdsMutationReconciliationClaim&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationReconciliationClaim -.-&gt; export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationReconciliationResult[&quot;GoogleAdsMutationReconciliationResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsMutationResult[&quot;GoogleAdsMutationResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsMutationResult
+  export_GoogleAdsProvider[&quot;GoogleAdsProvider&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsProvider
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsApproval
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutation
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationProposal
+  export_GoogleAdsProvider -.-&gt; export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsProviderConfiguration[&quot;GoogleAdsProviderConfiguration&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsProviderConfiguration
+  export_GoogleAdsReadPort[&quot;GoogleAdsReadPort&quot;]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --&gt; export_GoogleAdsReadPort
+  export_GoogleAdsReadPort -.-&gt; export_GoogleAdsReadResult
+  export_GoogleAdsReadResult[&quot;GoogleAdsReadResult&quot;]
+  module_src_types_googleAds_ts --&gt; export_GoogleAdsReadResult
+  export_prepareGoogleAdsMutationAsync[&quot;prepareGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --&gt; export_prepareGoogleAdsMutationAsync
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutation
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationPort
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_prepareGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+  export_reconcileApprovedGoogleAdsMutationAsync[&quot;reconcileApprovedGoogleAdsMutationAsync&quot;]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --&gt; export_reconcileApprovedGoogleAdsMutationAsync
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsApproval
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationAttemptPort
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationProposal
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsMutationReconciliationResult
+  export_reconcileApprovedGoogleAdsMutationAsync -.-&gt; export_GoogleAdsReadPort
+</pre>
+    </details>
+  </article><article class="item" data-search="createGoogleAdsProvider sequence diagrams/sequences/create-google-ads-provider.mmd">
+    <h3>createGoogleAdsProvider sequence</h3>
+    <p class="muted"><code>diagrams/sequences/create-google-ads-provider.mmd</code></p>
+    <div class="mermaid">sequenceDiagram
+  participant participant_createGoogleAdsProvider as createGoogleAdsProvider
+  participant participant_createGoogleAdsRequestAsync as createGoogleAdsRequestAsync
+  participant participant_createGoogleAdsRestPorts as createGoogleAdsRestPorts
+  participant_createGoogleAdsProvider-&gt;&gt;participant_createGoogleAdsRestPorts: createGoogleAdsRestPorts()
+  participant_createGoogleAdsRestPorts-&gt;&gt;participant_createGoogleAdsRequestAsync: createGoogleAdsRequestAsync()
+  participant_createGoogleAdsRequestAsync--&gt;&gt;participant_createGoogleAdsRestPorts: return
+  participant_createGoogleAdsRestPorts--&gt;&gt;participant_createGoogleAdsProvider: return
+</div>
+    <details>
+      <summary>View Mermaid source</summary>
+      <pre>sequenceDiagram
+  participant participant_createGoogleAdsProvider as createGoogleAdsProvider
+  participant participant_createGoogleAdsRequestAsync as createGoogleAdsRequestAsync
+  participant participant_createGoogleAdsRestPorts as createGoogleAdsRestPorts
+  participant_createGoogleAdsProvider-&gt;&gt;participant_createGoogleAdsRestPorts: createGoogleAdsRestPorts()
+  participant_createGoogleAdsRestPorts-&gt;&gt;participant_createGoogleAdsRequestAsync: createGoogleAdsRequestAsync()
+  participant_createGoogleAdsRequestAsync--&gt;&gt;participant_createGoogleAdsRestPorts: return
+  participant_createGoogleAdsRestPorts--&gt;&gt;participant_createGoogleAdsProvider: return
+</pre>
+    </details>
+  </article>
+    </section>
+        </section>
+        <section id="view-src-features-google-ads-adapters-assertgoogleadsmutationresourcekind-ts" class="view" data-view="src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts</h2>
+      <article class="item" data-search="assertGoogleAdsMutationResourceKind src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts Reject a resource whose canonical Google collection cannot carry the requested mutation.">
+    <h3>assertGoogleAdsMutationResourceKind</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts:4:1</code></p>
+    <p>Reject a resource whose canonical Google collection cannot carry the requested mutation.</p>
+  </article><article class="item" data-search="getExpectedResourceCollection src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts Map each supported operation to the one canonical Google resource collection it may mutate.">
+    <h3>getExpectedResourceCollection</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts:14:1</code></p>
+    <p>Map each supported operation to the one canonical Google resource collection it may mutate.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-adapters-creategoogleadsrestports-test-ts" class="view" data-view="src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts</h2>
+      <article class="item" data-search="verifyScopedReadAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts ">
+    <h3>verifyScopedReadAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:26:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="verifyValidateOnlyMutationAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts ">
+    <h3>verifyValidateOnlyMutationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:138:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="createValidateOnlyMutation src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts Return a valid scoped mutation for Google Ads validate-only request assertions.">
+    <h3>createValidateOnlyMutation</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:177:1</code></p>
+    <p>Return a valid scoped mutation for Google Ads validate-only request assertions.</p>
+  </article><article class="item" data-search="verifyValidateOnlyPartialFailureAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts Reject partial failures even when the Google Ads request is validate-only.">
+    <h3>verifyValidateOnlyPartialFailureAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:191:1</code></p>
+    <p>Reject partial failures even when the Google Ads request is validate-only.</p>
+  </article><article class="item" data-search="verifyForeignMutationRejectedAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts Ensure resource names cannot escape the configured customer even on a permitted request URL.">
+    <h3>verifyForeignMutationRejectedAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:208:1</code></p>
+    <p>Ensure resource names cannot escape the configured customer even on a permitted request URL.</p>
+  </article><article class="item" data-search="verifyWrongResourceKindRejectedAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts Reject a permitted customer resource when its collection cannot carry the requested operation.">
+    <h3>verifyWrongResourceKindRejectedAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:227:1</code></p>
+    <p>Reject a permitted customer resource when its collection cannot carry the requested operation.</p>
+  </article><article class="item" data-search="verifyRedactedFailureAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts ">
+    <h3>verifyRedactedFailureAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:245:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="assertRejectsAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts ">
+    <h3>assertRejectsAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:260:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="getErrorAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts ">
+    <h3>getErrorAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts:268:1</code></p>
+    <p class="empty">No description available.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-adapters-creategoogleadsrestports-ts" class="view" data-view="src/features/google-ads/adapters/createGoogleAdsRestPorts.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts</h2>
+      <article class="item" data-search="createGoogleAdsRestPorts src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Create v26 REST ports scoped to one configured Google Ads customer.">
+    <h3>createGoogleAdsRestPorts</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:10:1</code></p>
+    <p>Create v26 REST ports scoped to one configured Google Ads customer.</p>
+  </article><article class="item" data-search="createGoogleAdsRequestAsync src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Create the one authenticated request boundary without exposing secret values in errors.">
+    <h3>createGoogleAdsRequestAsync</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:65:1</code></p>
+    <p>Create the one authenticated request boundary without exposing secret values in errors.</p>
+  </article><article class="item" data-search="assertCustomer src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Refuse every customer except the explicitly configured account.">
+    <h3>assertCustomer</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:82:1</code></p>
+    <p>Refuse every customer except the explicitly configured account.</p>
+  </article><article class="item" data-search="assertResourceCustomer src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Reject a resource name unless it belongs to the single configured customer.">
+    <h3>assertResourceCustomer</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:88:1</code></p>
+    <p>Reject a resource name unless it belongs to the single configured customer.</p>
+  </article><article class="item" data-search="assertMutationResources src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Validate every resource carried by an operation before any provider request is made.">
+    <h3>assertMutationResources</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:101:1</code></p>
+    <p>Validate every resource carried by an operation before any provider request is made.</p>
+  </article><article class="item" data-search="createHeaders src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Build authorization headers without serializing secrets into errors or audit data.">
+    <h3>createHeaders</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:115:1</code></p>
+    <p>Build authorization headers without serializing secrets into errors or audit data.</p>
+  </article><article class="item" data-search="toMutationRequest src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Translate one supported provider mutation to its precise Google Ads mutate service.">
+    <h3>toMutationRequest</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:129:1</code></p>
+    <p>Translate one supported provider mutation to its precise Google Ads mutate service.</p>
+  </article><article class="item" data-search="createAdGroupCriterionRequest src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Map an ad-group criterion creation to the v26 operation payload.">
+    <h3>createAdGroupCriterionRequest</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:162:1</code></p>
+    <p>Map an ad-group criterion creation to the v26 operation payload.</p>
+  </article><article class="item" data-search="createCampaignCriterionRequest src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Map a campaign criterion creation to the v26 operation payload.">
+    <h3>createCampaignCriterionRequest</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:181:1</code></p>
+    <p>Map a campaign criterion creation to the v26 operation payload.</p>
+  </article><article class="item" data-search="createUpdateRequest src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Build a field-mask update operation for one v26 resource service.">
+    <h3>createUpdateRequest</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:200:1</code></p>
+    <p>Build a field-mask update operation for one v26 resource service.</p>
+  </article><article class="item" data-search="escapeGaql src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Escape a GAQL string literal.">
+    <h3>escapeGaql</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:217:1</code></p>
+    <p>Escape a GAQL string literal.</p>
+  </article><article class="item" data-search="createResourceReadQuery src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Build a resource-scoped GAQL lookup for a supported mutable resource name.">
+    <h3>createResourceReadQuery</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:222:1</code></p>
+    <p>Build a resource-scoped GAQL lookup for a supported mutable resource name.</p>
+  </article><article class="item" data-search="getResourceReadFields src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Select only the mutable state needed to prepare and verify each supported resource.">
+    <h3>getResourceReadFields</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:228:1</code></p>
+    <p>Select only the mutable state needed to prepare and verify each supported resource.</p>
+  </article><article class="item" data-search="getResourceQuery src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Select the correct GAQL resource and field namespace from its canonical name.">
+    <h3>getResourceQuery</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:241:1</code></p>
+    <p>Select the correct GAQL resource and field namespace from its canonical name.</p>
+  </article><article class="item" data-search="createKeywordDuplicateQuery src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Build the criterion query shared by keyword and negative-keyword duplicate detection.">
+    <h3>createKeywordDuplicateQuery</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:256:1</code></p>
+    <p>Build the criterion query shared by keyword and negative-keyword duplicate detection.</p>
+  </article><article class="item" data-search="decodeResources src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Decode a supported v26 search-stream response without trusting its JSON shape.">
+    <h3>decodeResources</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:269:1</code></p>
+    <p>Decode a supported v26 search-stream response without trusting its JSON shape.</p>
+  </article><article class="item" data-search="decodeSearchStreamBatch src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Decode one REST search-stream batch into provider read values.">
+    <h3>decodeSearchStreamBatch</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:278:1</code></p>
+    <p>Decode one REST search-stream batch into provider read values.</p>
+  </article><article class="item" data-search="decodeSearchStreamResult src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Decode one resource record while retaining the selected provider state.">
+    <h3>decodeSearchStreamResult</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:287:1</code></p>
+    <p>Decode one resource record while retaining the selected provider state.</p>
+  </article><article class="item" data-search="extractReadValues src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Retain JSON-compatible selected resource fields without preserving untrusted envelopes.">
+    <h3>extractReadValues</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:297:1</code></p>
+    <p>Retain JSON-compatible selected resource fields without preserving untrusted envelopes.</p>
+  </article><article class="item" data-search="decodeMutationResult src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Decode a validation acknowledgement or the exact result of one productive mutation.">
+    <h3>decodeMutationResult</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:305:1</code></p>
+    <p>Decode a validation acknowledgement or the exact result of one productive mutation.</p>
+  </article><article class="item" data-search="decodeFirstResource src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Return the first decoded read result, if the API selected a resource.">
+    <h3>decodeFirstResource</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:323:1</code></p>
+    <p>Return the first decoded read result, if the API selected a resource.</p>
+  </article><article class="item" data-search="findResourceName src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Find a resource name in a typed Google Ads result without an unsafe JSON cast.">
+    <h3>findResourceName</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:330:1</code></p>
+    <p>Find a resource name in a typed Google Ads result without an unsafe JSON cast.</p>
+  </article><article class="item" data-search="isRecord src/features/google-ads/adapters/createGoogleAdsRestPorts.ts Narrow untrusted JSON to a record before accessing fields.">
+    <h3>isRecord</h3>
+    <p class="muted"><code>src/features/google-ads/adapters/createGoogleAdsRestPorts.ts:342:1</code></p>
+    <p>Narrow untrusted JSON to a record before accessing fields.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-executeapprovedgoogleadsmutationasync-ts" class="view" data-view="src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts</h2>
+      <article class="item" data-search="executeApprovedGoogleAdsMutationAsync src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Consume approval with a durable intent before issuing exactly one Google Ads mutation.">
+    <h3>executeApprovedGoogleAdsMutationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:15:1</code></p>
+    <p>Consume approval with a durable intent before issuing exactly one Google Ads mutation.</p>
+  </article><article class="item" data-search="assertProposalIntegrity src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Reject locally tampered proposals before their trusted approval lifecycle is entered.">
+    <h3>assertProposalIntegrity</h3>
+    <p class="muted"><code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:51:1</code></p>
+    <p>Reject locally tampered proposals before their trusted approval lifecycle is entered.</p>
+  </article><article class="item" data-search="assertUnchangedAsync src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Re-read the approved target and reject proposals that changed before approval consumption.">
+    <h3>assertUnchangedAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:62:1</code></p>
+    <p>Re-read the approved target and reject proposals that changed before approval consumption.</p>
+  </article><article class="item" data-search="assertNoDuplicateAtExecutionAsync src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Re-check the keyword uniqueness invariant immediately before approval is atomically consumed.">
+    <h3>assertNoDuplicateAtExecutionAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:79:1</code></p>
+    <p>Re-check the keyword uniqueness invariant immediately before approval is atomically consumed.</p>
+  </article><article class="item" data-search="recordIndeterminateAsync src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts Preserve an ambiguous outcome durably; no caller may use it to retry a Google Ads write.">
+    <h3>recordIndeterminateAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts:101:1</code></p>
+    <p>Preserve an ambiguous outcome durably; no caller may use it to retry a Google Ads write.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-getgoogleadsmutationevidenceasync-ts" class="view" data-view="src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts</h2>
+      <article class="item" data-search="getGoogleAdsMutationEvidenceAsync src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts Return applied only for an acknowledged result identity whose approved post-state is readable.">
+    <h3>getGoogleAdsMutationEvidenceAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts:5:1</code></p>
+    <p>Return applied only for an acknowledged result identity whose approved post-state is readable.</p>
+  </article><article class="item" data-search="matchesMutationResult src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts Bind the only acknowledged v26 mutate result to the exact approved operation.">
+    <h3>matchesMutationResult</h3>
+    <p class="muted"><code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts:24:1</code></p>
+    <p>Bind the only acknowledged v26 mutate result to the exact approved operation.</p>
+  </article><article class="item" data-search="getExpectedResultCollection src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts Map each supported operation to the collection returned by its v26 mutate result.">
+    <h3>getExpectedResultCollection</h3>
+    <p class="muted"><code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts:34:1</code></p>
+    <p>Map each supported operation to the collection returned by its v26 mutate result.</p>
+  </article><article class="item" data-search="escapeRegularExpression src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts Escape a literal account identifier before using it in the fixed resource-name expression.">
+    <h3>escapeRegularExpression</h3>
+    <p class="muted"><code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts:50:1</code></p>
+    <p>Escape a literal account identifier before using it in the fixed resource-name expression.</p>
+  </article><article class="item" data-search="matchesExpectedState src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts Compare every approved after-value to the exact resource identity returned by Google Ads.">
+    <h3>matchesExpectedState</h3>
+    <p class="muted"><code>src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts:55:1</code></p>
+    <p>Compare every approved after-value to the exact resource identity returned by Google Ads.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-googleadsmutation-test-ts" class="view" data-view="src/features/google-ads/application/googleAdsMutation.test.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/googleAdsMutation.test.ts</h2>
+      <article class="item" data-search="createProposalAsync src/features/google-ads/application/googleAdsMutation.test.ts Prepare a deterministic fixture proposal.">
+    <h3>createProposalAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutation.test.ts:324:1</code></p>
+    <p>Prepare a deterministic fixture proposal.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-googleadsmutationfixtures-test-ts" class="view" data-view="src/features/google-ads/application/googleAdsMutationFixtures.test.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/googleAdsMutationFixtures.test.ts</h2>
+      <article class="item" data-search="createAttemptPort src/features/google-ads/application/googleAdsMutationFixtures.test.ts Create a host lifecycle double that enforces the production claim invariants.">
+    <h3>createAttemptPort</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:12:1</code></p>
+    <p>Create a host lifecycle double that enforces the production claim invariants.</p>
+  </article><article class="item" data-search="consumeIntentAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>consumeIntentAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:37:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="markIndeterminateAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>markIndeterminateAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:58:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="settleExecutedAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>settleExecutedAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:75:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="claimRecoverableAttemptAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>claimRecoverableAttemptAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:85:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="completeReconciliationAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>completeReconciliationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:106:1</code></p>
+    <p class="empty">No description available.</p>
+  </article><article class="item" data-search="createIndeterminateAttemptAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts Execute one ambiguous write to persist a reconcilable attempt.">
+    <h3>createIndeterminateAttemptAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:121:1</code></p>
+    <p>Execute one ambiguous write to persist a reconcilable attempt.</p>
+  </article><article class="item" data-search="createProposalForAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts Prepare a proposal for a supported mutation against deterministic read fixtures.">
+    <h3>createProposalForAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:135:1</code></p>
+    <p>Prepare a proposal for a supported mutation against deterministic read fixtures.</p>
+  </article><article class="item" data-search="approvalFor src/features/google-ads/application/googleAdsMutationFixtures.test.ts Construct a proposal-bound external approval fixture.">
+    <h3>approvalFor</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:151:1</code></p>
+    <p>Construct a proposal-bound external approval fixture.</p>
+  </article><article class="item" data-search="reads src/features/google-ads/application/googleAdsMutationFixtures.test.ts Return deterministic Google Ads read fixtures without making a live request.">
+    <h3>reads</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:156:1</code></p>
+    <p>Return deterministic Google Ads read fixtures without making a live request.</p>
+  </article><article class="item" data-search="readSequence src/features/google-ads/application/googleAdsMutationFixtures.test.ts Return one resource state per consecutive read, retaining the resource identity.">
+    <h3>readSequence</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:177:1</code></p>
+    <p>Return one resource state per consecutive read, retaining the resource identity.</p>
+  </article><article class="item" data-search="resultFor src/features/google-ads/application/googleAdsMutationFixtures.test.ts Return the canonical resource name that a successful v26 fixture would acknowledge.">
+    <h3>resultFor</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:190:1</code></p>
+    <p>Return the canonical resource name that a successful v26 fixture would acknowledge.</p>
+  </article><article class="item" data-search="proposalWith src/features/google-ads/application/googleAdsMutationFixtures.test.ts Rebind a deliberately different proposal so the host claim, rather than integrity, rejects it.">
+    <h3>proposalWith</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:197:1</code></p>
+    <p>Rebind a deliberately different proposal so the host claim, rather than integrity, rejects it.</p>
+  </article><article class="item" data-search="assertRejectsAsync src/features/google-ads/application/googleAdsMutationFixtures.test.ts Assert that an async operation rejects with the expected safe message fragment.">
+    <h3>assertRejectsAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:206:1</code></p>
+    <p>Assert that an async operation rejects with the expected safe message fragment.</p>
+  </article><article class="item" data-search="expectMessage src/features/google-ads/application/googleAdsMutationFixtures.test.ts ">
+    <h3>expectMessage</h3>
+    <p class="muted"><code>src/features/google-ads/application/googleAdsMutationFixtures.test.ts:222:1</code></p>
+    <p class="empty">No description available.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-preparegoogleadsmutationasync-ts" class="view" data-view="src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts</h2>
+      <article class="item" data-search="prepareGoogleAdsMutationAsync src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Read, diff, duplicate-check, and API-validate a mutation before external approval.">
+    <h3>prepareGoogleAdsMutationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:11:1</code></p>
+    <p>Read, diff, duplicate-check, and API-validate a mutation before external approval.</p>
+  </article><article class="item" data-search="assertNoDuplicateAsync src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Reject a keyword that Google Ads would otherwise add as a duplicate criterion.">
+    <h3>assertNoDuplicateAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:57:1</code></p>
+    <p>Reject a keyword that Google Ads would otherwise add as a duplicate criterion.</p>
+  </article><article class="item" data-search="createChange src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Build a portable change record without exposing provider credentials or headers.">
+    <h3>createChange</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:77:1</code></p>
+    <p>Build a portable change record without exposing provider credentials or headers.</p>
+  </article><article class="item" data-search="getPortableResourceKind src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Map each mutable Google resource to its truthful portable hierarchy kind.">
+    <h3>getPortableResourceKind</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:105:1</code></p>
+    <p>Map each mutable Google resource to its truthful portable hierarchy kind.</p>
+  </article><article class="item" data-search="getGoogleResourceKind src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Preserve the exact Google resource kind without falsifying the portable descriptor.">
+    <h3>getGoogleResourceKind</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:115:1</code></p>
+    <p>Preserve the exact Google resource kind without falsifying the portable descriptor.</p>
+  </article><article class="item" data-search="getMutationResourceName src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Identify the single Google resource changed by a mutation.">
+    <h3>getMutationResourceName</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:126:1</code></p>
+    <p>Identify the single Google resource changed by a mutation.</p>
+  </article><article class="item" data-search="isCreateKeyword src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Identify mutations whose target does not exist until the API creates it.">
+    <h3>isCreateKeyword</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:134:1</code></p>
+    <p>Identify mutations whose target does not exist until the API creates it.</p>
+  </article><article class="item" data-search="describeAfter src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts Produce the exact changed fields for a reviewable before/after diff.">
+    <h3>describeAfter</h3>
+    <p class="muted"><code>src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts:141:1</code></p>
+    <p>Produce the exact changed fields for a reviewable before/after diff.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-application-reconcileapprovedgoogleadsmutationasync-ts" class="view" data-view="src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts</h2>
+      <article class="item" data-search="reconcileApprovedGoogleAdsMutationAsync src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.">
+    <h3>reconcileApprovedGoogleAdsMutationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts:12:1</code></p>
+    <p>Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.</p>
+  </article><article class="item" data-search="assertProposalIntegrity src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts Reject a proposal whose canonical timestamp, operation, or approval differs from the approved data.">
+    <h3>assertProposalIntegrity</h3>
+    <p class="muted"><code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts:45:1</code></p>
+    <p>Reject a proposal whose canonical timestamp, operation, or approval differs from the approved data.</p>
+  </article><article class="item" data-search="completeReconciliationAsync src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts Release or settle the exclusive reconciliation claim through one atomic host transition.">
+    <h3>completeReconciliationAsync</h3>
+    <p class="muted"><code>src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts:56:1</code></p>
+    <p>Release or settle the exclusive reconciliation claim through one atomic host transition.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-composition-creategoogleadsprovider-ts" class="view" data-view="src/features/google-ads/composition/createGoogleAdsProvider.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/composition/createGoogleAdsProvider.ts</h2>
+      <article class="item" data-search="createGoogleAdsProvider src/features/google-ads/composition/createGoogleAdsProvider.ts Compose the real v26 REST adapter behind the approval-gated public provider boundary.">
+    <h3>createGoogleAdsProvider</h3>
+    <p class="muted"><code>src/features/google-ads/composition/createGoogleAdsProvider.ts:12:1</code></p>
+    <p>Compose the real v26 REST adapter behind the approval-gated public provider boundary.</p>
+  </article>
+    </section>
+  </section><section id="view-src-features-google-ads-domain-createmutationfingerprint-ts" class="view" data-view="src/features/google-ads/domain/createMutationFingerprint.ts" hidden>
+    <section class="panel">
+      <h2>src/features/google-ads/domain/createMutationFingerprint.ts</h2>
+      <article class="item" data-search="createMutationFingerprint src/features/google-ads/domain/createMutationFingerprint.ts Create a stable fingerprint over the complete immutable operation proposal.">
+    <h3>createMutationFingerprint</h3>
+    <p class="muted"><code>src/features/google-ads/domain/createMutationFingerprint.ts:6:1</code></p>
+    <p>Create a stable fingerprint over the complete immutable operation proposal.</p>
+  </article><article class="item" data-search="createProposalFingerprint src/features/google-ads/domain/createMutationFingerprint.ts Recompute the immutable approval binding from the proposal that will be executed.">
+    <h3>createProposalFingerprint</h3>
+    <p class="muted"><code>src/features/google-ads/domain/createMutationFingerprint.ts:13:1</code></p>
+    <p>Recompute the immutable approval binding from the proposal that will be executed.</p>
+  </article><article class="item" data-search="sortValue src/features/google-ads/domain/createMutationFingerprint.ts Recursively sort object keys so equivalent proposals have one fingerprint.">
+    <h3>sortValue</h3>
+    <p class="muted"><code>src/features/google-ads/domain/createMutationFingerprint.ts:20:1</code></p>
+    <p>Recursively sort object keys so equivalent proposals have one fingerprint.</p>
+  </article>
+    </section>
+  </section>
+      </main>
+    </div>
+    <script>
+      const search = document.getElementById('search');
+      const navButtons = Array.from(document.querySelectorAll('[data-target]'));
+      const views = Array.from(document.querySelectorAll('[data-view]'));
+
+      function getActiveView() {
+        return document.querySelector('[data-view]:not([hidden])');
+      }
+
+      function applySearch() {
+        const value = search?.value.trim().toLowerCase() || '';
+        const activeView = getActiveView();
+        const items = Array.from(activeView?.querySelectorAll('[data-search]') || []);
+
+        for (const item of items) {
+          const haystack = (item.getAttribute('data-search') || '').toLowerCase();
+          item.style.display = value === '' || haystack.includes(value) ? '' : 'none';
+        }
+      }
+
+      for (const button of navButtons) {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-target');
+
+          for (const view of views) {
+            view.hidden = view.getAttribute('data-view') !== target;
+          }
+
+          for (const item of navButtons) {
+            item.setAttribute('aria-current', item === button ? 'page' : 'false');
+          }
+
+          if (search) search.value = '';
+          applySearch();
+        });
+      }
+
+      search?.addEventListener('input', applySearch);
+    </script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+  </body>
+</html>

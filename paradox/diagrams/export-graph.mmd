@@ -1,0 +1,84 @@
+graph LR
+  module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts["src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts"]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts["src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts["src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts["src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"]
+  module_src_features_google_ads_application_getGoogleAdsMutationEvidenceAsync_ts["src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"]
+  module_src_features_google_ads_application_googleAdsMutation_test_ts["src/features/google-ads/application/googleAdsMutation.test.ts"]
+  module_src_features_google_ads_application_googleAdsMutationFixtures_test_ts["src/features/google-ads/application/googleAdsMutationFixtures.test.ts"]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts["src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts"]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts["src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts["src/features/google-ads/composition/createGoogleAdsProvider.ts"]
+  module_src_features_google_ads_domain_createMutationFingerprint_ts["src/features/google-ads/domain/createMutationFingerprint.ts"]
+  module_src_features_google_ads_ports_googleAdsPorts_ts["src/features/google-ads/ports/googleAdsPorts.ts"]
+  module_src_index_test_ts["src/index.test.ts"]
+  module_src_index_ts["src/index.ts"]
+  module_src_types_googleAds_ts["src/types/googleAds.ts"]
+  export_createGoogleAdsProvider["createGoogleAdsProvider"]
+  module_src_features_google_ads_composition_createGoogleAdsProvider_ts --> export_createGoogleAdsProvider
+  export_createGoogleAdsProvider -.-> export_GoogleAdsMutationAttemptPort
+  export_createGoogleAdsProvider -.-> export_GoogleAdsProvider
+  export_createGoogleAdsProvider -.-> export_GoogleAdsProviderConfiguration
+  export_executeApprovedGoogleAdsMutationAsync["executeApprovedGoogleAdsMutationAsync"]
+  module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts --> export_executeApprovedGoogleAdsMutationAsync
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsApproval
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationAttemptPort
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationExecutionResult
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationPort
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationProposal
+  export_executeApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsReadPort
+  export_GoogleAdsApproval["GoogleAdsApproval"]
+  module_src_types_googleAds_ts --> export_GoogleAdsApproval
+  export_GoogleAdsMutation["GoogleAdsMutation"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutation
+  export_GoogleAdsMutationAttempt["GoogleAdsMutationAttempt"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort["GoogleAdsMutationAttemptPort"]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --> export_GoogleAdsMutationAttemptPort
+  export_GoogleAdsMutationAttemptPort -.-> export_GoogleAdsApproval
+  export_GoogleAdsMutationAttemptPort -.-> export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationAttemptPort -.-> export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationAttemptPort -.-> export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationExecutionResult["GoogleAdsMutationExecutionResult"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsMutationPort["GoogleAdsMutationPort"]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --> export_GoogleAdsMutationPort
+  export_GoogleAdsMutationPort -.-> export_GoogleAdsMutation
+  export_GoogleAdsMutationPort -.-> export_GoogleAdsMutationResult
+  export_GoogleAdsMutationProposal["GoogleAdsMutationProposal"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationProposal
+  export_GoogleAdsMutationProposal -.-> export_GoogleAdsMutation
+  export_GoogleAdsMutationReconciliationClaim["GoogleAdsMutationReconciliationClaim"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationReconciliationClaim
+  export_GoogleAdsMutationReconciliationClaim -.-> export_GoogleAdsMutationAttempt
+  export_GoogleAdsMutationReconciliationResult["GoogleAdsMutationReconciliationResult"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsMutationResult["GoogleAdsMutationResult"]
+  module_src_types_googleAds_ts --> export_GoogleAdsMutationResult
+  export_GoogleAdsProvider["GoogleAdsProvider"]
+  module_src_types_googleAds_ts --> export_GoogleAdsProvider
+  export_GoogleAdsProvider -.-> export_GoogleAdsApproval
+  export_GoogleAdsProvider -.-> export_GoogleAdsMutation
+  export_GoogleAdsProvider -.-> export_GoogleAdsMutationExecutionResult
+  export_GoogleAdsProvider -.-> export_GoogleAdsMutationProposal
+  export_GoogleAdsProvider -.-> export_GoogleAdsMutationReconciliationResult
+  export_GoogleAdsProviderConfiguration["GoogleAdsProviderConfiguration"]
+  module_src_types_googleAds_ts --> export_GoogleAdsProviderConfiguration
+  export_GoogleAdsReadPort["GoogleAdsReadPort"]
+  module_src_features_google_ads_ports_googleAdsPorts_ts --> export_GoogleAdsReadPort
+  export_GoogleAdsReadPort -.-> export_GoogleAdsReadResult
+  export_GoogleAdsReadResult["GoogleAdsReadResult"]
+  module_src_types_googleAds_ts --> export_GoogleAdsReadResult
+  export_prepareGoogleAdsMutationAsync["prepareGoogleAdsMutationAsync"]
+  module_src_features_google_ads_application_prepareGoogleAdsMutationAsync_ts --> export_prepareGoogleAdsMutationAsync
+  export_prepareGoogleAdsMutationAsync -.-> export_GoogleAdsMutation
+  export_prepareGoogleAdsMutationAsync -.-> export_GoogleAdsMutationPort
+  export_prepareGoogleAdsMutationAsync -.-> export_GoogleAdsMutationProposal
+  export_prepareGoogleAdsMutationAsync -.-> export_GoogleAdsReadPort
+  export_reconcileApprovedGoogleAdsMutationAsync["reconcileApprovedGoogleAdsMutationAsync"]
+  module_src_features_google_ads_application_reconcileApprovedGoogleAdsMutationAsync_ts --> export_reconcileApprovedGoogleAdsMutationAsync
+  export_reconcileApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsApproval
+  export_reconcileApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationAttemptPort
+  export_reconcileApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationProposal
+  export_reconcileApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationReconciliationResult
+  export_reconcileApprovedGoogleAdsMutationAsync -.-> export_GoogleAdsReadPort

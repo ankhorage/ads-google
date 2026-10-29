@@ -1,0 +1,744 @@
+[
+  {
+    "name": "createGoogleAdsProvider",
+    "description": "Compose the real v26 REST adapter behind the approval-gated public provider boundary.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "function",
+    "modulePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
+      "line": 12,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutationAttemptPort",
+      "GoogleAdsProvider",
+      "GoogleAdsProviderConfiguration"
+    ],
+    "signatures": [
+      {
+        "label": "(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }) => GoogleAdsProvider",
+        "parameters": [
+          {
+            "name": "input",
+            "type": "{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "GoogleAdsProvider",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "executeApprovedGoogleAdsMutationAsync",
+    "description": "Consume approval with a durable intent before issuing exactly one Google Ads mutation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "function",
+    "modulePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts",
+      "line": 15,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsApproval",
+      "GoogleAdsMutationAttemptPort",
+      "GoogleAdsMutationExecutionResult",
+      "GoogleAdsMutationPort",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsReadPort"
+    ],
+    "signatures": [
+      {
+        "label": "(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationExecutionResult>",
+        "parameters": [
+          {
+            "name": "input",
+            "type": "{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GoogleAdsMutationExecutionResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsApproval",
+    "description": "A consumed external approval bound to exactly one proposed mutation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 110,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "approvalId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "fingerprint",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutation",
+    "description": "Explicit resources and fields that this provider can mutate.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "unknown",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 17,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationAttempt",
+    "description": "A durable, approval-bound write attempt owned by the trusted host runtime.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 74,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "accountId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "approvalId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "attemptId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "fingerprint",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "operation",
+        "kind": "property",
+        "type": "\"create-keyword\" | \"create-ad-group-negative-keyword\" | \"create-campaign-negative-keyword\" | \"remove-keyword\" | \"remove-ad-group-negative-keyword\" | \"remove-campaign-negative-keyword\" | \"set-keyword-cpc\" | \"set-ad-group-cpc\" | \"set-budget\" | \"set-campaign-status\" | \"set-ad-group-status\"",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "providerResourceName",
+        "kind": "property",
+        "type": "string | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "resourceName",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationAttemptPort",
+    "description": "Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "line": 37,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsApproval",
+      "GoogleAdsMutationAttempt",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsMutationReconciliationClaim"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "claimRecoverableAttemptAsync",
+        "kind": "method",
+        "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationReconciliationClaim | null>",
+        "required": true,
+        "description": "Atomically bind and lease only this approval's orphaned intent or indeterminate attempt.\n\nThe trusted host validates approval ID, account, fingerprint, resource, and operation in the\nsame transition, returns an opaque fencing token, and never causes another provider write."
+      },
+      {
+        "name": "completeReconciliationAsync",
+        "kind": "method",
+        "type": "(input: { readonly claim: GoogleAdsMutationReconciliationClaim; readonly outcome: \"applied\" | \"not-applied\" | \"indeterminate\"; }) => Promise<boolean>",
+        "required": true,
+        "description": "Fence a reconciliation transition; indeterminate releases the lease, terminal outcomes settle it."
+      },
+      {
+        "name": "consumeApprovalAndCreateIntentAsync",
+        "kind": "method",
+        "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationAttempt | null>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "markIndeterminateAsync",
+        "kind": "method",
+        "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; readonly providerResourceName?: string; }) => Promise<boolean>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "settleExecutedAsync",
+        "kind": "method",
+        "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; }) => Promise<boolean>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationExecutionResult",
+    "description": "The terminal outcome of one approved mutation attempt.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "unknown",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 91,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationPort",
+    "description": "Validates and applies an exact Google Ads mutation at the provider boundary.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "line": 28,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutation",
+      "GoogleAdsMutationResult"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "mutateAsync",
+        "kind": "method",
+        "type": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly validateOnly: boolean; }) => Promise<GoogleAdsMutationResult | undefined>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationProposal",
+    "description": "Immutable proposal which must be approved outside this provider before execution.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 62,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutation"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "accountId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "after",
+        "kind": "property",
+        "type": "Readonly<Record<string, unknown>> | null",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "before",
+        "kind": "property",
+        "type": "Readonly<Record<string, unknown>> | null",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "change",
+        "kind": "property",
+        "type": "AdsChangeDescriptor",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "createdAt",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "fingerprint",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "mutation",
+        "kind": "property",
+        "type": "GoogleAdsMutation",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "resourceName",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationReconciliationClaim",
+    "description": "An exclusively leased host-owned attempt recovery claim, fenced by an opaque token.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 85,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutationAttempt"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "attempt",
+        "kind": "property",
+        "type": "GoogleAdsMutationAttempt",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "fenceToken",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationReconciliationResult",
+    "description": "The evidence-based settlement of an indeterminate approved mutation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "unknown",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 99,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationResult",
+    "description": "The exact provider resource affected by one validated mutation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 105,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "resourceName",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsProvider",
+    "description": "The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 123,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsApproval",
+      "GoogleAdsMutation",
+      "GoogleAdsMutationExecutionResult",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsMutationReconciliationResult"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "executeApprovedMutationAsync",
+        "kind": "method",
+        "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationExecutionResult>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "prepareMutationAsync",
+        "kind": "method",
+        "type": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; }) => Promise<GoogleAdsMutationProposal>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "reconcileApprovedMutationAsync",
+        "kind": "method",
+        "type": "(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationReconciliationResult>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsProviderConfiguration",
+    "description": "A Google Ads account explicitly permitted for one provider instance.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 4,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "accessToken",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "allowedCustomerId",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "apiVersion",
+        "kind": "property",
+        "type": "\"v26\" | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "developerToken",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "loginCustomerId",
+        "kind": "property",
+        "type": "string | undefined",
+        "required": false,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsReadPort",
+    "description": "Reads an exact Google Ads resource within an already isolated customer scope.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
+      "line": 13,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsReadResult"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "findKeywordDuplicatesAsync",
+        "kind": "method",
+        "type": "(input: { readonly customerId: string; readonly matchType: GoogleAdsKeywordMatchType; readonly negative: boolean; readonly parentResourceName: string; readonly text: string; }) => Promise<readonly GoogleAdsReadResult[]>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "readResourceAsync",
+        "kind": "method",
+        "type": "(input: { readonly customerId: string; readonly resourceName: string; }) => Promise<GoogleAdsReadResult | null>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsReadResult",
+    "description": "Sanitized Google Ads read result retaining provider-only values explicitly.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 116,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "extensions",
+        "kind": "property",
+        "type": "readonly AdsProviderExtension[] | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "resourceName",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "values",
+        "kind": "property",
+        "type": "Readonly<Record<string, unknown>>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "prepareGoogleAdsMutationAsync",
+    "description": "Read, diff, duplicate-check, and API-validate a mutation before external approval.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "function",
+    "modulePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+      "line": 11,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutation",
+      "GoogleAdsMutationPort",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsReadPort"
+    ],
+    "signatures": [
+      {
+        "label": "(input: { readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () => string; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationProposal>",
+        "parameters": [
+          {
+            "name": "input",
+            "type": "{ readonly customerId: string; readonly mutation: GoogleAdsMutation; readonly mutations: GoogleAdsMutationPort; readonly now: () => string; readonly reads: GoogleAdsReadPort; }",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GoogleAdsMutationProposal>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "reconcileApprovedGoogleAdsMutationAsync",
+    "description": "Settle only a host-persisted indeterminate attempt, without issuing another Google Ads mutation.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "function",
+    "modulePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts",
+      "line": 12,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsApproval",
+      "GoogleAdsMutationAttemptPort",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsMutationReconciliationResult",
+      "GoogleAdsReadPort"
+    ],
+    "signatures": [
+      {
+        "label": "(input: { readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationReconciliationResult>",
+        "parameters": [
+          {
+            "name": "input",
+            "type": "{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GoogleAdsMutationReconciliationResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  }
+]
