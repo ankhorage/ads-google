@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2024"],
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": true,
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "types": ["bun", "node"]
+  },
+  "include": ["src/**/*.ts"]
+}

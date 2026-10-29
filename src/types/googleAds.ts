@@ -1,0 +1,136 @@
+import type { AdsChangeDescriptor, AdsProviderExtension } from '@ankhorage/contracts/ads';
+
+/*** A Google Ads account explicitly permitted for one provider instance. */
+export interface GoogleAdsProviderConfiguration {
+  readonly allowedCustomerId: string;
+  readonly developerToken: string;
+  readonly accessToken: string;
+  /** Google Ads v26 is the first supported runtime API version. */
+  readonly apiVersion?: 'v26';
+  readonly loginCustomerId?: string;
+}
+
+/*** Supported Google Ads keyword match modes. */
+export type GoogleAdsKeywordMatchType = 'BROAD' | 'PHRASE' | 'EXACT';
+
+/*** Explicit resources and fields that this provider can mutate. */
+export type GoogleAdsMutation =
+  | {
+      readonly kind: 'create-keyword' | 'create-ad-group-negative-keyword';
+      readonly adGroupResourceName: string;
+      readonly text: string;
+      readonly matchType: GoogleAdsKeywordMatchType;
+    }
+  | {
+      readonly kind: 'create-campaign-negative-keyword';
+      readonly campaignResourceName: string;
+      readonly text: string;
+      readonly matchType: GoogleAdsKeywordMatchType;
+    }
+  | {
+      readonly kind:
+        'remove-keyword' | 'remove-ad-group-negative-keyword' | 'remove-campaign-negative-keyword';
+      readonly criterionResourceName: string;
+    }
+  | {
+      readonly kind: 'set-keyword-cpc';
+      readonly criterionResourceName: string;
+      readonly cpcBidMicros: string;
+    }
+  | {
+      readonly kind: 'set-ad-group-cpc';
+      readonly adGroupResourceName: string;
+      readonly cpcBidMicros: string;
+    }
+  | {
+      readonly kind: 'set-budget';
+      readonly campaignBudgetResourceName: string;
+      readonly amountMicros: string;
+    }
+  | {
+      readonly kind: 'set-campaign-status';
+      readonly campaignResourceName: string;
+      readonly status: 'ENABLED' | 'PAUSED';
+    }
+  | {
+      readonly kind: 'set-ad-group-status';
+      readonly adGroupResourceName: string;
+      readonly status: 'ENABLED' | 'PAUSED';
+    };
+
+/*** Immutable proposal which must be approved outside this provider before execution. */
+export interface GoogleAdsMutationProposal {
+  readonly accountId: string;
+  readonly after: Readonly<Record<string, unknown>> | null;
+  readonly before: Readonly<Record<string, unknown>> | null;
+  readonly change: AdsChangeDescriptor;
+  readonly createdAt: string;
+  readonly fingerprint: string;
+  readonly mutation: GoogleAdsMutation;
+  readonly resourceName: string;
+}
+
+/*** A durable, approval-bound write attempt owned by the trusted host runtime. */
+export interface GoogleAdsMutationAttempt {
+  readonly accountId: string;
+  readonly approvalId: string;
+  readonly attemptId: string;
+  readonly fingerprint: string;
+  readonly operation: GoogleAdsMutation['kind'];
+  readonly providerResourceName?: string;
+  readonly resourceName: string;
+}
+
+/*** An exclusively leased host-owned attempt recovery claim, fenced by an opaque token. */
+export interface GoogleAdsMutationReconciliationClaim {
+  readonly attempt: GoogleAdsMutationAttempt;
+  readonly fenceToken: string;
+}
+
+/*** The terminal outcome of one approved mutation attempt. */
+export type GoogleAdsMutationExecutionResult =
+  | { readonly outcome: 'executed' }
+  | {
+      readonly outcome: 'indeterminate';
+      readonly reason: string;
+    };
+
+/*** The evidence-based settlement of an indeterminate approved mutation. */
+export type GoogleAdsMutationReconciliationResult =
+  | { readonly outcome: 'applied' }
+  | { readonly outcome: 'not-applied' }
+  | { readonly outcome: 'indeterminate'; readonly reason: string };
+
+/*** The exact provider resource affected by one validated mutation. */
+export interface GoogleAdsMutationResult {
+  readonly resourceName: string;
+}
+
+/*** A consumed external approval bound to exactly one proposed mutation. */
+export interface GoogleAdsApproval {
+  readonly approvalId: string;
+  readonly fingerprint: string;
+}
+
+/*** Sanitized Google Ads read result retaining provider-only values explicitly. */
+export interface GoogleAdsReadResult {
+  readonly extensions?: readonly AdsProviderExtension[];
+  readonly resourceName: string;
+  readonly values: Readonly<Record<string, unknown>>;
+}
+
+/*** The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation. */
+export interface GoogleAdsProvider {
+  prepareMutationAsync(input: {
+    readonly customerId: string;
+    readonly mutation: GoogleAdsMutation;
+  }): Promise<GoogleAdsMutationProposal>;
+  executeApprovedMutationAsync(input: {
+    readonly approval: GoogleAdsApproval;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationExecutionResult>;
+  reconcileApprovedMutationAsync(input: {
+    readonly approval: GoogleAdsApproval;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationReconciliationResult>;
+}
