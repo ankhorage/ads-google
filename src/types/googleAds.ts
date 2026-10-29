@@ -3,12 +3,15 @@ import type { AdsChangeDescriptor, AdsProviderExtension } from '@ankhorage/contr
 /*** A Google Ads account explicitly permitted for one provider instance. */
 export interface GoogleAdsProviderConfiguration {
   readonly allowedCustomerId: string;
-  readonly developerToken: string;
-  readonly accessToken: string;
+  readonly accessTokenAsync: GoogleAdsAccessTokenResolver;
+  readonly developerToken?: string;
   /** Google Ads v26 is the first supported runtime API version. */
   readonly apiVersion?: 'v26';
   readonly loginCustomerId?: string;
 }
+
+/*** Resolve a short-lived OAuth access token immediately before a Google Ads API request. */
+export type GoogleAdsAccessTokenResolver = () => Promise<string>;
 
 /*** Supported Google Ads keyword match modes. */
 export type GoogleAdsKeywordMatchType = 'BROAD' | 'PHRASE' | 'EXACT';

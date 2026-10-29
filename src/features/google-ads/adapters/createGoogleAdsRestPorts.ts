@@ -74,7 +74,7 @@ function createGoogleAdsRequestAsync(
   return async (path, body) => {
     const response = await fetch(`https://googleads.googleapis.com/${apiVersion}/${path}`, {
       body: JSON.stringify(body),
-      headers: createHeaders(configuration),
+      headers: await createHeadersAsync(configuration),
       method: 'POST',
     });
     if (!response.ok)
@@ -113,13 +113,15 @@ function assertMutationResources(
   });
 }
 /*** Build authorization headers without serializing secrets into errors or audit data. */
-function createHeaders(
+async function createHeadersAsync(
   configuration: GoogleAdsProviderConfiguration,
-): Readonly<Record<string, string>> {
+): Promise<Readonly<Record<string, string>>> {
   return {
-    Authorization: `Bearer ${configuration.accessToken}`,
+    Authorization: `Bearer ${await configuration.accessTokenAsync()}`,
     'Content-Type': 'application/json',
-    'developer-token': configuration.developerToken,
+    ...(configuration.developerToken === undefined
+      ? {}
+      : { 'developer-token': configuration.developerToken }),
     ...(configuration.loginCustomerId === undefined
       ? {}
       : { 'login-customer-id': configuration.loginCustomerId }),

@@ -9,6 +9,7 @@ export type {
   GoogleAdsReadPort,
 } from './features/google-ads/ports/googleAdsPorts.js';
 export type {
+  GoogleAdsAccessTokenResolver,
   GoogleAdsApproval,
   GoogleAdsMutation,
   GoogleAdsMutationAttempt,

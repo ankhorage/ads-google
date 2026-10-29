@@ -4,9 +4,8 @@ import { expect, spyOn, test } from 'bun:test';
 import { createGoogleAdsMcpIntegration } from './index.js';
 
 const configuration = {
-  accessToken: 'access-token',
+  accessTokenAsync: () => Promise.resolve('access-token'),
   allowedCustomerId: '8810770460',
-  developerToken: 'developer-token',
 };
 
 /** Discover scoped resources and preparation tools without credentials in their contracts. */
