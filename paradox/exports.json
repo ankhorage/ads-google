@@ -119,6 +119,26 @@
     "structuredRows": []
   },
   {
+    "name": "GoogleAdsAccessTokenResolver",
+    "description": "Resolve a short-lived OAuth access token immediately before a Google Ads API request.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "unknown",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 14,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "GoogleAdsApproval",
     "description": "A consumed external approval bound to exactly one proposed mutation.",
     "isReadme": false,
@@ -127,7 +147,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 116,
+      "line": 119,
       "column": 1
     },
     "exportPaths": [
@@ -162,7 +182,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 17,
+      "line": 20,
       "column": 1
     },
     "exportPaths": [
@@ -182,7 +202,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 74,
+      "line": 77,
       "column": 1
     },
     "exportPaths": [
@@ -335,7 +355,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 91,
+      "line": 94,
       "column": 1
     },
     "exportPaths": [
@@ -372,7 +392,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 97,
+      "line": 100,
       "column": 1
     },
     "exportPaths": [
@@ -423,7 +443,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 62,
+      "line": 65,
       "column": 1
     },
     "exportPaths": [
@@ -502,7 +522,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 85,
+      "line": 88,
       "column": 1
     },
     "exportPaths": [
@@ -539,7 +559,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 105,
+      "line": 108,
       "column": 1
     },
     "exportPaths": [
@@ -559,7 +579,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 111,
+      "line": 114,
       "column": 1
     },
     "exportPaths": [
@@ -587,7 +607,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 129,
+      "line": 132,
       "column": 1
     },
     "exportPaths": [
@@ -641,13 +661,15 @@
     "exportPaths": [
       "src/index.ts"
     ],
-    "relatedSymbols": [],
+    "relatedSymbols": [
+      "GoogleAdsAccessTokenResolver"
+    ],
     "signatures": [],
     "members": [
       {
-        "name": "accessToken",
+        "name": "accessTokenAsync",
         "kind": "property",
-        "type": "string",
+        "type": "GoogleAdsAccessTokenResolver",
         "required": true,
         "description": null
       },
@@ -668,8 +690,8 @@
       {
         "name": "developerToken",
         "kind": "property",
-        "type": "string",
-        "required": true,
+        "type": "string | undefined",
+        "required": false,
         "description": null
       },
       {
@@ -728,7 +750,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 122,
+      "line": 125,
       "column": 1
     },
     "exportPaths": [

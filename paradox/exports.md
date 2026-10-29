@@ -40,11 +40,19 @@ Source: `src/features/google-ads/application/executePersistedGoogleAdsMutationAs
   - input: `{ readonly approvalId: string; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }`
   - returns: `Promise<GoogleAdsMutationExecutionResult>`
 
+## GoogleAdsAccessTokenResolver
+
+Kind: `unknown`
+Module: `src/types/googleAds.ts`
+Source: `src/types/googleAds.ts:14:1`
+
+Resolve a short-lived OAuth access token immediately before a Google Ads API request.
+
 ## GoogleAdsApproval
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:116:1`
+Source: `src/types/googleAds.ts:119:1`
 
 A consumed external approval bound to exactly one proposed mutation.
 
@@ -59,7 +67,7 @@ A consumed external approval bound to exactly one proposed mutation.
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:17:1`
+Source: `src/types/googleAds.ts:20:1`
 
 Explicit resources and fields that this provider can mutate.
 
@@ -67,7 +75,7 @@ Explicit resources and fields that this provider can mutate.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:74:1`
+Source: `src/types/googleAds.ts:77:1`
 
 A durable, approval-bound write attempt owned by the trusted host runtime.
 
@@ -111,7 +119,7 @@ same transition, returns an opaque fencing token, and never causes another provi
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:91:1`
+Source: `src/types/googleAds.ts:94:1`
 
 ### Members
 
@@ -124,7 +132,7 @@ Source: `src/types/googleAds.ts:91:1`
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:97:1`
+Source: `src/types/googleAds.ts:100:1`
 
 The terminal outcome of one approved mutation attempt.
 
@@ -146,7 +154,7 @@ Validates and applies an exact Google Ads mutation at the provider boundary.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:62:1`
+Source: `src/types/googleAds.ts:65:1`
 
 Immutable proposal which must be approved outside this provider before execution.
 
@@ -167,7 +175,7 @@ Immutable proposal which must be approved outside this provider before execution
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:85:1`
+Source: `src/types/googleAds.ts:88:1`
 
 An exclusively leased host-owned attempt recovery claim, fenced by an opaque token.
 
@@ -182,7 +190,7 @@ An exclusively leased host-owned attempt recovery claim, fenced by an opaque tok
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:105:1`
+Source: `src/types/googleAds.ts:108:1`
 
 The evidence-based settlement of an indeterminate approved mutation.
 
@@ -190,7 +198,7 @@ The evidence-based settlement of an indeterminate approved mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:111:1`
+Source: `src/types/googleAds.ts:114:1`
 
 The exact provider resource affected by one validated mutation.
 
@@ -204,7 +212,7 @@ The exact provider resource affected by one validated mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:129:1`
+Source: `src/types/googleAds.ts:132:1`
 
 The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.
 
@@ -228,10 +236,10 @@ A Google Ads account explicitly permitted for one provider instance.
 
 | Name | Kind | Type | Required | Description |
 | --- | --- | --- | --- | --- |
-| accessToken | property | `string` | yes |  |
+| accessTokenAsync | property | `GoogleAdsAccessTokenResolver` | yes |  |
 | allowedCustomerId | property | `string` | yes |  |
 | apiVersion | property | `"v26" \| undefined` | no |  |
-| developerToken | property | `string` | yes |  |
+| developerToken | property | `string \| undefined` | no |  |
 | loginCustomerId | property | `string \| undefined` | no |  |
 
 ## GoogleAdsReadPort
@@ -253,7 +261,7 @@ Reads an exact Google Ads resource within an already isolated customer scope.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:122:1`
+Source: `src/types/googleAds.ts:125:1`
 
 Sanitized Google Ads read result retaining provider-only values explicitly.
 

@@ -16,6 +16,9 @@ graph LR
   module_src_features_google_ads_ports_googleAdsPorts_ts["src/features/google-ads/ports/googleAdsPorts.ts"]
   module_src_index_test_ts["src/index.test.ts"]
   module_src_index_ts["src/index.ts"]
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_test_ts["src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"]
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts["src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"]
+  module_src_mcp_createIntegrationAsync_ts["src/mcp/createIntegrationAsync.ts"]
   module_src_mcp_googleAdsMcpToolUtils_ts["src/mcp/googleAdsMcpToolUtils.ts"]
   module_src_mcp_index_test_ts["src/mcp/index.test.ts"]
   module_src_mcp_index_ts["src/mcp/index.ts"]
@@ -40,6 +43,8 @@ graph LR
   export_executePersistedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationPort
   export_executePersistedGoogleAdsMutationAsync -.-> export_GoogleAdsMutationProposal
   export_executePersistedGoogleAdsMutationAsync -.-> export_GoogleAdsReadPort
+  export_GoogleAdsAccessTokenResolver["GoogleAdsAccessTokenResolver"]
+  module_src_types_googleAds_ts --> export_GoogleAdsAccessTokenResolver
   export_GoogleAdsApproval["GoogleAdsApproval"]
   module_src_types_googleAds_ts --> export_GoogleAdsApproval
   export_GoogleAdsMutation["GoogleAdsMutation"]
@@ -81,6 +86,7 @@ graph LR
   export_GoogleAdsProvider -.-> export_GoogleAdsMutationReconciliationResult
   export_GoogleAdsProviderConfiguration["GoogleAdsProviderConfiguration"]
   module_src_types_googleAds_ts --> export_GoogleAdsProviderConfiguration
+  export_GoogleAdsProviderConfiguration -.-> export_GoogleAdsAccessTokenResolver
   export_GoogleAdsReadPort["GoogleAdsReadPort"]
   module_src_features_google_ads_ports_googleAdsPorts_ts --> export_GoogleAdsReadPort
   export_GoogleAdsReadPort -.-> export_GoogleAdsReadResult

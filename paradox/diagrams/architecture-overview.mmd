@@ -79,6 +79,17 @@ graph TD
   package__ankhorage_ads_google -.-> module_src_index_test_ts
   module_src_index_test_ts --> module_src_index_ts
   module_src_index_ts["src/index.ts"]
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_test_ts["src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"]
+  package__ankhorage_ads_google -.-> module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_test_ts
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_test_ts --> module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_test_ts --> module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts["src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"]
+  package__ankhorage_ads_google -.-> module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts
+  module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts --> module_src_types_googleAds_ts
+  module_src_mcp_createIntegrationAsync_ts["src/mcp/createIntegrationAsync.ts"]
+  package__ankhorage_ads_google -.-> module_src_mcp_createIntegrationAsync_ts
+  module_src_mcp_createIntegrationAsync_ts --> module_src_mcp_createGoogleAdsServiceAccountAccessTokenResolver_ts
+  module_src_mcp_createIntegrationAsync_ts --> module_src_mcp_index_ts
   module_src_mcp_googleAdsMcpToolUtils_ts["src/mcp/googleAdsMcpToolUtils.ts"]
   package__ankhorage_ads_google -.-> module_src_mcp_googleAdsMcpToolUtils_ts
   module_src_mcp_googleAdsMcpToolUtils_ts --> module_src_types_googleAds_ts

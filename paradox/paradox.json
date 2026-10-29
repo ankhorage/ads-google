@@ -14,7 +14,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.3.0",
+      "value": "v0.4.0",
       "color": "cb3837"
     },
     {
@@ -270,6 +270,7 @@
         "createGoogleAdsProvider",
         "executeApprovedGoogleAdsMutationAsync",
         "executePersistedGoogleAdsMutationAsync",
+        "GoogleAdsAccessTokenResolver",
         "GoogleAdsApproval",
         "GoogleAdsMutation",
         "GoogleAdsMutationAttempt",
@@ -287,6 +288,36 @@
         "GoogleAdsReadResult",
         "prepareGoogleAdsMutationAsync",
         "reconcileApprovedGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "createGoogleAdsServiceAccountAccessTokenResolver"
+      ]
+    },
+    {
+      "path": "src/mcp/createIntegrationAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "src/mcp/index.ts"
+      ],
+      "exports": [
+        "createIntegrationAsync"
       ]
     },
     {
@@ -322,6 +353,7 @@
       ],
       "exports": [
         "createGoogleAdsMcpIntegration",
+        "createGoogleAdsServiceAccountAccessTokenResolver",
         "createIntegrationAsync"
       ]
     },
@@ -330,6 +362,7 @@
       "isEntrypoint": false,
       "dependencies": [],
       "exports": [
+        "GoogleAdsAccessTokenResolver",
         "GoogleAdsApproval",
         "GoogleAdsKeywordMatchType",
         "GoogleAdsMutation",
@@ -467,6 +500,26 @@
       "structuredRows": []
     },
     {
+      "name": "GoogleAdsAccessTokenResolver",
+      "description": "Resolve a short-lived OAuth access token immediately before a Google Ads API request.",
+      "isReadme": false,
+      "examples": [],
+      "kind": "unknown",
+      "modulePath": "src/types/googleAds.ts",
+      "sourceLocation": {
+        "filePath": "src/types/googleAds.ts",
+        "line": 14,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
       "name": "GoogleAdsApproval",
       "description": "A consumed external approval bound to exactly one proposed mutation.",
       "isReadme": false,
@@ -475,7 +528,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 116,
+        "line": 119,
         "column": 1
       },
       "exportPaths": [
@@ -510,7 +563,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 17,
+        "line": 20,
         "column": 1
       },
       "exportPaths": [
@@ -530,7 +583,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 74,
+        "line": 77,
         "column": 1
       },
       "exportPaths": [
@@ -683,7 +736,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 91,
+        "line": 94,
         "column": 1
       },
       "exportPaths": [
@@ -720,7 +773,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 97,
+        "line": 100,
         "column": 1
       },
       "exportPaths": [
@@ -771,7 +824,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 62,
+        "line": 65,
         "column": 1
       },
       "exportPaths": [
@@ -850,7 +903,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 85,
+        "line": 88,
         "column": 1
       },
       "exportPaths": [
@@ -887,7 +940,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 105,
+        "line": 108,
         "column": 1
       },
       "exportPaths": [
@@ -907,7 +960,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 111,
+        "line": 114,
         "column": 1
       },
       "exportPaths": [
@@ -935,7 +988,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 129,
+        "line": 132,
         "column": 1
       },
       "exportPaths": [
@@ -989,13 +1042,15 @@
       "exportPaths": [
         "src/index.ts"
       ],
-      "relatedSymbols": [],
+      "relatedSymbols": [
+        "GoogleAdsAccessTokenResolver"
+      ],
       "signatures": [],
       "members": [
         {
-          "name": "accessToken",
+          "name": "accessTokenAsync",
           "kind": "property",
-          "type": "string",
+          "type": "GoogleAdsAccessTokenResolver",
           "required": true,
           "description": null
         },
@@ -1016,8 +1071,8 @@
         {
           "name": "developerToken",
           "kind": "property",
-          "type": "string",
-          "required": true,
+          "type": "string | undefined",
+          "required": false,
           "description": null
         },
         {
@@ -1076,7 +1131,7 @@
       "modulePath": "src/types/googleAds.ts",
       "sourceLocation": {
         "filePath": "src/types/googleAds.ts",
-        "line": 122,
+        "line": 125,
         "column": 1
       },
       "exportPaths": [
@@ -1232,7 +1287,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 138,
+        "line": 173,
         "column": 1
       }
     },
@@ -1241,7 +1296,7 @@
       "description": "Return a valid scoped mutation for Google Ads validate-only request assertions.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 177,
+        "line": 212,
         "column": 1
       }
     },
@@ -1250,7 +1305,7 @@
       "description": "Reject partial failures even when the Google Ads request is validate-only.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 191,
+        "line": 226,
         "column": 1
       }
     },
@@ -1259,7 +1314,7 @@
       "description": "Ensure resource names cannot escape the configured customer even on a permitted request URL.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 208,
+        "line": 243,
         "column": 1
       }
     },
@@ -1268,7 +1323,7 @@
       "description": "Reject a permitted customer resource when its collection cannot carry the requested operation.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 227,
+        "line": 262,
         "column": 1
       }
     },
@@ -1277,7 +1332,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 245,
+        "line": 280,
         "column": 1
       }
     },
@@ -1286,7 +1341,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 260,
+        "line": 295,
         "column": 1
       }
     },
@@ -1295,7 +1350,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "line": 268,
+        "line": 303,
         "column": 1
       }
     },
@@ -1345,7 +1400,7 @@
       }
     },
     {
-      "name": "createHeaders",
+      "name": "createHeadersAsync",
       "description": "Build authorization headers without serializing secrets into errors or audit data.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
@@ -1358,7 +1413,7 @@
       "description": "Translate one supported provider mutation to its precise Google Ads mutate service.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 129,
+        "line": 131,
         "column": 1
       }
     },
@@ -1367,7 +1422,7 @@
       "description": "Map an ad-group criterion creation to the v26 operation payload.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 162,
+        "line": 164,
         "column": 1
       }
     },
@@ -1376,7 +1431,7 @@
       "description": "Map a campaign criterion creation to the v26 operation payload.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 181,
+        "line": 183,
         "column": 1
       }
     },
@@ -1385,7 +1440,7 @@
       "description": "Build a field-mask update operation for one v26 resource service.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 200,
+        "line": 202,
         "column": 1
       }
     },
@@ -1394,7 +1449,7 @@
       "description": "Escape a GAQL string literal.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 217,
+        "line": 219,
         "column": 1
       }
     },
@@ -1403,7 +1458,7 @@
       "description": "Build a resource-scoped GAQL lookup for a supported mutable resource name.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 221,
+        "line": 223,
         "column": 1
       }
     },
@@ -1412,7 +1467,7 @@
       "description": "Select only the mutable state needed to prepare and verify each supported resource.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 227,
+        "line": 229,
         "column": 1
       }
     },
@@ -1421,7 +1476,7 @@
       "description": "Select the correct GAQL resource and field namespace from its canonical name.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 240,
+        "line": 242,
         "column": 1
       }
     },
@@ -1430,7 +1485,7 @@
       "description": "Build the criterion query shared by keyword and negative-keyword duplicate detection.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 255,
+        "line": 257,
         "column": 1
       }
     },
@@ -1439,7 +1494,7 @@
       "description": "Decode a supported v26 search-stream response without trusting its JSON shape.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 268,
+        "line": 270,
         "column": 1
       }
     },
@@ -1448,7 +1503,7 @@
       "description": "Decode one REST search-stream batch into provider read values.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 277,
+        "line": 279,
         "column": 1
       }
     },
@@ -1457,7 +1512,7 @@
       "description": "Decode one resource record while retaining the selected provider state.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 286,
+        "line": 288,
         "column": 1
       }
     },
@@ -1466,7 +1521,7 @@
       "description": "Retain JSON-compatible selected resource fields without preserving untrusted envelopes.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 296,
+        "line": 298,
         "column": 1
       }
     },
@@ -1475,7 +1530,7 @@
       "description": "Decode a validation acknowledgement or the exact result of one productive mutation.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 304,
+        "line": 306,
         "column": 1
       }
     },
@@ -1484,7 +1539,7 @@
       "description": "Find a resource name in a typed Google Ads result without an unsafe JSON cast.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 322,
+        "line": 324,
         "column": 1
       }
     },
@@ -1493,7 +1548,7 @@
       "description": "Narrow untrusted JSON to a record before accessing fields.",
       "sourceLocation": {
         "filePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "line": 334,
+        "line": 336,
         "column": 1
       }
     },
@@ -1930,6 +1985,150 @@
       }
     },
     {
+      "name": "createCredentialsFixtures",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 112,
+        "column": 1
+      }
+    },
+    {
+      "name": "writeServiceAccountCredentials",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 134,
+        "column": 1
+      }
+    },
+    {
+      "name": "serviceAccountAssertionPayload",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 154,
+        "column": 1
+      }
+    },
+    {
+      "name": "tokenResponse",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 159,
+        "column": 1
+      }
+    },
+    {
+      "name": "toFetchImplementation",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 166,
+        "column": 1
+      }
+    },
+    {
+      "name": "formBody",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 172,
+        "column": 1
+      }
+    },
+    {
+      "name": "createRefreshFetch",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 176,
+        "column": 1
+      }
+    },
+    {
+      "name": "tokenResponseForRequest",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 194,
+        "column": 3
+      }
+    },
+    {
+      "name": "requestUrl",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "line": 204,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGoogleAdsServiceAccountAccessTokenResolver",
+      "description": "Create a host-owned service-account resolver with Google Auth's cached, proactive refresh.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "line": 11,
+        "column": 1
+      }
+    },
+    {
+      "name": "readServiceAccountCredentials",
+      "description": "Read only the host-selected service-account file and reject every other credential type.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "line": 44,
+        "column": 1
+      }
+    },
+    {
+      "name": "isServiceAccountCredentials",
+      "description": "Recognize the minimal, non-routable identity fields required by Google Auth's service-account client.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "line": 58,
+        "column": 1
+      }
+    },
+    {
+      "name": "createIntegrationAsync",
+      "description": "Create the discoverable read-only integration from process-local secrets, never tool input.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createIntegrationAsync.ts",
+        "line": 7,
+        "column": 1
+      }
+    },
+    {
+      "name": "requiredEnvironmentValue",
+      "description": "Read a required process-local secret without ever returning it in an error.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createIntegrationAsync.ts",
+        "line": 25,
+        "column": 1
+      }
+    },
+    {
+      "name": "optionalEnvironmentValue",
+      "description": "Read a nonempty host configuration value.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createIntegrationAsync.ts",
+        "line": 32,
+        "column": 1
+      }
+    },
+    {
+      "name": "environmentValue",
+      "description": "Select only the fixed environment names owned by this integration.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createIntegrationAsync.ts",
+        "line": 38,
+        "column": 1
+      }
+    },
+    {
       "name": "toGoogleAdsMcpChangeDescriptor",
       "description": null,
       "sourceLocation": {
@@ -1961,16 +2160,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 19,
-        "column": 1
-      }
-    },
-    {
-      "name": "createIntegrationAsync",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 65,
+        "line": 22,
         "column": 1
       }
     },
@@ -1979,7 +2169,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 80,
+        "line": 68,
         "column": 1
       }
     },
@@ -1988,7 +2178,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 101,
+        "line": 89,
         "column": 1
       }
     },
@@ -1997,7 +2187,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 119,
+        "line": 107,
         "column": 1
       }
     },
@@ -2006,7 +2196,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 129,
+        "line": 117,
         "column": 1
       }
     },
@@ -2015,7 +2205,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 136,
+        "line": 124,
         "column": 9
       }
     },
@@ -2024,7 +2214,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 180,
+        "line": 168,
         "column": 1
       }
     },
@@ -2033,7 +2223,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 234,
+        "line": 222,
         "column": 1
       }
     },
@@ -2042,7 +2232,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 239,
+        "line": 227,
         "column": 1
       }
     },
@@ -2051,7 +2241,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 268,
+        "line": 256,
         "column": 1
       }
     },
@@ -2060,7 +2250,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 275,
+        "line": 263,
         "column": 1
       }
     },
@@ -2069,7 +2259,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 283,
+        "line": 271,
         "column": 1
       }
     },
@@ -2078,34 +2268,7 @@
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 295,
-        "column": 1
-      }
-    },
-    {
-      "name": "requiredEnvironmentValue",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 302,
-        "column": 1
-      }
-    },
-    {
-      "name": "optionalEnvironmentValue",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 309,
-        "column": 1
-      }
-    },
-    {
-      "name": "environmentValue",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 315,
+        "line": 283,
         "column": 1
       }
     }
@@ -2195,6 +2358,31 @@
         "sourcePath": "src/index.ts"
       },
       {
+        "fromPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"
+      },
+      {
+        "fromPath": "src/mcp/createIntegrationAsync.ts",
+        "toPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromPath": "src/mcp/createIntegrationAsync.ts",
+        "toPath": "src/mcp/index.ts",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
         "fromPath": "src/mcp/googleAdsMcpToolUtils.ts",
         "toPath": "src/types/googleAds.ts",
         "sourcePath": "src/mcp/googleAdsMcpToolUtils.ts"
@@ -2232,6 +2420,16 @@
       {
         "fromPath": "src/mcp/index.ts",
         "toPath": "src/mcp/googleAdsMcpToolUtils.ts",
+        "sourcePath": "src/mcp/index.ts"
+      },
+      {
+        "fromPath": "src/mcp/index.ts",
+        "toPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts",
+        "sourcePath": "src/mcp/index.ts"
+      },
+      {
+        "fromPath": "src/mcp/index.ts",
+        "toPath": "src/mcp/createIntegrationAsync.ts",
         "sourcePath": "src/mcp/index.ts"
       },
       {
@@ -2482,6 +2680,258 @@
         "sourcePath": "src/index.test.ts"
       },
       {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "createCredentialsFixtures",
+        "callExpression": "createCredentialsFixtures",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "spyOn",
+        "callExpression": "spyOn",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "toFetchImplementation",
+        "callExpression": "toFetchImplementation",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "formBody",
+        "callExpression": "formBody",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "serviceAccountAssertionPayload",
+        "callExpression": "serviceAccountAssertionPayload",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "tokenResponse",
+        "callExpression": "tokenResponse",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "createGoogleAdsServiceAccountAccessTokenResolver",
+        "callExpression": "createGoogleAdsServiceAccountAccessTokenResolver",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "accessTokenAsync",
+        "callExpression": "accessTokenAsync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "dispose",
+        "callExpression": "fixtures.dispose",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "mkdtempSync",
+        "callExpression": "mkdtempSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "tmpdir",
+        "callExpression": "tmpdir",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "writeFileSync",
+        "callExpression": "writeFileSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "__function",
+        "callExpression": "(() => {\n      try {\n        createGoogleAdsServiceAccountAccessTokenResolver({ credentialsFile });\n        return new Error('Expected service-account validation to fail.');\n      } catch (reason) {\n        return reason;\n      }\n    })",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "rmSync",
+        "callExpression": "rmSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "createRefreshFetch",
+        "callExpression": "createRefreshFetch",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "listResourcesAsync",
+        "callExpression": "ports.listResourcesAsync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "tokenRequestCount",
+        "callExpression": "fetch.tokenRequestCount",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createCredentialsFixtures",
+        "toSymbol": "mkdtempSync",
+        "callExpression": "mkdtempSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createCredentialsFixtures",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createCredentialsFixtures",
+        "toSymbol": "tmpdir",
+        "callExpression": "tmpdir",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createCredentialsFixtures",
+        "toSymbol": "generateKeyPairSync",
+        "callExpression": "generateKeyPairSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createCredentialsFixtures",
+        "toSymbol": "writeServiceAccountCredentials",
+        "callExpression": "writeServiceAccountCredentials",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "dispose",
+        "toSymbol": "rmSync",
+        "callExpression": "rmSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "writeServiceAccountCredentials",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "writeServiceAccountCredentials",
+        "toSymbol": "writeFileSync",
+        "callExpression": "writeFileSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createRefreshFetch",
+        "toSymbol": "toFetchImplementation",
+        "callExpression": "toFetchImplementation",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "requestUrl",
+        "callExpression": "requestUrl",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
+        "toSymbol": "tokenResponseForRequest",
+        "callExpression": "tokenResponseForRequest",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "tokenResponseForRequest",
+        "toSymbol": "tokenResponse",
+        "callExpression": "tokenResponse",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
+      },
+      {
+        "fromSymbol": "createGoogleAdsServiceAccountAccessTokenResolver",
+        "toSymbol": "readServiceAccountCredentials",
+        "callExpression": "readServiceAccountCredentials",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"
+      },
+      {
+        "fromSymbol": "readServiceAccountCredentials",
+        "toSymbol": "readFileSync",
+        "callExpression": "readFileSync",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"
+      },
+      {
+        "fromSymbol": "readServiceAccountCredentials",
+        "toSymbol": "isServiceAccountCredentials",
+        "callExpression": "isServiceAccountCredentials",
+        "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.ts"
+      },
+      {
+        "fromSymbol": "createIntegrationAsync",
+        "toSymbol": "optionalEnvironmentValue",
+        "callExpression": "optionalEnvironmentValue",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromSymbol": "createIntegrationAsync",
+        "toSymbol": "createGoogleAdsMcpIntegration",
+        "callExpression": "createGoogleAdsMcpIntegration",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromSymbol": "createIntegrationAsync",
+        "toSymbol": "createGoogleAdsServiceAccountAccessTokenResolver",
+        "callExpression": "createGoogleAdsServiceAccountAccessTokenResolver",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromSymbol": "createIntegrationAsync",
+        "toSymbol": "requiredEnvironmentValue",
+        "callExpression": "requiredEnvironmentValue",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromSymbol": "requiredEnvironmentValue",
+        "toSymbol": "optionalEnvironmentValue",
+        "callExpression": "optionalEnvironmentValue",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
+        "fromSymbol": "optionalEnvironmentValue",
+        "toSymbol": "environmentValue",
+        "callExpression": "environmentValue",
+        "sourcePath": "src/mcp/createIntegrationAsync.ts"
+      },
+      {
         "fromSymbol": "src/mcp/index.test.ts",
         "toSymbol": "test",
         "callExpression": "test",
@@ -2539,24 +2989,6 @@
         "fromSymbol": "createGoogleAdsMcpIntegration",
         "toSymbol": "createWriteTools",
         "callExpression": "createWriteTools",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createIntegrationAsync",
-        "toSymbol": "createGoogleAdsMcpIntegration",
-        "callExpression": "createGoogleAdsMcpIntegration",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createIntegrationAsync",
-        "toSymbol": "requiredEnvironmentValue",
-        "callExpression": "requiredEnvironmentValue",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createIntegrationAsync",
-        "toSymbol": "optionalEnvironmentValue",
-        "callExpression": "optionalEnvironmentValue",
         "sourcePath": "src/mcp/index.ts"
       },
       {
@@ -2716,18 +3148,6 @@
         "sourcePath": "src/mcp/index.ts"
       },
       {
-        "fromSymbol": "requiredEnvironmentValue",
-        "toSymbol": "optionalEnvironmentValue",
-        "callExpression": "optionalEnvironmentValue",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "optionalEnvironmentValue",
-        "toSymbol": "environmentValue",
-        "callExpression": "environmentValue",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
         "fromSymbol": "assertGoogleAdsMutationResourceKind",
         "toSymbol": "getExpectedResourceCollection",
         "callExpression": "getExpectedResourceCollection",
@@ -2783,14 +3203,20 @@
       },
       {
         "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
-        "toSymbol": "readResourceAsync",
-        "callExpression": "ports.readResourceAsync",
+        "toSymbol": "listResourcesAsync",
+        "callExpression": "ports.listResourcesAsync",
         "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
       },
       {
         "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
         "toSymbol": "expect",
         "callExpression": "expect",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
+      },
+      {
+        "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "ports.readResourceAsync",
         "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"
       },
       {
@@ -3023,8 +3449,8 @@
       },
       {
         "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "toSymbol": "createHeaders",
-        "callExpression": "createHeaders",
+        "toSymbol": "createHeadersAsync",
+        "callExpression": "createHeadersAsync",
         "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
       },
       {
@@ -3037,6 +3463,12 @@
         "fromSymbol": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
         "toSymbol": "assertGoogleAdsMutationResourceKind",
         "callExpression": "assertGoogleAdsMutationResourceKind",
+        "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
+      },
+      {
+        "fromSymbol": "createHeadersAsync",
+        "toSymbol": "accessTokenAsync",
+        "callExpression": "configuration.accessTokenAsync",
         "sourcePath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"
       },
       {
@@ -3897,6 +4329,11 @@
       {
         "fromSymbol": "GoogleAdsProvider",
         "toType": "GoogleAdsMutationReconciliationResult",
+        "sourcePath": "src/types/googleAds.ts"
+      },
+      {
+        "fromSymbol": "GoogleAdsProviderConfiguration",
+        "toType": "GoogleAdsAccessTokenResolver",
         "sourcePath": "src/types/googleAds.ts"
       },
       {
