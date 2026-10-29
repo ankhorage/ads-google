@@ -28,11 +28,23 @@ Consume approval with a durable intent before issuing exactly one Google Ads mut
   - input: `{ readonly approval: GoogleAdsApproval; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }`
   - returns: `Promise<GoogleAdsMutationExecutionResult>`
 
+## executePersistedGoogleAdsMutationAsync
+
+Kind: `function`
+Module: `src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts`
+Source: `src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts:14:1`
+
+### Signatures
+
+- `(input: { readonly approvalId: string; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationExecutionResult>`
+  - input: `{ readonly approvalId: string; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }`
+  - returns: `Promise<GoogleAdsMutationExecutionResult>`
+
 ## GoogleAdsApproval
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:110:1`
+Source: `src/types/googleAds.ts:116:1`
 
 A consumed external approval bound to exactly one proposed mutation.
 
@@ -75,7 +87,7 @@ A durable, approval-bound write attempt owned by the trusted host runtime.
 
 Kind: `type`
 Module: `src/features/google-ads/ports/googleAdsPorts.ts`
-Source: `src/features/google-ads/ports/googleAdsPorts.ts:37:1`
+Source: `src/features/google-ads/ports/googleAdsPorts.ts:47:1`
 
 Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt.
 
@@ -83,20 +95,36 @@ Atomically consumes approval and persists the host-owned lifecycle of a Google A
 
 | Name | Kind | Type | Required | Description |
 | --- | --- | --- | --- | --- |
+| claimExecutionAsync | method | `(input: { readonly approvalId: string; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationExecutionClaim \| null>` | yes | Atomically claim a host-persisted intent for its one normal provider invocation. |
 | claimRecoverableAttemptAsync | method | `(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationReconciliationClaim \| null>` | yes | Atomically bind and lease only this approval's orphaned intent or indeterminate attempt.
 
 The trusted host validates approval ID, account, fingerprint, resource, and operation in the
 same transition, returns an opaque fencing token, and never causes another provider write. |
 | completeReconciliationAsync | method | `(input: { readonly claim: GoogleAdsMutationReconciliationClaim; readonly outcome: "applied" \| "not-applied" \| "indeterminate"; }) => Promise<boolean>` | yes | Fence a reconciliation transition; indeterminate releases the lease, terminal outcomes settle it. |
 | consumeApprovalAndCreateIntentAsync | method | `(input: { readonly approval: GoogleAdsApproval; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationAttempt \| null>` | yes |  |
+| markClaimedExecutionIndeterminateAsync | method | `(input: { readonly claim: GoogleAdsMutationExecutionClaim; readonly providerResourceName?: string; }) => Promise<boolean>` | yes | Fence an ambiguous normal execution before handing it to reconciliation. |
 | markIndeterminateAsync | method | `(input: { readonly attempt: GoogleAdsMutationAttempt; readonly providerResourceName?: string; }) => Promise<boolean>` | yes |  |
+| settleClaimedExecutionAsync | method | `(input: { readonly claim: GoogleAdsMutationExecutionClaim; }) => Promise<boolean>` | yes | Settle only the current execution lease after exact post-write evidence. |
 | settleExecutedAsync | method | `(input: { readonly attempt: GoogleAdsMutationAttempt; }) => Promise<boolean>` | yes |  |
+
+## GoogleAdsMutationExecutionClaim
+
+Kind: `type`
+Module: `src/types/googleAds.ts`
+Source: `src/types/googleAds.ts:91:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| attempt | property | `GoogleAdsMutationAttempt` | yes |  |
+| fenceToken | property | `string` | yes |  |
 
 ## GoogleAdsMutationExecutionResult
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:91:1`
+Source: `src/types/googleAds.ts:97:1`
 
 The terminal outcome of one approved mutation attempt.
 
@@ -104,7 +132,7 @@ The terminal outcome of one approved mutation attempt.
 
 Kind: `type`
 Module: `src/features/google-ads/ports/googleAdsPorts.ts`
-Source: `src/features/google-ads/ports/googleAdsPorts.ts:28:1`
+Source: `src/features/google-ads/ports/googleAdsPorts.ts:38:1`
 
 Validates and applies an exact Google Ads mutation at the provider boundary.
 
@@ -154,7 +182,7 @@ An exclusively leased host-owned attempt recovery claim, fenced by an opaque tok
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:99:1`
+Source: `src/types/googleAds.ts:105:1`
 
 The evidence-based settlement of an indeterminate approved mutation.
 
@@ -162,7 +190,7 @@ The evidence-based settlement of an indeterminate approved mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:105:1`
+Source: `src/types/googleAds.ts:111:1`
 
 The exact provider resource affected by one validated mutation.
 
@@ -176,7 +204,7 @@ The exact provider resource affected by one validated mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:123:1`
+Source: `src/types/googleAds.ts:129:1`
 
 The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.
 
@@ -210,7 +238,7 @@ A Google Ads account explicitly permitted for one provider instance.
 
 Kind: `type`
 Module: `src/features/google-ads/ports/googleAdsPorts.ts`
-Source: `src/features/google-ads/ports/googleAdsPorts.ts:13:1`
+Source: `src/features/google-ads/ports/googleAdsPorts.ts:14:1`
 
 Reads an exact Google Ads resource within an already isolated customer scope.
 
@@ -225,7 +253,7 @@ Reads an exact Google Ads resource within an already isolated customer scope.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:116:1`
+Source: `src/types/googleAds.ts:122:1`
 
 Sanitized Google Ads read result retaining provider-only values explicitly.
 

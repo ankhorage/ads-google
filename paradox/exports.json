@@ -79,6 +79,46 @@
     "structuredRows": []
   },
   {
+    "name": "executePersistedGoogleAdsMutationAsync",
+    "description": null,
+    "isReadme": false,
+    "examples": [],
+    "kind": "function",
+    "modulePath": "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts",
+      "line": 14,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutationAttemptPort",
+      "GoogleAdsMutationExecutionResult",
+      "GoogleAdsMutationPort",
+      "GoogleAdsMutationProposal",
+      "GoogleAdsReadPort"
+    ],
+    "signatures": [
+      {
+        "label": "(input: { readonly approvalId: string; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }) => Promise<GoogleAdsMutationExecutionResult>",
+        "parameters": [
+          {
+            "name": "input",
+            "type": "{ readonly approvalId: string; readonly attempts: GoogleAdsMutationAttemptPort; readonly mutations: GoogleAdsMutationPort; readonly proposal: GoogleAdsMutationProposal; readonly reads: GoogleAdsReadPort; }",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GoogleAdsMutationExecutionResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "GoogleAdsApproval",
     "description": "A consumed external approval bound to exactly one proposed mutation.",
     "isReadme": false,
@@ -87,7 +127,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 110,
+      "line": 116,
       "column": 1
     },
     "exportPaths": [
@@ -212,7 +252,7 @@
     "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
     "sourceLocation": {
       "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
-      "line": 37,
+      "line": 47,
       "column": 1
     },
     "exportPaths": [
@@ -221,11 +261,19 @@
     "relatedSymbols": [
       "GoogleAdsApproval",
       "GoogleAdsMutationAttempt",
+      "GoogleAdsMutationExecutionClaim",
       "GoogleAdsMutationProposal",
       "GoogleAdsMutationReconciliationClaim"
     ],
     "signatures": [],
     "members": [
+      {
+        "name": "claimExecutionAsync",
+        "kind": "method",
+        "type": "(input: { readonly approvalId: string; readonly proposal: GoogleAdsMutationProposal; }) => Promise<GoogleAdsMutationExecutionClaim | null>",
+        "required": true,
+        "description": "Atomically claim a host-persisted intent for its one normal provider invocation."
+      },
       {
         "name": "claimRecoverableAttemptAsync",
         "kind": "method",
@@ -248,6 +296,13 @@
         "description": null
       },
       {
+        "name": "markClaimedExecutionIndeterminateAsync",
+        "kind": "method",
+        "type": "(input: { readonly claim: GoogleAdsMutationExecutionClaim; readonly providerResourceName?: string; }) => Promise<boolean>",
+        "required": true,
+        "description": "Fence an ambiguous normal execution before handing it to reconciliation."
+      },
+      {
         "name": "markIndeterminateAsync",
         "kind": "method",
         "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; readonly providerResourceName?: string; }) => Promise<boolean>",
@@ -255,9 +310,53 @@
         "description": null
       },
       {
+        "name": "settleClaimedExecutionAsync",
+        "kind": "method",
+        "type": "(input: { readonly claim: GoogleAdsMutationExecutionClaim; }) => Promise<boolean>",
+        "required": true,
+        "description": "Settle only the current execution lease after exact post-write evidence."
+      },
+      {
         "name": "settleExecutedAsync",
         "kind": "method",
         "type": "(input: { readonly attempt: GoogleAdsMutationAttempt; }) => Promise<boolean>",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GoogleAdsMutationExecutionClaim",
+    "description": null,
+    "isReadme": false,
+    "examples": [],
+    "kind": "type",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 91,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "GoogleAdsMutationAttempt"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "attempt",
+        "kind": "property",
+        "type": "GoogleAdsMutationAttempt",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "fenceToken",
+        "kind": "property",
+        "type": "string",
         "required": true,
         "description": null
       }
@@ -273,7 +372,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 91,
+      "line": 97,
       "column": 1
     },
     "exportPaths": [
@@ -293,7 +392,7 @@
     "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
     "sourceLocation": {
       "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
-      "line": 28,
+      "line": 38,
       "column": 1
     },
     "exportPaths": [
@@ -440,7 +539,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 99,
+      "line": 105,
       "column": 1
     },
     "exportPaths": [
@@ -460,7 +559,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 105,
+      "line": 111,
       "column": 1
     },
     "exportPaths": [
@@ -488,7 +587,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 123,
+      "line": 129,
       "column": 1
     },
     "exportPaths": [
@@ -592,7 +691,7 @@
     "modulePath": "src/features/google-ads/ports/googleAdsPorts.ts",
     "sourceLocation": {
       "filePath": "src/features/google-ads/ports/googleAdsPorts.ts",
-      "line": 13,
+      "line": 14,
       "column": 1
     },
     "exportPaths": [
@@ -629,7 +728,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 116,
+      "line": 122,
       "column": 1
     },
     "exportPaths": [
