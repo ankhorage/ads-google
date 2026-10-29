@@ -3,15 +3,27 @@ import type {
   GoogleAdsMutationResult,
   GoogleAdsProviderConfiguration,
 } from '../../../types/googleAds.js';
-import type { GoogleAdsMutationPort, GoogleAdsReadPort } from '../ports/googleAdsPorts.js';
+import type {
+  GoogleAdsDiscoveryPort,
+  GoogleAdsMutationPort,
+  GoogleAdsReadPort,
+} from '../ports/googleAdsPorts.js';
 import { assertGoogleAdsMutationResourceKind } from './assertGoogleAdsMutationResourceKind.js';
+import { createGoogleAdsDiscoveryQuery } from './createGoogleAdsDiscoveryQuery.js';
 
 /*** Create v26 REST ports scoped to one configured Google Ads customer. */
 export function createGoogleAdsRestPorts(
   configuration: GoogleAdsProviderConfiguration,
-): GoogleAdsReadPort & GoogleAdsMutationPort {
+): GoogleAdsDiscoveryPort & GoogleAdsReadPort & GoogleAdsMutationPort {
   const requestAsync = createGoogleAdsRequestAsync(configuration);
   return {
+    async listResourcesAsync({ customerId, kind }) {
+      assertCustomer(configuration, customerId);
+      const response = await requestAsync(`customers/${customerId}/googleAds:searchStream`, {
+        query: createGoogleAdsDiscoveryQuery(kind),
+      });
+      return decodeResources(response);
+    },
     async readResourceAsync({ customerId, resourceName }) {
       assertCustomer(configuration, customerId);
       assertResourceCustomer(configuration, resourceName);
@@ -19,7 +31,7 @@ export function createGoogleAdsRestPorts(
       const response = await requestAsync(`customers/${customerId}/googleAds:searchStream`, {
         query,
       });
-      return decodeFirstResource(response);
+      return decodeResources(response).at(0) ?? null;
     },
     async findKeywordDuplicatesAsync({
       customerId,
@@ -50,17 +62,10 @@ export function createGoogleAdsRestPorts(
 }
 
 type GoogleAdsRequestAsync = (path: string, body: unknown) => Promise<unknown>;
-
 interface GoogleAdsMutationRequest {
   readonly operation: Readonly<Record<string, unknown>>;
   readonly service: string;
 }
-
-interface GoogleAdsResourceQuery {
-  readonly field: string;
-  readonly resource: string;
-}
-
 /*** Create the one authenticated request boundary without exposing secret values in errors. */
 function createGoogleAdsRequestAsync(
   configuration: GoogleAdsProviderConfiguration,
@@ -77,13 +82,11 @@ function createGoogleAdsRequestAsync(
     return await response.json();
   };
 }
-
 /*** Refuse every customer except the explicitly configured account. */
 function assertCustomer(configuration: GoogleAdsProviderConfiguration, customerId: string): void {
   if (customerId !== configuration.allowedCustomerId)
     throw new Error('Google Ads customer is outside this provider scope.');
 }
-
 /*** Reject a resource name unless it belongs to the single configured customer. */
 function assertResourceCustomer(
   configuration: GoogleAdsProviderConfiguration,
@@ -96,7 +99,6 @@ function assertResourceCustomer(
   if (match?.[1] !== configuration.allowedCustomerId)
     throw new Error('Google Ads resource is outside this provider scope.');
 }
-
 /*** Validate every resource carried by an operation before any provider request is made. */
 function assertMutationResources(
   configuration: GoogleAdsProviderConfiguration,
@@ -110,7 +112,6 @@ function assertMutationResources(
     assertGoogleAdsMutationResourceKind(mutation, resourceName);
   });
 }
-
 /*** Build authorization headers without serializing secrets into errors or audit data. */
 function createHeaders(
   configuration: GoogleAdsProviderConfiguration,
@@ -124,7 +125,6 @@ function createHeaders(
       : { 'login-customer-id': configuration.loginCustomerId }),
   };
 }
-
 /*** Translate one supported provider mutation to its precise Google Ads mutate service. */
 function toMutationRequest(mutation: GoogleAdsMutation): GoogleAdsMutationRequest {
   if (mutation.kind === 'create-keyword' || mutation.kind === 'create-ad-group-negative-keyword')
@@ -217,7 +217,6 @@ function createUpdateRequest(
 function escapeGaql(value: string): string {
   return value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
 }
-/*** Detect whether a Google Ads searchStream response contains at least one row. */
 /*** Build a resource-scoped GAQL lookup for a supported mutable resource name. */
 function createResourceReadQuery(resourceName: string): string {
   const { field, resource } = getResourceQuery(resourceName);
@@ -238,7 +237,7 @@ function getResourceReadFields(field: string): string {
 }
 
 /*** Select the correct GAQL resource and field namespace from its canonical name. */
-function getResourceQuery(resourceName: string): GoogleAdsResourceQuery {
+function getResourceQuery(resourceName: string): Readonly<{ field: string; resource: string }> {
   const resource = resourceName.split('/').at(-2);
   if (resource === 'adGroupCriteria')
     return { field: 'ad_group_criterion', resource: 'ad_group_criterion' };
@@ -317,13 +316,6 @@ function decodeMutationResult(
   if (!isRecord(result) || typeof result['resourceName'] !== 'string')
     throw new Error('Google Ads mutation response did not identify its resource.');
   return { resourceName: result['resourceName'] };
-}
-
-/*** Return the first decoded read result, if the API selected a resource. */
-function decodeFirstResource(
-  value: unknown,
-): { readonly resourceName: string; readonly values: Readonly<Record<string, unknown>> } | null {
-  return decodeResources(value).at(0) ?? null;
 }
 
 /*** Find a resource name in a typed Google Ads result without an unsafe JSON cast. */

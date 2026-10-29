@@ -87,6 +87,12 @@ export interface GoogleAdsMutationReconciliationClaim {
   readonly fenceToken: string;
 }
 
+/** An exclusively leased host-owned execution claim, fenced before one provider call. */
+export interface GoogleAdsMutationExecutionClaim {
+  readonly attempt: GoogleAdsMutationAttempt;
+  readonly fenceToken: string;
+}
+
 /*** The terminal outcome of one approved mutation attempt. */
 export type GoogleAdsMutationExecutionResult =
   | { readonly outcome: 'executed' }

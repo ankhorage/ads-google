@@ -28,6 +28,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./mcp": {
+      "types": "./dist/mcp/index.d.ts",
+      "import": "./dist/mcp/index.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -64,7 +68,8 @@
     "knip:check": "ankhorage-knip"
   },
   "dependencies": {
-    "@ankhorage/contracts": "^26.3.0"
+    "@ankhorage/contracts": "^26.3.0",
+    "@ankhorage/mcp": "^0.3.0"
   },
   "packageManager": "bun@1.4.2"
 }

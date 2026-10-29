@@ -3,6 +3,7 @@ import type {
   GoogleAdsKeywordMatchType,
   GoogleAdsMutation,
   GoogleAdsMutationAttempt,
+  GoogleAdsMutationExecutionClaim,
   GoogleAdsMutationProposal,
   GoogleAdsMutationReconciliationClaim,
   GoogleAdsMutationResult,
@@ -21,6 +22,15 @@ export interface GoogleAdsReadPort {
     readonly negative: boolean;
     readonly parentResourceName: string;
     readonly text: string;
+  }): Promise<readonly GoogleAdsReadResult[]>;
+}
+
+/*** Lists bounded mutable resource collections for agent discovery. */
+export interface GoogleAdsDiscoveryPort {
+  listResourcesAsync(input: {
+    readonly customerId: string;
+    readonly kind:
+      'ad-groups' | 'campaign-negative-keywords' | 'campaigns' | 'keywords' | 'negative-keywords';
   }): Promise<readonly GoogleAdsReadResult[]>;
 }
 
@@ -44,6 +54,20 @@ export interface GoogleAdsMutationAttemptPort {
     readonly providerResourceName?: string;
   }): Promise<boolean>;
   settleExecutedAsync(input: { readonly attempt: GoogleAdsMutationAttempt }): Promise<boolean>;
+  /*** Atomically claim a host-persisted intent for its one normal provider invocation. */
+  claimExecutionAsync(input: {
+    readonly approvalId: string;
+    readonly proposal: GoogleAdsMutationProposal;
+  }): Promise<GoogleAdsMutationExecutionClaim | null>;
+  /*** Fence an ambiguous normal execution before handing it to reconciliation. */
+  markClaimedExecutionIndeterminateAsync(input: {
+    readonly claim: GoogleAdsMutationExecutionClaim;
+    readonly providerResourceName?: string;
+  }): Promise<boolean>;
+  /*** Settle only the current execution lease after exact post-write evidence. */
+  settleClaimedExecutionAsync(input: {
+    readonly claim: GoogleAdsMutationExecutionClaim;
+  }): Promise<boolean>;
   /*** Atomically bind and lease only this approval's orphaned intent or indeterminate attempt.
    *
    * The trusted host validates approval ID, account, fingerprint, resource, and operation in the
