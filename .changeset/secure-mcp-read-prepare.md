@@ -2,4 +2,4 @@
 '@ankhorage/ads-google': minor
 ---
 
-Expose account-scoped Google Ads MCP read and validate-only mutation preparation, and add a fenced persisted-attempt execution boundary for trusted hosts.
+Expose account-scoped Google Ads MCP discovery and validate-only preparation, plus host-bound fenced execution for supported writes.

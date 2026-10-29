@@ -9,8 +9,8 @@ const configuration = {
   developerToken: 'developer-token',
 };
 
-/** Discover only account-scoped Google Ads read and validate-only tools from the published MCP API. */
-test('exposes scoped read and proposal tools without credentials in their contracts', () => {
+/** Discover scoped resources and preparation tools without credentials in their contracts. */
+test('exposes scoped discovery and proposal tools without credentials in their contracts', () => {
   const registry = createMcpRegistry({
     integrations: [
       createGoogleAdsMcpIntegration({
@@ -19,9 +19,58 @@ test('exposes scoped read and proposal tools without credentials in their contra
     ],
   });
   expect(registry.listTools().map(({ toolId }) => toolId)).toEqual([
+    'google-ads.list-ad-groups',
+    'google-ads.list-campaign-negative-keywords',
+    'google-ads.list-campaigns',
+    'google-ads.list-keywords',
+    'google-ads.list-negative-keywords',
     'google-ads.prepare-mutation',
     'google-ads.read-resource',
   ]);
+});
+
+/** Query campaign discovery through v26 while preserving account scope and mutable identifiers. */
+test('discovers campaign resource IDs, budgets, and status', () => {
+  const fetchSpy = spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+    new Response(
+      JSON.stringify([
+        {
+          results: [
+            {
+              campaign: {
+                resourceName: 'customers/8810770460/campaigns/7',
+                status: 'ENABLED',
+              },
+            },
+          ],
+        },
+      ]),
+      { status: 200 },
+    ),
+  );
+  try {
+    const registry = createMcpRegistry({
+      integrations: [createGoogleAdsMcpIntegration({ configuration })],
+    });
+    expect(
+      registry.executeAsync(
+        'google-ads.list-campaigns',
+        { accountId: '8810770460' },
+        { actorId: 'test', allowedAccounts: ['8810770460'] },
+      ),
+    ).resolves.toEqual([
+      {
+        resourceName: 'customers/8810770460/campaigns/7',
+        values: {
+          resourceName: 'customers/8810770460/campaigns/7',
+          status: 'ENABLED',
+        },
+      },
+    ]);
+    expect(fetchSpy.mock.calls[0]?.[1]?.body).toContain('campaign_budget.amount_micros');
+  } finally {
+    fetchSpy.mockRestore();
+  }
 });
 
 /** Prepare a keyword proposal through validate-only and reject an account outside host scope. */

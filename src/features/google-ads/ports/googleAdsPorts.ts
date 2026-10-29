@@ -25,6 +25,15 @@ export interface GoogleAdsReadPort {
   }): Promise<readonly GoogleAdsReadResult[]>;
 }
 
+/*** Lists bounded mutable resource collections for agent discovery. */
+export interface GoogleAdsDiscoveryPort {
+  listResourcesAsync(input: {
+    readonly customerId: string;
+    readonly kind:
+      'ad-groups' | 'campaign-negative-keywords' | 'campaigns' | 'keywords' | 'negative-keywords';
+  }): Promise<readonly GoogleAdsReadResult[]>;
+}
+
 /*** Validates and applies an exact Google Ads mutation at the provider boundary. */
 export interface GoogleAdsMutationPort {
   mutateAsync(input: {
