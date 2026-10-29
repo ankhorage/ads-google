@@ -4,7 +4,7 @@ import { expect, spyOn, test } from 'bun:test';
 import { createGoogleAdsRestPorts } from './createGoogleAdsRestPorts.js';
 
 const configuration = {
-  accessToken: 'access-token-that-must-not-leak',
+  accessTokenAsync: () => Promise.resolve('access-token-that-must-not-leak'),
   allowedCustomerId: '8810770460',
   developerToken: 'developer-token-that-must-not-leak',
 } as const;
@@ -54,9 +54,44 @@ async function verifyScopedReadAsync(
         query:
           "SELECT campaign.resource_name, campaign.status FROM campaign WHERE campaign.resource_name = 'customers/8810770460/campaigns/7'",
       }),
+      headers: {
+        Authorization: 'Bearer access-token-that-must-not-leak',
+        'Content-Type': 'application/json',
+        'developer-token': 'developer-token-that-must-not-leak',
+      },
     }),
   );
 }
+
+/*** Omit the retired developer-token header while resolving a fresh token at each API boundary. */
+test('omits an absent developer-token header and resolves access tokens per request', async () => {
+  const fetchSpy = spyOn(globalThis, 'fetch')
+    .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
+    .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }));
+  const accessTokenAsync = spyOn(
+    { resolveAsync: () => Promise.resolve('access-token-that-must-not-leak') },
+    'resolveAsync',
+  );
+  const ports = createGoogleAdsRestPorts({
+    accessTokenAsync: accessTokenAsync,
+    allowedCustomerId: '8810770460',
+  });
+  try {
+    await ports.listResourcesAsync({ customerId: '8810770460', kind: 'campaigns' });
+    await ports.listResourcesAsync({ customerId: '8810770460', kind: 'campaigns' });
+    expect(accessTokenAsync).toHaveBeenCalledTimes(2);
+    expect(fetchSpy.mock.calls[0]?.[1]).toMatchObject({
+      headers: {
+        Authorization: 'Bearer access-token-that-must-not-leak',
+        'Content-Type': 'application/json',
+      },
+    });
+    expect(fetchSpy.mock.calls[0]?.[1]?.headers).not.toHaveProperty('developer-token');
+  } finally {
+    accessTokenAsync.mockRestore();
+    fetchSpy.mockRestore();
+  }
+});
 
 /*** Keep every mutable v26 resource projection limited to fields owned by that resource. */
 test('uses schema-grounded v26 read projections for every mutable resource', async () => {

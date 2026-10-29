@@ -20,7 +20,7 @@ test('exports an approval-gated public Google Ads provider factory', async () =>
         settleExecutedAsync: () => Promise.resolve(true),
       },
       configuration: {
-        accessToken: 'access-token',
+        accessTokenAsync: () => Promise.resolve('access-token'),
         allowedCustomerId: '8810770460',
         developerToken: 'developer-token',
       },
