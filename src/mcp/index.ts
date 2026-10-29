@@ -73,7 +73,7 @@ function createPrepareAsync(configuration: GoogleAdsProviderConfiguration, now: 
       customerId: request.accountId,
       mutation: request.mutation,
       mutations: ports,
-      now: () => request.createdAt ?? now(),
+      now,
       reads: ports,
     });
   };
@@ -100,16 +100,13 @@ function accountId(value: Readonly<Record<string, unknown>>): string | null {
 /** Parse the deliberately narrow supported MCP mutation grammar. */
 function parseMutationRequest(value: Readonly<Record<string, unknown>>): {
   readonly accountId: string;
-  readonly createdAt?: string;
   readonly mutation: GoogleAdsMutation;
 } {
   const accountId = requiredAccountId(value);
   const kind = stringAt(value, 'kind');
-  const createdAt = optionalStringAt(value, 'createdAt');
   if (kind === 'create-keyword' || kind === 'create-ad-group-negative-keyword')
     return {
       accountId,
-      ...(createdAt === undefined ? {} : { createdAt }),
       mutation: {
         adGroupResourceName: stringAt(value, 'adGroupResourceName'),
         kind,
@@ -120,7 +117,6 @@ function parseMutationRequest(value: Readonly<Record<string, unknown>>): {
   if (kind === 'set-budget')
     return {
       accountId,
-      ...(createdAt === undefined ? {} : { createdAt }),
       mutation: {
         amountMicros: stringAt(value, 'amountMicros'),
         campaignBudgetResourceName: stringAt(value, 'campaignBudgetResourceName'),
@@ -142,24 +138,11 @@ function stringAt(value: Readonly<Record<string, unknown>>, key: string): string
     throw new Error(`Google Ads ${key} is required.`);
   return result;
 }
-/** Read an optional JSON string without accepting another type. */
-function optionalStringAt(
-  value: Readonly<Record<string, unknown>>,
-  key: string,
-): string | undefined {
-  const result = valueForKey(value, key);
-  if (result === undefined) return undefined;
-  if (typeof result !== 'string' || result === '')
-    throw new Error(`Google Ads ${key} must be a string.`);
-  return result;
-}
-
 /** Select from the finite public tool grammar without accepting object-key injection. */
 function valueForKey(value: Readonly<Record<string, unknown>>, key: string): unknown {
   if (key === 'adGroupResourceName') return value['adGroupResourceName'];
   if (key === 'amountMicros') return value['amountMicros'];
   if (key === 'campaignBudgetResourceName') return value['campaignBudgetResourceName'];
-  if (key === 'createdAt') return value['createdAt'];
   if (key === 'kind') return value['kind'];
   if (key === 'matchType') return value['matchType'];
   if (key === 'resourceName') return value['resourceName'];
