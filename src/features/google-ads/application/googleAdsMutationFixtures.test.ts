@@ -22,6 +22,10 @@ export function createAttemptPort(): {
       consumeApprovalAndCreateIntentAsync: (input) => consumeIntentAsync(lifecycle, input),
       markIndeterminateAsync: (input) => markIndeterminateAsync(lifecycle, input),
       settleExecutedAsync: (input) => settleExecutedAsync(lifecycle, input),
+      claimExecutionAsync: (input) => claimExecutionAsync(lifecycle, input),
+      markClaimedExecutionIndeterminateAsync: (input) =>
+        markClaimedExecutionIndeterminateAsync(lifecycle, input),
+      settleClaimedExecutionAsync: (input) => settleClaimedExecutionAsync(lifecycle, input),
       claimRecoverableAttemptAsync: (input) => claimRecoverableAttemptAsync(lifecycle, input),
       completeReconciliationAsync: (input) => completeReconciliationAsync(lifecycle, input),
     },
@@ -31,7 +35,7 @@ export function createAttemptPort(): {
 interface AttemptLifecycle {
   created: number;
   attempt?: GoogleAdsMutationAttempt;
-  status: 'intent' | 'indeterminate' | 'reconciling' | 'settled';
+  status: 'intent' | 'executing' | 'indeterminate' | 'reconciling' | 'settled';
 }
 
 function consumeIntentAsync(
@@ -77,6 +81,59 @@ function settleExecutedAsync(
   { attempt }: Parameters<GoogleAdsMutationAttemptPort['settleExecutedAsync']>[0],
 ) {
   if (lifecycle.attempt?.attemptId !== attempt.attemptId || lifecycle.status !== 'intent')
+    return Promise.resolve(false);
+  lifecycle.status = 'settled';
+  return Promise.resolve(true);
+}
+
+function claimExecutionAsync(
+  lifecycle: AttemptLifecycle,
+  { approvalId, proposal }: Parameters<GoogleAdsMutationAttemptPort['claimExecutionAsync']>[0],
+) {
+  const { attempt } = lifecycle;
+  if (
+    lifecycle.status !== 'intent' ||
+    attempt?.approvalId !== approvalId ||
+    attempt.accountId !== proposal.accountId ||
+    attempt.resourceName !== proposal.resourceName ||
+    attempt.operation !== proposal.mutation.kind ||
+    attempt.fingerprint !== proposal.fingerprint
+  )
+    return Promise.resolve(null);
+  lifecycle.status = 'executing';
+  return Promise.resolve({ attempt, fenceToken: 'execution-claim-1' });
+}
+
+function markClaimedExecutionIndeterminateAsync(
+  lifecycle: AttemptLifecycle,
+  {
+    claim,
+    providerResourceName,
+  }: Parameters<GoogleAdsMutationAttemptPort['markClaimedExecutionIndeterminateAsync']>[0],
+) {
+  if (
+    lifecycle.status !== 'executing' ||
+    lifecycle.attempt?.attemptId !== claim.attempt.attemptId ||
+    claim.fenceToken !== 'execution-claim-1'
+  )
+    return Promise.resolve(false);
+  lifecycle.attempt = {
+    ...lifecycle.attempt,
+    ...(providerResourceName === undefined ? {} : { providerResourceName }),
+  };
+  lifecycle.status = 'indeterminate';
+  return Promise.resolve(true);
+}
+
+function settleClaimedExecutionAsync(
+  lifecycle: AttemptLifecycle,
+  { claim }: Parameters<GoogleAdsMutationAttemptPort['settleClaimedExecutionAsync']>[0],
+) {
+  if (
+    lifecycle.status !== 'executing' ||
+    lifecycle.attempt?.attemptId !== claim.attempt.attemptId ||
+    claim.fenceToken !== 'execution-claim-1'
+  )
     return Promise.resolve(false);
   lifecycle.status = 'settled';
   return Promise.resolve(true);

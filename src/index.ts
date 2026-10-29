@@ -1,4 +1,5 @@
 export { executeApprovedGoogleAdsMutationAsync } from './features/google-ads/application/executeApprovedGoogleAdsMutationAsync.js';
+export { executePersistedGoogleAdsMutationAsync } from './features/google-ads/application/executePersistedGoogleAdsMutationAsync.js';
 export { prepareGoogleAdsMutationAsync } from './features/google-ads/application/prepareGoogleAdsMutationAsync.js';
 export { reconcileApprovedGoogleAdsMutationAsync } from './features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.js';
 export { createGoogleAdsProvider } from './features/google-ads/composition/createGoogleAdsProvider.js';
@@ -11,6 +12,7 @@ export type {
   GoogleAdsApproval,
   GoogleAdsMutation,
   GoogleAdsMutationAttempt,
+  GoogleAdsMutationExecutionClaim,
   GoogleAdsMutationExecutionResult,
   GoogleAdsMutationProposal,
   GoogleAdsMutationReconciliationClaim,
