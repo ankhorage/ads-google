@@ -48,6 +48,22 @@ export function createGoogleAdsMcpIntegration(input: {
   };
 }
 
+/** Create the discoverable MCP integration from process-local secrets, never from tool input. */
+export function createIntegrationAsync(): Promise<McpIntegration> {
+  return Promise.resolve(
+    createGoogleAdsMcpIntegration({
+      configuration: {
+        accessToken: requiredEnvironmentValue('ANKH_GOOGLE_ADS_ACCESS_TOKEN'),
+        allowedCustomerId: requiredEnvironmentValue('ANKH_GOOGLE_ADS_ALLOWED_CUSTOMER_ID'),
+        developerToken: requiredEnvironmentValue('ANKH_GOOGLE_ADS_DEVELOPER_TOKEN'),
+        ...(optionalEnvironmentValue('ANKH_GOOGLE_ADS_LOGIN_CUSTOMER_ID') === undefined
+          ? {}
+          : { loginCustomerId: optionalEnvironmentValue('ANKH_GOOGLE_ADS_LOGIN_CUSTOMER_ID') }),
+      },
+    }),
+  );
+}
+
 /** Bind prepare to the same explicit provider configuration without retaining host state. */
 function createPrepareAsync(configuration: GoogleAdsProviderConfiguration, now: () => string) {
   const ports = createGoogleAdsRestPorts(configuration);
@@ -155,4 +171,29 @@ function keywordMatchType(value: Readonly<Record<string, unknown>>): 'BROAD' | '
   const result = stringAt(value, 'matchType');
   if (result === 'BROAD' || result === 'EXACT' || result === 'PHRASE') return result;
   throw new Error('Google Ads matchType is invalid.');
+}
+
+/** Read a required process-local secret without ever returning it in an error. */
+function requiredEnvironmentValue(name: string): string {
+  const value = optionalEnvironmentValue(name);
+  if (value === undefined) throw new Error('Google Ads MCP host configuration is incomplete.');
+  return value;
+}
+
+/** Read a nonempty host configuration value. */
+function optionalEnvironmentValue(name: string): string | undefined {
+  const value = environmentValue(name);
+  return typeof value === 'string' && value !== '' ? value : undefined;
+}
+
+/** Select only the fixed environment names owned by this integration. */
+function environmentValue(name: string): string | undefined {
+  if (name === 'ANKH_GOOGLE_ADS_ACCESS_TOKEN') return process.env['ANKH_GOOGLE_ADS_ACCESS_TOKEN'];
+  if (name === 'ANKH_GOOGLE_ADS_ALLOWED_CUSTOMER_ID')
+    return process.env['ANKH_GOOGLE_ADS_ALLOWED_CUSTOMER_ID'];
+  if (name === 'ANKH_GOOGLE_ADS_DEVELOPER_TOKEN')
+    return process.env['ANKH_GOOGLE_ADS_DEVELOPER_TOKEN'];
+  if (name === 'ANKH_GOOGLE_ADS_LOGIN_CUSTOMER_ID')
+    return process.env['ANKH_GOOGLE_ADS_LOGIN_CUSTOMER_ID'];
+  throw new Error('Unsupported Google Ads MCP environment variable.');
 }
