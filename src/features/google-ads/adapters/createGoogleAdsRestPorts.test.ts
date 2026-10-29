@@ -99,7 +99,7 @@ test('uses schema-grounded v26 read projections for every mutable resource', asy
   }
 });
 
-/*** Reject incomplete, multi-result, and partial-failure v26 mutate acknowledgements. */
+/*** Reject incomplete, multi-result, and partial-failure productive v26 mutate acknowledgements. */
 test('rejects mutation responses that cannot acknowledge exactly one operation', async () => {
   const fetchSpy = spyOn(globalThis, 'fetch');
   const ports = createGoogleAdsRestPorts(configuration);
@@ -139,22 +139,8 @@ async function verifyValidateOnlyMutationAsync(
   ports: ReturnType<typeof createGoogleAdsRestPorts>,
   fetchSpy: FetchSpy,
 ): Promise<void> {
-  fetchSpy.mockResolvedValueOnce(
-    new Response(
-      JSON.stringify({ results: [{ resourceName: 'customers/8810770460/adGroupCriteria/99' }] }),
-      { status: 200 },
-    ),
-  );
-  await ports.mutateAsync({
-    customerId: '8810770460',
-    mutation: {
-      adGroupResourceName: 'customers/8810770460/adGroups/7',
-      kind: 'create-ad-group-negative-keyword',
-      matchType: 'PHRASE',
-      text: 'free taxi',
-    },
-    validateOnly: true,
-  });
+  fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }));
+  await ports.mutateAsync(createValidateOnlyMutation());
   expect(fetchSpy).toHaveBeenLastCalledWith(
     'https://googleads.googleapis.com/v26/customers/8810770460/adGroupCriteria:mutate',
     expect.objectContaining({
@@ -180,10 +166,42 @@ async function verifyValidateOnlyMutationAsync(
       }),
     'outside',
   );
-  expect(fetchSpy).toHaveBeenCalledTimes(2);
+  await verifyValidateOnlyPartialFailureAsync(ports, fetchSpy);
+  expect(fetchSpy).toHaveBeenCalledTimes(3);
   await verifyForeignMutationRejectedAsync(ports);
   await verifyWrongResourceKindRejectedAsync(ports);
-  expect(fetchSpy).toHaveBeenCalledTimes(2);
+  expect(fetchSpy).toHaveBeenCalledTimes(3);
+}
+
+/*** Return a valid scoped mutation for Google Ads validate-only request assertions. */
+function createValidateOnlyMutation() {
+  return {
+    customerId: '8810770460',
+    mutation: {
+      adGroupResourceName: 'customers/8810770460/adGroups/7',
+      kind: 'create-ad-group-negative-keyword' as const,
+      matchType: 'PHRASE' as const,
+      text: 'free taxi',
+    },
+    validateOnly: true,
+  };
+}
+
+/*** Reject partial failures even when the Google Ads request is validate-only. */
+async function verifyValidateOnlyPartialFailureAsync(
+  ports: ReturnType<typeof createGoogleAdsRestPorts>,
+  fetchSpy: FetchSpy,
+): Promise<void> {
+  fetchSpy.mockResolvedValueOnce(
+    new Response(
+      JSON.stringify({ partialFailureError: { code: 3, message: 'invalid criterion' } }),
+      { status: 200 },
+    ),
+  );
+  await assertRejectsAsync(
+    () => ports.mutateAsync(createValidateOnlyMutation()),
+    'partial failure',
+  );
 }
 
 /*** Ensure resource names cannot escape the configured customer even on a permitted request URL. */

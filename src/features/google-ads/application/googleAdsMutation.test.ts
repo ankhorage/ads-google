@@ -264,6 +264,39 @@ test('does not settle a malformed acknowledgement or an unverified post-write va
   expect(wrongValue.outcome).toBe('indeterminate');
 });
 
+/*** Keep a correctly-shaped but wrongly mapped SearchStream resource indeterminate. */
+test('does not settle an acknowledgement when SearchStream returns another resource', async () => {
+  const update = {
+    campaignResourceName: 'customers/8810770460/campaigns/7',
+    kind: 'set-campaign-status' as const,
+    status: 'ENABLED' as const,
+  };
+  const before = { status: 'PAUSED' };
+  const proposal = await createProposalForAsync(update, readSequence(before));
+  let reads = 0;
+  const result = await executeApprovedGoogleAdsMutationAsync({
+    approval: approvalFor(proposal),
+    attempts: createAttemptPort().port,
+    mutations: { mutateAsync: () => Promise.resolve({ resourceName: proposal.resourceName }) },
+    proposal,
+    reads: {
+      findKeywordDuplicatesAsync: () => Promise.resolve([]),
+      readResourceAsync: () => {
+        reads += 1;
+        return Promise.resolve(
+          reads === 1
+            ? { resourceName: proposal.resourceName, values: before }
+            : {
+                resourceName: 'customers/8810770460/campaigns/8',
+                values: { status: 'ENABLED' },
+              },
+        );
+      },
+    },
+  });
+  expect(result.outcome).toBe('indeterminate');
+});
+
 /*** Recover orphaned intents without ever sending another Google Ads mutate request. */
 test('recovers crashes before, during, and after a mutation response conservatively', async () => {
   const proposal = await createProposalAsync();

@@ -15,7 +15,9 @@ export async function getGoogleAdsMutationEvidenceAsync(input: {
   });
   if (input.proposal.mutation.kind.startsWith('remove-'))
     return created === null ? 'applied' : 'indeterminate';
-  return matchesExpectedState(input.proposal, created) ? 'applied' : 'indeterminate';
+  return matchesExpectedState(input.proposal, input.providerResourceName, created)
+    ? 'applied'
+    : 'indeterminate';
 }
 
 /*** Bind the only acknowledged v26 mutate result to the exact approved operation. */
@@ -52,9 +54,11 @@ function escapeRegularExpression(value: string): string {
 /*** Compare every approved after-value to the exact resource identity returned by Google Ads. */
 function matchesExpectedState(
   proposal: GoogleAdsMutationProposal,
+  providerResourceName: string,
   result: GoogleAdsReadResult | null,
 ): boolean {
-  if (result === null || proposal.after === null) return false;
+  if (result === null || proposal.after === null || result.resourceName !== providerResourceName)
+    return false;
   return Object.entries(proposal.after).every(([key, value]) => {
     const actual = Object.entries(result.values).find(([resultKey]) => resultKey === key)?.[1];
     return JSON.stringify(actual) === JSON.stringify(value);

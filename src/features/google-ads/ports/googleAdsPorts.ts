@@ -30,7 +30,7 @@ export interface GoogleAdsMutationPort {
     readonly customerId: string;
     readonly mutation: GoogleAdsMutation;
     readonly validateOnly: boolean;
-  }): Promise<GoogleAdsMutationResult>;
+  }): Promise<GoogleAdsMutationResult | undefined>;
 }
 
 /*** Atomically consumes approval and persists the host-owned lifecycle of a Google Ads write attempt. */

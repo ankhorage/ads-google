@@ -141,8 +141,7 @@ export function createProposalForAsync(
     mutation: operation,
     now: () => '2026-10-28T00:00:00.000Z',
     mutations: {
-      mutateAsync: () =>
-        Promise.resolve({ resourceName: 'customers/8810770460/adGroupCriteria/validate-only' }),
+      mutateAsync: () => Promise.resolve(undefined),
     },
     reads: readPort,
   });

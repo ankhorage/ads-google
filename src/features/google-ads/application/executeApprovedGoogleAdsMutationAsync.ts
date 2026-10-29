@@ -33,6 +33,7 @@ export async function executeApprovedGoogleAdsMutationAsync(input: {
       mutation: input.proposal.mutation,
       validateOnly: false,
     });
+    if (result === undefined) return await recordIndeterminateAsync(input, attempt);
     const evidence = await getGoogleAdsMutationEvidenceAsync({
       proposal: input.proposal,
       providerResourceName: result.resourceName,

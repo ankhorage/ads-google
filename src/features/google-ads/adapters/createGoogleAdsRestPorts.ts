@@ -44,7 +44,7 @@ export function createGoogleAdsRestPorts(
         operations: [request.operation],
         validateOnly,
       });
-      return decodeMutationResult(response);
+      return decodeMutationResult(response, validateOnly);
     },
   };
 }
@@ -301,11 +301,15 @@ function extractReadValues(
   return resource ?? {};
 }
 
-/*** Extract the canonical created resource name returned by a Google Ads mutate response. */
-function decodeMutationResult(value: unknown): GoogleAdsMutationResult {
+/*** Decode a validation acknowledgement or the exact result of one productive mutation. */
+function decodeMutationResult(
+  value: unknown,
+  validateOnly: boolean,
+): GoogleAdsMutationResult | undefined {
   if (!isRecord(value)) throw new Error('Google Ads mutation response was incomplete.');
   if (value['partialFailureError'] !== undefined)
     throw new Error('Google Ads mutation response reported a partial failure.');
+  if (validateOnly) return undefined;
   const results = Array.isArray(value['results']) ? value['results'] : [];
   if (results.length !== 1)
     throw new Error('Google Ads mutation response did not contain exactly one result.');
