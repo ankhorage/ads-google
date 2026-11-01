@@ -56,6 +56,7 @@
     "typecheck": "bun run check-types",
     "docs": "paradox && ankhorage-prettier --write README.md paradox",
     "test": "bun test src",
+    "test:standalone": "bun run build && bun test src/standalone.test.ts",
     "doctor": "ankhorage-structure check .",
     "changeset": "ankhorage-changeset",
     "changeset:status": "ankhorage-changeset status --since=origin/main",
