@@ -2,4 +2,4 @@
 '@ankhorage/ads-google': minor
 ---
 
-Add read-only MCP prepared-write recovery evidence for Google Ads budget updates.
+Keep MCP prepared-write recovery indeterminate unless Google Ads can provide evidence bound to the original mutation attempt; observed post-state alone never settles a write as executed.

@@ -1,15 +1,13 @@
 import type { McpPreparedWriteProposal, McpToolExecutionContext } from '@ankhorage/mcp/types';
 
-import { createGoogleAdsRestPorts } from '../features/google-ads/adapters/createGoogleAdsRestPorts.js';
-import { getGoogleAdsMutationEvidenceAsync } from '../features/google-ads/application/getGoogleAdsMutationEvidenceAsync.js';
 import type {
   GoogleAdsMutation,
   GoogleAdsMutationProposal,
   GoogleAdsProviderConfiguration,
 } from '../types/googleAds.js';
 
-/*** Read causal provider evidence for a host-fenced proposal without invoking a Google Ads mutation. */
-export async function reconcileGoogleAdsMcpPreparedWriteAsync(input: {
+/*** Keep recovery indeterminate unless Google Ads supplies evidence bound to this exact mutation attempt. */
+export function reconcileGoogleAdsMcpPreparedWriteAsync(input: {
   readonly configuration: GoogleAdsProviderConfiguration;
   readonly context: McpToolExecutionContext;
   readonly kind: GoogleAdsMutation['kind'];
@@ -18,15 +16,12 @@ export async function reconcileGoogleAdsMcpPreparedWriteAsync(input: {
 }): Promise<'executed' | 'indeterminate' | 'not_applied'> {
   try {
     assertRecoveryBinding(input.stored, input.context, input.kind);
-    const proposal = input.parseProposal(input.stored);
-    const outcome = await getGoogleAdsMutationEvidenceAsync({
-      proposal,
-      providerResourceName: providerResourceNameForRecovery(proposal),
-      reads: createGoogleAdsRestPorts(input.configuration),
-    });
-    return outcome === 'applied' ? 'executed' : 'indeterminate';
+    input.parseProposal(input.stored);
+    // A resource read can establish only its current state. Google Ads v26 SearchStream does not
+    // expose a request or operation identity that proves this recovered attempt caused that state.
+    return Promise.resolve('indeterminate');
   } catch {
-    return 'indeterminate';
+    return Promise.resolve('indeterminate');
   }
 }
 
@@ -43,9 +38,4 @@ function assertRecoveryBinding(
     stored.toolId !== `google-ads.${kind}`
   )
     throw new Error('Google Ads prepared write recovery binding is invalid.');
-}
-
-/*** Use only an approved pre-existing resource identity; creates lack causal recovery identity. */
-function providerResourceNameForRecovery(proposal: GoogleAdsMutationProposal): string | undefined {
-  return proposal.mutation.kind.startsWith('create-') ? undefined : proposal.resourceName;
 }
