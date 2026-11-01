@@ -1,5 +1,7 @@
 ---
-'@ankhorage/ads-google': minor
+'@ankhorage/ads-google': major
 ---
 
-Migrate Google Ads MCP writes to the published prepared-write lifecycle.
+Remove the legacy `google-ads.prepare-mutation` MCP tool. Google Ads writes use only the published
+prepared-write tool pairs, which persist the original proposal at the trusted host before external
+approval and execution.

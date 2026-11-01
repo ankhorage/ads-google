@@ -1,8 +1,7 @@
 import type { McpIntegration } from '@ankhorage/mcp/types';
 
 import { createGoogleAdsRestPorts } from '../features/google-ads/adapters/createGoogleAdsRestPorts.js';
-import { prepareGoogleAdsMutationAsync } from '../features/google-ads/application/prepareGoogleAdsMutationAsync.js';
-import type { GoogleAdsMutation, GoogleAdsProviderConfiguration } from '../types/googleAds.js';
+import type { GoogleAdsProviderConfiguration } from '../types/googleAds.js';
 import { createGoogleAdsMcpWriteTools } from './createGoogleAdsMcpWriteTools.js';
 
 export { createGoogleAdsServiceAccountAccessTokenResolver } from './createGoogleAdsServiceAccountAccessTokenResolver.js';
@@ -37,16 +36,6 @@ export function createGoogleAdsMcpIntegration(input: {
         'campaign-negative-keywords',
         'List campaign negative keyword resource IDs.',
       ),
-      {
-        accountId,
-        description: 'Prepare a Google Ads mutation with validate-only and an immutable diff.',
-        executeAsync: createPrepareAsync(input.configuration, now),
-        id: 'prepare-mutation',
-        inputSchema: mutationSchema,
-        risk: 'read',
-        scope: 'account',
-        title: 'Prepare Google Ads mutation',
-      },
       ...(input.writeEnabled === true
         ? createGoogleAdsMcpWriteTools({
             accountId,
@@ -99,21 +88,6 @@ function createDiscoveryTool(
   };
 }
 
-/*** Bind prepare to the same explicit provider configuration without retaining host state. */
-function createPrepareAsync(configuration: GoogleAdsProviderConfiguration, now: () => string) {
-  const ports = createGoogleAdsRestPorts(configuration);
-  return async (value: Readonly<Record<string, unknown>>) => {
-    const request = parseMutationRequest(value);
-    return await prepareGoogleAdsMutationAsync({
-      customerId: request.accountId,
-      mutation: request.mutation,
-      mutations: ports,
-      now,
-      reads: ports,
-    });
-  };
-}
-
 const accountSchema = {
   additionalProperties: false,
   properties: { accountId: { type: 'string' as const } },
@@ -126,46 +100,10 @@ const accountResourceSchema = {
   required: ['accountId', 'resourceName'],
   type: 'object' as const,
 };
-const mutationSchema = {
-  additionalProperties: true,
-  properties: { accountId: { type: 'string' as const }, kind: { type: 'string' as const } },
-  required: ['accountId', 'kind'],
-  type: 'object' as const,
-};
-
 /*** Derive scope only from the canonical account argument. */
 function accountId(value: Readonly<Record<string, unknown>>): string | null {
   const result = value['accountId'];
   return typeof result === 'string' && result.length > 0 ? result : null;
-}
-
-/*** Parse the deliberately narrow supported MCP mutation grammar. */
-function parseMutationRequest(value: Readonly<Record<string, unknown>>): {
-  readonly accountId: string;
-  readonly mutation: GoogleAdsMutation;
-} {
-  const accountIdValue = requiredAccountId(value);
-  const kind = stringAt(value, 'kind');
-  if (kind === 'create-keyword' || kind === 'create-ad-group-negative-keyword')
-    return {
-      accountId: accountIdValue,
-      mutation: {
-        adGroupResourceName: stringAt(value, 'adGroupResourceName'),
-        kind,
-        matchType: keywordMatchType(value),
-        text: stringAt(value, 'text'),
-      },
-    };
-  if (kind === 'set-budget')
-    return {
-      accountId: accountIdValue,
-      mutation: {
-        amountMicros: stringAt(value, 'amountMicros'),
-        campaignBudgetResourceName: stringAt(value, 'campaignBudgetResourceName'),
-        kind,
-      },
-    };
-  throw new Error('Google Ads mutation kind is not supported by this MCP integration.');
 }
 
 /*** Require a nonempty account identity before scope and provider checks. */
@@ -177,15 +115,7 @@ function requiredAccountId(value: Readonly<Record<string, unknown>>): string {
 /*** Read one required nonempty JSON string without coercion. */
 function stringAt(
   value: Readonly<Record<string, unknown>>,
-  key:
-    | 'accountId'
-    | 'adGroupResourceName'
-    | 'amountMicros'
-    | 'campaignBudgetResourceName'
-    | 'kind'
-    | 'matchType'
-    | 'resourceName'
-    | 'text',
+  key: 'accountId' | 'resourceName',
 ): string {
   const result = valueForStringKey(value, key);
   if (typeof result !== 'string' || result.length === 0)
@@ -195,38 +125,12 @@ function stringAt(
 /*** Select from the finite public grammar without a caller-controlled object lookup. */
 function valueForStringKey(
   value: Readonly<Record<string, unknown>>,
-  key:
-    | 'accountId'
-    | 'adGroupResourceName'
-    | 'amountMicros'
-    | 'campaignBudgetResourceName'
-    | 'kind'
-    | 'matchType'
-    | 'resourceName'
-    | 'text',
+  key: 'accountId' | 'resourceName',
 ): unknown {
   switch (key) {
     case 'accountId':
       return value['accountId'];
-    case 'adGroupResourceName':
-      return value['adGroupResourceName'];
-    case 'amountMicros':
-      return value['amountMicros'];
-    case 'campaignBudgetResourceName':
-      return value['campaignBudgetResourceName'];
-    case 'kind':
-      return value['kind'];
-    case 'matchType':
-      return value['matchType'];
     case 'resourceName':
       return value['resourceName'];
-    case 'text':
-      return value['text'];
   }
-}
-/*** Restrict matches to values represented by the core contract. */
-function keywordMatchType(value: Readonly<Record<string, unknown>>): 'BROAD' | 'EXACT' | 'PHRASE' {
-  const matchType = stringAt(value, 'matchType');
-  if (matchType === 'BROAD' || matchType === 'EXACT' || matchType === 'PHRASE') return matchType;
-  throw new Error('Google Ads matchType must be BROAD, EXACT, or PHRASE.');
 }
