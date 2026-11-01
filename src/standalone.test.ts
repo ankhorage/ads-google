@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { expect, test } from 'bun:test';
 
 const packageName = '@ankhorage/ads-google';
-const mcpVersion = '0.4.0';
+const mcpVersion = '1.0.0';
 
 /** Exercise the packed public package through Node, Bun, and an actual MCP STDIO child process. */
 test('installs the packed package into an isolated MCP consumer', async () => {
@@ -122,7 +122,6 @@ const store = {
     state.claimed = true; await save(state);
     return { approvalId: 'approval-1', expiresAt: '2030-01-01T00:00:00.000Z', proposal, snapshotFingerprint: fingerprint(proposal), executionClaim: { approvalId: 'approval-1', intentId: 'intent-1' } };
   },
-  async reconcilePreparedWriteAsync() { const state = await load(); return { outcome: state.settlement ?? 'executing' }; },
   async settlePreparedWriteAsync(settlement) { const state = await load(); state.settlement = settlement.outcome; state.settlements.push(settlement); await save(state); },
 };
 await createMcpStdioServerAsync({ auditSink: { async recordAsync(event) { const state = await load(); state.audit.push(event); await save(state); } }, context: { actorId: 'operator', allowedAccounts: ['8810770460'] }, integrations: [createGoogleAdsMcpIntegration({ configuration: { accessTokenAsync: async () => 'secret-access-token', allowedCustomerId: '8810770460' }, now: () => '2026-11-01T00:00:00.000Z', writeEnabled: process.argv[3] !== 'read-only' })], preparedWriteStore: store, version: 'test' });

@@ -19,6 +19,7 @@ import {
   isSameGoogleAdsMcpChange,
   toGoogleAdsMcpChangeDescriptor,
 } from './googleAdsMcpToolUtils.js';
+import { reconcileGoogleAdsMcpPreparedWriteAsync } from './reconcileGoogleAdsMcpPreparedWriteAsync.js';
 
 const GOOGLE_ADS_PREPARED_WRITE_VERSION = 'google-ads-mutation-proposal/v1';
 
@@ -57,6 +58,18 @@ function createWriteTool(input: {
     ): Promise<McpPreparedWrite> =>
       await prepareGoogleAdsMcpWriteAsync(input.configuration, input.kind, input.now, value),
     risk: 'write' as const,
+    reconcilePreparedWriteAsync: async (
+      stored: McpPreparedWriteProposal,
+      context: McpToolExecutionContext,
+    ) =>
+      await reconcileGoogleAdsMcpPreparedWriteAsync({
+        configuration: input.configuration,
+        context,
+        kind: input.kind,
+        parseProposal: (proposal) =>
+          parseStoredGoogleAdsProposal(proposal, input.kind, input.configuration),
+        stored,
+      }),
     scope: 'account' as const,
     title: `Execute Google Ads ${input.kind}`,
     verifyPreparedWriteAsync: async (
