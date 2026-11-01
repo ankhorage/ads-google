@@ -4,7 +4,7 @@ import { createGoogleAdsProvider } from './index.js';
 
 /*** Construct the real REST-backed public provider without exposing its raw mutation port. */
 test('exports an approval-gated public Google Ads provider factory', async () => {
-  const fetchSpy = spyOn(globalThis, 'fetch')
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch')
     .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
     .mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 200 }));
   try {
@@ -25,6 +25,7 @@ test('exports an approval-gated public Google Ads provider factory', async () =>
         developerToken: 'developer-token',
       },
       now: () => '2026-10-29T00:00:00.000Z',
+      transport: fetchSpy,
     });
     const proposal = await provider.prepareMutationAsync({
       customerId: '8810770460',

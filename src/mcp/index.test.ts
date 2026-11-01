@@ -49,7 +49,7 @@ test('exposes only canonical prepared-write definitions when writes are enabled'
 
 /** Query campaign discovery through v26 while preserving account scope and mutable identifiers. */
 test('discovers campaign resource IDs, budgets, and status without a mutation request', () => {
-  const fetchSpy = spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch').mockResolvedValueOnce(
     new Response(
       JSON.stringify([
         {
@@ -68,7 +68,7 @@ test('discovers campaign resource IDs, budgets, and status without a mutation re
   );
   try {
     const registry = createMcpRegistry({
-      integrations: [createGoogleAdsMcpIntegration({ configuration })],
+      integrations: [createGoogleAdsMcpIntegration({ configuration, transport: fetchSpy })],
     });
     expect(
       registry.executeAsync(

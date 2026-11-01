@@ -7,8 +7,8 @@ import type {
   McpPreparedWriteStore,
   McpWriteAuditEvent,
 } from '@ankhorage/mcp/types';
-import { spyOn } from 'bun:test';
 
+import type { GoogleAdsHttpTransport } from '../types/googleAds.js';
 import { createGoogleAdsMcpIntegration } from './index.js';
 
 const accountId = '8810770460';
@@ -72,7 +72,7 @@ export function createRecoveryHost(input?: {
   };
 }
 
-export function createRegistry(store: McpPreparedWriteStore) {
+export function createRegistry(store: McpPreparedWriteStore, transport?: GoogleAdsHttpTransport) {
   return createMcpRegistry({
     auditSink: { recordAsync: (_event: McpWriteAuditEvent) => Promise.resolve() },
     integrations: [
@@ -82,6 +82,7 @@ export function createRegistry(store: McpPreparedWriteStore) {
           allowedCustomerId: accountId,
         },
         now: () => '2026-11-01T00:00:00.000Z',
+        transport,
         writeEnabled: true,
       }),
     ],
@@ -125,13 +126,12 @@ export function installGoogleAdsTransport(
     },
     { preconnect: () => undefined },
   );
-  const spy = spyOn(globalThis, 'fetch').mockImplementation(transport);
-  return createTransportController(state, () => spy.mockRestore());
+  return createTransportController(state, transport);
 }
 
 function createTransportController(
   state: { calls: number; mutations: number; reads: number; recovery: boolean },
-  restore: () => void,
+  transport: GoogleAdsHttpTransport,
 ) {
   return {
     get calls() {
@@ -143,13 +143,14 @@ function createTransportController(
     get reads() {
       return state.reads;
     },
+    transport,
     reset: () => {
       state.calls = 0;
       state.mutations = 0;
       state.reads = 0;
       state.recovery = true;
     },
-    restore,
+    restore: () => undefined,
   };
 }
 

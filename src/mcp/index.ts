@@ -1,7 +1,7 @@
 import type { McpIntegration } from '@ankhorage/mcp/types';
 
 import { createGoogleAdsRestPorts } from '../features/google-ads/adapters/createGoogleAdsRestPorts.js';
-import type { GoogleAdsProviderConfiguration } from '../types/googleAds.js';
+import type { GoogleAdsHttpTransport, GoogleAdsProviderConfiguration } from '../types/googleAds.js';
 import { createGoogleAdsMcpWriteTools } from './createGoogleAdsMcpWriteTools.js';
 
 export { createGoogleAdsServiceAccountAccessTokenResolver } from './createGoogleAdsServiceAccountAccessTokenResolver.js';
@@ -11,9 +11,11 @@ export { createIntegrationAsync } from './createIntegrationAsync.js';
 export function createGoogleAdsMcpIntegration(input: {
   readonly configuration: GoogleAdsProviderConfiguration;
   readonly now?: () => string;
+  /** Privileged host-only dependency; MCP clients and proposals cannot configure it. */
+  readonly transport?: GoogleAdsHttpTransport;
   readonly writeEnabled?: boolean;
 }): McpIntegration {
-  const ports = createGoogleAdsRestPorts(input.configuration);
+  const ports = createGoogleAdsRestPorts(input.configuration, input.transport);
   const now = input.now ?? (() => new Date().toISOString());
   return {
     id: 'google-ads',
@@ -41,6 +43,7 @@ export function createGoogleAdsMcpIntegration(input: {
             accountId,
             configuration: input.configuration,
             now,
+            transport: input.transport,
           })
         : []),
     ],

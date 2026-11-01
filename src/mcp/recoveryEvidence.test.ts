@@ -31,7 +31,7 @@ test('returns host-proven not_applied without provider recovery calls', async ()
   const host = createRecoveryHost({ currentOutcome: 'not_applied' });
   const transport = installGoogleAdsTransport('confirmed');
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, transport.transport);
     await registry.prepareWriteAsync('google-ads.set-budget', budgetInput, context);
     transport.reset();
     expect(
@@ -56,7 +56,7 @@ test('keeps create recovery indeterminate without a confirmed Google Ads resourc
   const host = createRecoveryHost();
   const transport = installGoogleAdsTransport('confirmed');
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, transport.transport);
     await registry.prepareWriteAsync('google-ads.create-keyword', keywordInput, context);
     transport.reset();
     expect(
@@ -79,7 +79,7 @@ test('keeps tampered proposals and mismatched actor bindings away from Google Ad
   });
   const tamperedTransport = installGoogleAdsTransport('confirmed');
   try {
-    const registry = createRegistry(tamperedHost.store);
+    const registry = createRegistry(tamperedHost.store, tamperedTransport.transport);
     await registry.prepareWriteAsync('google-ads.set-budget', budgetInput, context);
     tamperedTransport.reset();
     expect(
@@ -95,7 +95,7 @@ test('keeps tampered proposals and mismatched actor bindings away from Google Ad
   const host = createRecoveryHost();
   const transport = installGoogleAdsTransport('confirmed');
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, transport.transport);
     await registry.prepareWriteAsync('google-ads.set-budget', budgetInput, context);
     transport.reset();
     const rejected = await registry
@@ -118,7 +118,7 @@ test('repeats recovery conservatively without a Google Ads read or mutate reques
   const host = createRecoveryHost();
   const transport = installGoogleAdsTransport('confirmed');
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, transport.transport);
     await registry.prepareWriteAsync('google-ads.set-budget', budgetInput, context);
     transport.reset();
     const tool = registry.listTools().find((item) => item.toolId === 'google-ads.set-budget')?.tool;
@@ -144,7 +144,7 @@ async function expectIndeterminateBudgetRecoveryAsync(
   const host = createRecoveryHost();
   const transport = installGoogleAdsTransport(mode);
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, transport.transport);
     await registry.prepareWriteAsync('google-ads.set-budget', budgetInput, context);
     transport.reset();
     expect(

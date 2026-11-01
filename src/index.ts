@@ -11,6 +11,7 @@ export type {
 export type {
   GoogleAdsAccessTokenResolver,
   GoogleAdsApproval,
+  GoogleAdsHttpTransport,
   GoogleAdsMutation,
   GoogleAdsMutationAttempt,
   GoogleAdsMutationExecutionClaim,

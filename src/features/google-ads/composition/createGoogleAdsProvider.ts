@@ -1,4 +1,5 @@
 import type {
+  GoogleAdsHttpTransport,
   GoogleAdsProvider,
   GoogleAdsProviderConfiguration,
 } from '../../../types/googleAds.js';
@@ -13,8 +14,10 @@ export function createGoogleAdsProvider(input: {
   readonly attempts: GoogleAdsMutationAttemptPort;
   readonly configuration: GoogleAdsProviderConfiguration;
   readonly now?: () => string;
+  /** Privileged host-only dependency; it is never derived from a provider input or proposal. */
+  readonly transport?: GoogleAdsHttpTransport;
 }): GoogleAdsProvider {
-  const ports = createGoogleAdsRestPorts(input.configuration);
+  const ports = createGoogleAdsRestPorts(input.configuration, input.transport);
   const now = input.now ?? (() => new Date().toISOString());
   return {
     prepareMutationAsync: ({ customerId, mutation }) =>

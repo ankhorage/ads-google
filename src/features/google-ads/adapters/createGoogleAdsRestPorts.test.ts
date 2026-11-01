@@ -12,8 +12,8 @@ const configuration = {
 type FetchSpy = Mock<typeof fetch>;
 
 test('uses v26 fixtures for scoped reads, validate-only writes, and redacted failures', async () => {
-  const fetchSpy = spyOn(globalThis, 'fetch');
-  const ports = createGoogleAdsRestPorts(configuration);
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch');
+  const ports = createGoogleAdsRestPorts(configuration, fetchSpy);
   try {
     await verifyScopedReadAsync(ports, fetchSpy);
     await verifyValidateOnlyMutationAsync(ports, fetchSpy);
@@ -65,17 +65,20 @@ async function verifyScopedReadAsync(
 
 /*** Omit the retired developer-token header while resolving a fresh token at each API boundary. */
 test('omits an absent developer-token header and resolves access tokens per request', async () => {
-  const fetchSpy = spyOn(globalThis, 'fetch')
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch')
     .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }))
     .mockResolvedValueOnce(new Response(JSON.stringify([]), { status: 200 }));
   const accessTokenAsync = spyOn(
     { resolveAsync: () => Promise.resolve('access-token-that-must-not-leak') },
     'resolveAsync',
   );
-  const ports = createGoogleAdsRestPorts({
-    accessTokenAsync: accessTokenAsync,
-    allowedCustomerId: '8810770460',
-  });
+  const ports = createGoogleAdsRestPorts(
+    {
+      accessTokenAsync: accessTokenAsync,
+      allowedCustomerId: '8810770460',
+    },
+    fetchSpy,
+  );
   try {
     await ports.listResourcesAsync({ customerId: '8810770460', kind: 'campaigns' });
     await ports.listResourcesAsync({ customerId: '8810770460', kind: 'campaigns' });
@@ -95,8 +98,8 @@ test('omits an absent developer-token header and resolves access tokens per requ
 
 /*** Keep every mutable v26 resource projection limited to fields owned by that resource. */
 test('uses schema-grounded v26 read projections for every mutable resource', async () => {
-  const fetchSpy = spyOn(globalThis, 'fetch');
-  const ports = createGoogleAdsRestPorts(configuration);
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch');
+  const ports = createGoogleAdsRestPorts(configuration, fetchSpy);
   const cases = [
     ['campaigns/7', 'campaign.resource_name, campaign.status'],
     ['adGroups/7', 'ad_group.resource_name, ad_group.status, ad_group.cpc_bid_micros'],
@@ -136,8 +139,8 @@ test('uses schema-grounded v26 read projections for every mutable resource', asy
 
 /*** Reject incomplete, multi-result, and partial-failure productive v26 mutate acknowledgements. */
 test('rejects mutation responses that cannot acknowledge exactly one operation', async () => {
-  const fetchSpy = spyOn(globalThis, 'fetch');
-  const ports = createGoogleAdsRestPorts(configuration);
+  const fetchSpy = spyOn({ fetch: globalThis.fetch }, 'fetch');
+  const ports = createGoogleAdsRestPorts(configuration, fetchSpy);
   const request = {
     customerId: configuration.allowedCustomerId,
     mutation: {

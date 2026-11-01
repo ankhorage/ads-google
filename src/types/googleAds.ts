@@ -1,5 +1,18 @@
 import type { AdsChangeDescriptor, AdsProviderExtension } from '@ankhorage/contracts/ads';
 
+/***
+ * A privileged server-side HTTP dependency for the canonical Google Ads provider endpoint.
+ *
+ * @security
+ * Supply this only from trusted host composition, for example to route isolated acceptance traffic
+ * to a local fake server. Agents, MCP tool inputs, approval proposals, and runtime configuration
+ * must never select a transport or URL.
+ */
+export type GoogleAdsHttpTransport = (
+  input: string | URL | Request,
+  init?: RequestInit,
+) => Promise<Response>;
+
 /*** A Google Ads account explicitly permitted for one provider instance. */
 export interface GoogleAdsProviderConfiguration {
   readonly allowedCustomerId: string;
