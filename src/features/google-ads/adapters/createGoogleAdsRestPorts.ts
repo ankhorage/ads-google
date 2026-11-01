@@ -11,6 +11,7 @@ import type {
 } from '../ports/googleAdsPorts.js';
 import { assertGoogleAdsMutationResourceKind } from './assertGoogleAdsMutationResourceKind.js';
 import { createGoogleAdsDiscoveryQuery } from './createGoogleAdsDiscoveryQuery.js';
+import { sanitizeGoogleAdsRequestFailureAsync } from './sanitizeGoogleAdsRequestFailureAsync.js';
 
 /*** Create v26 REST ports scoped to one configured Google Ads customer. */
 export function createGoogleAdsRestPorts(
@@ -73,18 +74,20 @@ function createGoogleAdsRequestAsync(
   configuration: GoogleAdsProviderConfiguration,
   transport: GoogleAdsHttpTransport,
 ): GoogleAdsRequestAsync {
-  const apiVersion = configuration.apiVersion ?? 'v26';
   return async (path, body) => {
-    const response = await transport(`https://googleads.googleapis.com/${apiVersion}/${path}`, {
-      body: JSON.stringify(body),
-      headers: await createHeadersAsync(configuration),
-      method: 'POST',
-    }).catch(() => Promise.reject(new Error('Google Ads API request failed.')));
+    const headers = await sanitizeGoogleAdsRequestFailureAsync(() =>
+      createHeadersAsync(configuration),
+    );
+    const response = await sanitizeGoogleAdsRequestFailureAsync(() =>
+      transport(`https://googleads.googleapis.com/${configuration.apiVersion ?? 'v26'}/${path}`, {
+        body: JSON.stringify(body),
+        headers,
+        method: 'POST',
+      }),
+    );
     if (!response.ok)
       throw new Error(`Google Ads API request failed with HTTP ${response.status}.`);
-    return await response
-      .json()
-      .catch(() => Promise.reject(new Error('Google Ads API request failed.')));
+    return sanitizeGoogleAdsRequestFailureAsync(() => response.json());
   };
 }
 /*** Refuse every customer except the explicitly configured account. */
