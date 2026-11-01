@@ -2,7 +2,9 @@ graph LR
   module_src_features_google_ads_adapters_assertGoogleAdsMutationResourceKind_ts["src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts"]
   module_src_features_google_ads_adapters_createGoogleAdsDiscoveryQuery_ts["src/features/google-ads/adapters/createGoogleAdsDiscoveryQuery.ts"]
   module_src_features_google_ads_adapters_createGoogleAdsRestPorts_test_ts["src/features/google-ads/adapters/createGoogleAdsRestPorts.test.ts"]
+  module_src_features_google_ads_adapters_createGoogleAdsRestPorts_transportFailures_test_ts["src/features/google-ads/adapters/createGoogleAdsRestPorts.transportFailures.test.ts"]
   module_src_features_google_ads_adapters_createGoogleAdsRestPorts_ts["src/features/google-ads/adapters/createGoogleAdsRestPorts.ts"]
+  module_src_features_google_ads_adapters_sanitizeGoogleAdsRequestFailureAsync_ts["src/features/google-ads/adapters/sanitizeGoogleAdsRequestFailureAsync.ts"]
   module_src_features_google_ads_application_executeApprovedGoogleAdsMutationAsync_ts["src/features/google-ads/application/executeApprovedGoogleAdsMutationAsync.ts"]
   module_src_features_google_ads_application_executePersistedGoogleAdsMutation_test_ts["src/features/google-ads/application/executePersistedGoogleAdsMutation.test.ts"]
   module_src_features_google_ads_application_executePersistedGoogleAdsMutationAsync_ts["src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts"]
@@ -33,6 +35,7 @@ graph LR
   module_src_types_googleAds_ts["src/types/googleAds.ts"]
   export_createGoogleAdsProvider["createGoogleAdsProvider"]
   module_src_features_google_ads_composition_createGoogleAdsProvider_ts --> export_createGoogleAdsProvider
+  export_createGoogleAdsProvider -.-> export_GoogleAdsHttpTransport
   export_createGoogleAdsProvider -.-> export_GoogleAdsMutationAttemptPort
   export_createGoogleAdsProvider -.-> export_GoogleAdsProvider
   export_createGoogleAdsProvider -.-> export_GoogleAdsProviderConfiguration
@@ -55,6 +58,8 @@ graph LR
   module_src_types_googleAds_ts --> export_GoogleAdsAccessTokenResolver
   export_GoogleAdsApproval["GoogleAdsApproval"]
   module_src_types_googleAds_ts --> export_GoogleAdsApproval
+  export_GoogleAdsHttpTransport["GoogleAdsHttpTransport"]
+  module_src_types_googleAds_ts --> export_GoogleAdsHttpTransport
   export_GoogleAdsMutation["GoogleAdsMutation"]
   module_src_types_googleAds_ts --> export_GoogleAdsMutation
   export_GoogleAdsMutationAttempt["GoogleAdsMutationAttempt"]

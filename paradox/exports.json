@@ -8,24 +8,25 @@
     "modulePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
     "sourceLocation": {
       "filePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
-      "line": 12,
+      "line": 13,
       "column": 1
     },
     "exportPaths": [
       "src/index.ts"
     ],
     "relatedSymbols": [
+      "GoogleAdsHttpTransport",
       "GoogleAdsMutationAttemptPort",
       "GoogleAdsProvider",
       "GoogleAdsProviderConfiguration"
     ],
     "signatures": [
       {
-        "label": "(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }) => GoogleAdsProvider",
+        "label": "(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; readonly transport?: GoogleAdsHttpTransport; }) => GoogleAdsProvider",
         "parameters": [
           {
             "name": "input",
-            "type": "{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }",
+            "type": "{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; readonly transport?: GoogleAdsHttpTransport; }",
             "required": true,
             "description": null
           }
@@ -127,7 +128,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 14,
+      "line": 27,
       "column": 1
     },
     "exportPaths": [
@@ -147,7 +148,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 119,
+      "line": 132,
       "column": 1
     },
     "exportPaths": [
@@ -174,6 +175,26 @@
     "structuredRows": []
   },
   {
+    "name": "GoogleAdsHttpTransport",
+    "description": "A privileged server-side HTTP dependency for the canonical Google Ads provider endpoint.\n\n@security\nSupply this only from trusted host composition, for example to route isolated acceptance traffic\nto a local fake server. Agents, MCP tool inputs, approval proposals, and runtime configuration\nmust never select a transport or URL.",
+    "isReadme": false,
+    "examples": [],
+    "kind": "unknown",
+    "modulePath": "src/types/googleAds.ts",
+    "sourceLocation": {
+      "filePath": "src/types/googleAds.ts",
+      "line": 11,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "GoogleAdsMutation",
     "description": "Explicit resources and fields that this provider can mutate.",
     "isReadme": false,
@@ -182,7 +203,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 20,
+      "line": 33,
       "column": 1
     },
     "exportPaths": [
@@ -202,7 +223,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 77,
+      "line": 90,
       "column": 1
     },
     "exportPaths": [
@@ -355,7 +376,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 94,
+      "line": 107,
       "column": 1
     },
     "exportPaths": [
@@ -392,7 +413,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 100,
+      "line": 113,
       "column": 1
     },
     "exportPaths": [
@@ -443,7 +464,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 65,
+      "line": 78,
       "column": 1
     },
     "exportPaths": [
@@ -522,7 +543,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 88,
+      "line": 101,
       "column": 1
     },
     "exportPaths": [
@@ -559,7 +580,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 108,
+      "line": 121,
       "column": 1
     },
     "exportPaths": [
@@ -579,7 +600,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 114,
+      "line": 127,
       "column": 1
     },
     "exportPaths": [
@@ -607,7 +628,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 132,
+      "line": 145,
       "column": 1
     },
     "exportPaths": [
@@ -655,7 +676,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 4,
+      "line": 17,
       "column": 1
     },
     "exportPaths": [
@@ -750,7 +771,7 @@
     "modulePath": "src/types/googleAds.ts",
     "sourceLocation": {
       "filePath": "src/types/googleAds.ts",
-      "line": 125,
+      "line": 138,
       "column": 1
     },
     "exportPaths": [

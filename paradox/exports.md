@@ -4,14 +4,14 @@
 
 Kind: `function`
 Module: `src/features/google-ads/composition/createGoogleAdsProvider.ts`
-Source: `src/features/google-ads/composition/createGoogleAdsProvider.ts:12:1`
+Source: `src/features/google-ads/composition/createGoogleAdsProvider.ts:13:1`
 
 Compose the real v26 REST adapter behind the approval-gated public provider boundary.
 
 ### Signatures
 
-- `(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }) => GoogleAdsProvider`
-  - input: `{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; }`
+- `(input: { readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; readonly transport?: GoogleAdsHttpTransport; }) => GoogleAdsProvider`
+  - input: `{ readonly attempts: GoogleAdsMutationAttemptPort; readonly configuration: GoogleAdsProviderConfiguration; readonly now?: () => string; readonly transport?: GoogleAdsHttpTransport; }`
   - returns: `GoogleAdsProvider`
 
 ## executeApprovedGoogleAdsMutationAsync
@@ -44,7 +44,7 @@ Source: `src/features/google-ads/application/executePersistedGoogleAdsMutationAs
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:14:1`
+Source: `src/types/googleAds.ts:27:1`
 
 Resolve a short-lived OAuth access token immediately before a Google Ads API request.
 
@@ -52,7 +52,7 @@ Resolve a short-lived OAuth access token immediately before a Google Ads API req
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:119:1`
+Source: `src/types/googleAds.ts:132:1`
 
 A consumed external approval bound to exactly one proposed mutation.
 
@@ -63,11 +63,24 @@ A consumed external approval bound to exactly one proposed mutation.
 | approvalId | property | `string` | yes |  |
 | fingerprint | property | `string` | yes |  |
 
+## GoogleAdsHttpTransport
+
+Kind: `unknown`
+Module: `src/types/googleAds.ts`
+Source: `src/types/googleAds.ts:11:1`
+
+A privileged server-side HTTP dependency for the canonical Google Ads provider endpoint.
+
+@security
+Supply this only from trusted host composition, for example to route isolated acceptance traffic
+to a local fake server. Agents, MCP tool inputs, approval proposals, and runtime configuration
+must never select a transport or URL.
+
 ## GoogleAdsMutation
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:20:1`
+Source: `src/types/googleAds.ts:33:1`
 
 Explicit resources and fields that this provider can mutate.
 
@@ -75,7 +88,7 @@ Explicit resources and fields that this provider can mutate.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:77:1`
+Source: `src/types/googleAds.ts:90:1`
 
 A durable, approval-bound write attempt owned by the trusted host runtime.
 
@@ -119,7 +132,7 @@ same transition, returns an opaque fencing token, and never causes another provi
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:94:1`
+Source: `src/types/googleAds.ts:107:1`
 
 ### Members
 
@@ -132,7 +145,7 @@ Source: `src/types/googleAds.ts:94:1`
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:100:1`
+Source: `src/types/googleAds.ts:113:1`
 
 The terminal outcome of one approved mutation attempt.
 
@@ -154,7 +167,7 @@ Validates and applies an exact Google Ads mutation at the provider boundary.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:65:1`
+Source: `src/types/googleAds.ts:78:1`
 
 Immutable proposal which must be approved outside this provider before execution.
 
@@ -175,7 +188,7 @@ Immutable proposal which must be approved outside this provider before execution
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:88:1`
+Source: `src/types/googleAds.ts:101:1`
 
 An exclusively leased host-owned attempt recovery claim, fenced by an opaque token.
 
@@ -190,7 +203,7 @@ An exclusively leased host-owned attempt recovery claim, fenced by an opaque tok
 
 Kind: `unknown`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:108:1`
+Source: `src/types/googleAds.ts:121:1`
 
 The evidence-based settlement of an indeterminate approved mutation.
 
@@ -198,7 +211,7 @@ The evidence-based settlement of an indeterminate approved mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:114:1`
+Source: `src/types/googleAds.ts:127:1`
 
 The exact provider resource affected by one validated mutation.
 
@@ -212,7 +225,7 @@ The exact provider resource affected by one validated mutation.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:132:1`
+Source: `src/types/googleAds.ts:145:1`
 
 The safe public Google Ads boundary: reads, preparation, approved execution, and reconciliation.
 
@@ -228,7 +241,7 @@ The safe public Google Ads boundary: reads, preparation, approved execution, and
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:4:1`
+Source: `src/types/googleAds.ts:17:1`
 
 A Google Ads account explicitly permitted for one provider instance.
 
@@ -261,7 +274,7 @@ Reads an exact Google Ads resource within an already isolated customer scope.
 
 Kind: `type`
 Module: `src/types/googleAds.ts`
-Source: `src/types/googleAds.ts:125:1`
+Source: `src/types/googleAds.ts:138:1`
 
 Sanitized Google Ads read result retaining provider-only values explicitly.
 
