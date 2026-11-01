@@ -8,6 +8,7 @@ import type {
 } from '@ankhorage/mcp/types';
 import { expect, spyOn, test } from 'bun:test';
 
+import type { GoogleAdsHttpTransport } from '../types/googleAds.js';
 import { createGoogleAdsMcpIntegration } from './index.js';
 
 const accountId = '8810770460';
@@ -24,7 +25,7 @@ test('preserves one original proposal and permits exactly one verified provider 
   const host = createHost();
   const fetchSpy = installGoogleAdsTransport();
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, fetchSpy);
     await registry.prepareWriteAsync('google-ads.create-keyword', input, context);
     const original = host.proposal;
     expect(original).toBeDefined();
@@ -71,7 +72,7 @@ test('rejects altered stored fingerprints, account, operation, resource, payload
     const host = createHost(alter);
     const fetchSpy = installGoogleAdsTransport();
     try {
-      const registry = createRegistry(host.store);
+      const registry = createRegistry(host.store, fetchSpy);
       await registry.prepareWriteAsync('google-ads.create-keyword', input, context);
       await assertRejectedAsync(
         registry.executeAsync('google-ads.create-keyword', { approvalId: 'approval-1' }, context),
@@ -92,7 +93,7 @@ test('rejects a proposal whose original account differs from configuration', asy
   const host = createHost((proposal) => ({ ...proposal, accountId: 'other' }));
   const fetchSpy = installGoogleAdsTransport();
   try {
-    const registry = createRegistry(host.store);
+    const registry = createRegistry(host.store, fetchSpy);
     await registry.prepareWriteAsync('google-ads.create-keyword', input, context);
     await assertRejectedAsync(
       registry.executeAsync('google-ads.create-keyword', { approvalId: 'approval-1' }, context),
@@ -202,7 +203,7 @@ function sort(value: unknown): unknown {
 }
 
 /** Compose writes explicitly; discovery remains tested through the default read-only integration. */
-function createRegistry(store: McpPreparedWriteStore) {
+function createRegistry(store: McpPreparedWriteStore, transport: GoogleAdsHttpTransport) {
   return createMcpRegistry({
     auditSink: { recordAsync: () => Promise.resolve() },
     integrations: [
@@ -212,6 +213,7 @@ function createRegistry(store: McpPreparedWriteStore) {
           allowedCustomerId: accountId,
         },
         now: () => '2026-11-01T00:00:00.000Z',
+        transport,
         writeEnabled: true,
       }),
     ],
@@ -248,7 +250,7 @@ function installGoogleAdsTransport() {
     },
     { preconnect: () => undefined },
   );
-  return spyOn(globalThis, 'fetch').mockImplementation(transport);
+  return spyOn({ fetch: globalThis.fetch }, 'fetch').mockImplementation(transport);
 }
 
 /** Read only textual request bodies from the fake Google Ads transport. */

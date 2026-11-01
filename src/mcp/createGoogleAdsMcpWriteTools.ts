@@ -10,6 +10,7 @@ import { prepareGoogleAdsMutationAsync } from '../features/google-ads/applicatio
 import { verifyGoogleAdsMutationProposalAsync } from '../features/google-ads/application/verifyGoogleAdsMutationProposalAsync.js';
 import { createProposalFingerprint } from '../features/google-ads/domain/createMutationFingerprint.js';
 import type {
+  GoogleAdsHttpTransport,
   GoogleAdsMutation,
   GoogleAdsMutationProposal,
   GoogleAdsProviderConfiguration,
@@ -22,12 +23,20 @@ import {
 import { reconcileGoogleAdsMcpPreparedWriteAsync } from './reconcileGoogleAdsMcpPreparedWriteAsync.js';
 
 const GOOGLE_ADS_PREPARED_WRITE_VERSION = 'google-ads-mutation-proposal/v1';
+interface GoogleAdsMcpWriteToolInput {
+  readonly accountId: (value: Readonly<Record<string, unknown>>) => string | null;
+  readonly configuration: GoogleAdsProviderConfiguration;
+  readonly kind: 'create-keyword' | 'create-ad-group-negative-keyword' | 'set-budget';
+  readonly now: () => string;
+  readonly transport?: GoogleAdsHttpTransport;
+}
 
 /*** Create MCP write tools that preserve a single provider proposal through host approval and execution. */
 export function createGoogleAdsMcpWriteTools(input: {
   readonly accountId: (value: Readonly<Record<string, unknown>>) => string | null;
   readonly configuration: GoogleAdsProviderConfiguration;
   readonly now: () => string;
+  readonly transport?: GoogleAdsHttpTransport;
 }) {
   return (['create-keyword', 'create-ad-group-negative-keyword', 'set-budget'] as const).map(
     (kind) => createWriteTool({ ...input, kind }),
@@ -35,12 +44,7 @@ export function createGoogleAdsMcpWriteTools(input: {
 }
 
 /*** Bind one mutation grammar to the MCP prepared-write lifecycle. */
-function createWriteTool(input: {
-  readonly accountId: (value: Readonly<Record<string, unknown>>) => string | null;
-  readonly configuration: GoogleAdsProviderConfiguration;
-  readonly kind: 'create-keyword' | 'create-ad-group-negative-keyword' | 'set-budget';
-  readonly now: () => string;
-}) {
+function createWriteTool(input: GoogleAdsMcpWriteToolInput) {
   return {
     accountId: input.accountId,
     auditOutcome: (output: unknown) =>
@@ -49,14 +53,12 @@ function createWriteTool(input: {
     executePreparedWriteAsync: async (
       stored: McpPreparedWriteProposal,
       context: McpToolExecutionContext,
-    ) =>
-      await executeStoredGoogleAdsProposalAsync(input.configuration, input.kind, stored, context),
+    ) => await executeStoredGoogleAdsProposalAsync(input, stored, context),
     id: input.kind,
     inputSchema: input.kind === 'set-budget' ? budgetMutationSchema : keywordMutationSchema,
     prepareWriteAsync: async (
       value: Readonly<Record<string, unknown>>,
-    ): Promise<McpPreparedWrite> =>
-      await prepareGoogleAdsMcpWriteAsync(input.configuration, input.kind, input.now, value),
+    ): Promise<McpPreparedWrite> => await prepareGoogleAdsMcpWriteAsync(input, value),
     risk: 'write' as const,
     reconcilePreparedWriteAsync: async (
       stored: McpPreparedWriteProposal,
@@ -75,24 +77,22 @@ function createWriteTool(input: {
     verifyPreparedWriteAsync: async (
       stored: McpPreparedWriteProposal,
       context: McpToolExecutionContext,
-    ) => await verifyStoredGoogleAdsProposalAsync(input.configuration, input.kind, stored, context),
+    ) => await verifyStoredGoogleAdsProposalAsync(input, stored, context),
   };
 }
 
 /*** Prepare one provider proposal and serialize it for the trusted MCP host without regenerating it later. */
 async function prepareGoogleAdsMcpWriteAsync(
-  configuration: GoogleAdsProviderConfiguration,
-  kind: 'create-keyword' | 'create-ad-group-negative-keyword' | 'set-budget',
-  now: () => string,
+  input: GoogleAdsMcpWriteToolInput,
   value: Readonly<Record<string, unknown>>,
 ): Promise<McpPreparedWrite> {
-  const ports = createGoogleAdsRestPorts(configuration);
+  const ports = createGoogleAdsRestPorts(input.configuration, input.transport);
   return toMcpPreparedWrite(
     await prepareGoogleAdsMutationAsync({
       customerId: requiredAccountId(value),
-      mutation: parseMutation(value, kind),
+      mutation: parseMutation(value, input.kind),
       mutations: ports,
-      now,
+      now: input.now,
       reads: ports,
     }),
   );
@@ -100,31 +100,29 @@ async function prepareGoogleAdsMcpWriteAsync(
 
 /*** Execute one host-claimed stored proposal through the Google Ads boundary. */
 async function executeStoredGoogleAdsProposalAsync(
-  configuration: GoogleAdsProviderConfiguration,
-  kind: GoogleAdsMutation['kind'],
+  input: GoogleAdsMcpWriteToolInput,
   stored: McpPreparedWriteProposal,
   context: McpToolExecutionContext,
 ) {
   assertExecutionClaim(context);
-  const ports = createGoogleAdsRestPorts(configuration);
+  const ports = createGoogleAdsRestPorts(input.configuration, input.transport);
   return await executePreparedGoogleAdsMutationAsync({
     mutations: ports,
-    proposal: parseStoredGoogleAdsProposal(stored, kind, configuration),
+    proposal: parseStoredGoogleAdsProposal(stored, input.kind, input.configuration),
     reads: ports,
   });
 }
 
 /*** Check a stored proposal against current provider state before the one permitted provider write. */
 async function verifyStoredGoogleAdsProposalAsync(
-  configuration: GoogleAdsProviderConfiguration,
-  kind: GoogleAdsMutation['kind'],
+  input: GoogleAdsMcpWriteToolInput,
   stored: McpPreparedWriteProposal,
   context: McpToolExecutionContext,
 ): Promise<boolean> {
   assertExecutionClaim(context);
-  const ports = createGoogleAdsRestPorts(configuration);
+  const ports = createGoogleAdsRestPorts(input.configuration, input.transport);
   return await verifyGoogleAdsMutationProposalAsync({
-    proposal: parseStoredGoogleAdsProposal(stored, kind, configuration),
+    proposal: parseStoredGoogleAdsProposal(stored, input.kind, input.configuration),
     reads: ports,
   });
 }

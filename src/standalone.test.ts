@@ -89,6 +89,7 @@ async function writeConsumerFilesAsync(consumer: string, tarball: string): Promi
 const serverSource = String.raw`
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { createMcpStdioServerAsync } from '@ankhorage/mcp';
 import { createGoogleAdsMcpIntegration } from '@ankhorage/ads-google/mcp';
 const file = process.argv[2];
@@ -96,21 +97,25 @@ const load = async () => JSON.parse(await readFile(file, 'utf8'));
 const save = async (state) => writeFile(file, JSON.stringify(state));
 const stable = (value) => Array.isArray(value) ? value.map(stable) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => [key, stable(item)])) : value;
 const fingerprint = (value) => createHash('sha256').update(JSON.stringify(stable(value))).digest('hex');
-globalThis.fetch = async (_url, init = {}) => {
-  const state = await load();
-  const body = typeof init.body === 'string' ? init.body : '';
-  state.requests.push(body);
+const fakeServer = createServer(async (request, response) => {
+  const body = await new Promise((resolve, reject) => { let data = ''; request.setEncoding('utf8'); request.on('data', (chunk) => { data += chunk; }); request.on('end', () => resolve(data)); request.on('error', reject); });
+  const state = await load(); state.requests.push({ body, method: request.method, path: request.url });
+  const send = (value) => { response.setHeader('content-type', 'application/json'); response.end(JSON.stringify(value)); };
   if (body.includes('"validateOnly":false')) {
     state.mutations += 1;
     await save(state);
-    if (state.indeterminate) throw new Error('simulated uncertain provider outcome');
-    return new Response(JSON.stringify({ results: [{ resourceName: 'customers/8810770460/adGroupCriteria/99' }] }));
+    if (state.indeterminate) return response.destroy(new Error('simulated uncertain provider outcome'));
+    return send({ results: [{ resourceName: 'customers/8810770460/adGroupCriteria/99' }] });
   }
   await save(state);
-  if (body.includes('"validateOnly":true')) return new Response(JSON.stringify({}));
-  if (body.includes('ad_group_criterion.ad_group =')) return new Response(JSON.stringify([]));
-  return new Response(JSON.stringify([{ results: [{ adGroupCriterion: { keyword: { matchType: 'EXACT', text: 'airport taxi' }, negative: false, resourceName: 'customers/8810770460/adGroupCriteria/99' } }] }]));
-};
+  if (body.includes('"validateOnly":true')) return send({});
+  if (body.includes('ad_group_criterion.ad_group =')) return send([]);
+  return send([{ results: [{ adGroupCriterion: { keyword: { matchType: 'EXACT', text: 'airport taxi' }, negative: false, resourceName: 'customers/8810770460/adGroupCriteria/99' } }] }]);
+});
+await new Promise((resolve) => fakeServer.listen(0, '127.0.0.1', resolve)); fakeServer.unref();
+const address = fakeServer.address(); if (address === null || typeof address === 'string') throw new Error('Expected fake HTTP server address.');
+const fakeOrigin = 'http://127.0.0.1:' + address.port;
+const transport = async (url, init = {}) => { const target = new URL(url); if (target.origin !== 'https://googleads.googleapis.com') throw new Error('Google Ads transport target is invalid.'); return await fetch(fakeOrigin + target.pathname, init); };
 const store = {
   async createPreparedWriteAsync(proposal) {
     const state = await load(); state.proposal = proposal; await save(state);
@@ -124,7 +129,7 @@ const store = {
   },
   async settlePreparedWriteAsync(settlement) { const state = await load(); state.settlement = settlement.outcome; state.settlements.push(settlement); await save(state); },
 };
-await createMcpStdioServerAsync({ auditSink: { async recordAsync(event) { const state = await load(); state.audit.push(event); await save(state); } }, context: { actorId: 'operator', allowedAccounts: ['8810770460'] }, integrations: [createGoogleAdsMcpIntegration({ configuration: { accessTokenAsync: async () => 'secret-access-token', allowedCustomerId: '8810770460' }, now: () => '2026-11-01T00:00:00.000Z', writeEnabled: process.argv[3] !== 'read-only' })], preparedWriteStore: store, version: 'test' });
+await createMcpStdioServerAsync({ auditSink: { async recordAsync(event) { const state = await load(); state.audit.push(event); await save(state); } }, context: { actorId: 'operator', allowedAccounts: ['8810770460'] }, integrations: [createGoogleAdsMcpIntegration({ configuration: { accessTokenAsync: async () => 'secret-access-token', allowedCustomerId: '8810770460' }, now: () => '2026-11-01T00:00:00.000Z', transport, writeEnabled: process.argv[3] !== 'read-only' })], preparedWriteStore: store, version: 'test' });
 `;
 
 const clientSource = String.raw`
@@ -148,9 +153,9 @@ const initialize = async (indeterminate = false) => write({ approved: false, aud
 const prepare = async (client) => call(client, 'google-ads.create-keyword.prepare', input);
 const deny = async (client) => { const result = await call(client, 'google-ads.create-keyword.execute', { approvalId: 'approval-1' }); assert.equal(result.isError, true); };
 await initialize();
-{ const { client, close } = await session(true); const tools = await client.listTools(); const names = tools.tools.map((tool) => tool.name); assert(names.includes('google-ads.list-campaigns') && names.includes('google-ads.read-resource')); assert(!names.includes('google-ads.prepare-mutation')); assert(!names.includes('google-ads.create-keyword.prepare') && !names.includes('google-ads.create-keyword.execute')); assert.equal((await read()).requests.filter((body) => body.includes('"validateOnly"')).length, 0); await close(); }
+{ const { client, close } = await session(true); const tools = await client.listTools(); const names = tools.tools.map((tool) => tool.name); assert(names.includes('google-ads.list-campaigns') && names.includes('google-ads.read-resource')); assert(!names.includes('google-ads.prepare-mutation')); assert(!names.includes('google-ads.create-keyword.prepare') && !names.includes('google-ads.create-keyword.execute')); assert.equal((await read()).requests.filter((request) => request.body.includes('"validateOnly"')).length, 0); await close(); }
 await initialize();
-{ const { client, close } = await session(); const tools = await client.listTools(); const names = tools.tools.map((tool) => tool.name); assert(names.includes('google-ads.list-campaigns') && names.includes('google-ads.create-keyword.prepare') && names.includes('google-ads.create-keyword.execute')); assert(!names.includes('google-ads.prepare-mutation')); await call(client, 'google-ads.list-campaigns', { accountId: '8810770460' }); await prepare(client); const original = (await read()).proposal; let state = await read(); assert.equal(state.requests.filter((body) => body.includes('"validateOnly":true')).length, 1); assert.equal(state.requests.filter((body) => body.includes('"validateOnly":false')).length, 0); await deny(client); assert.equal((await read()).claimed, false); state = await read(); await write({ ...state, approved: true }); const executed = await call(client, 'google-ads.create-keyword.execute', { approvalId: 'approval-1' }); assert.equal(JSON.parse(text(executed)).outcome, 'executed'); state = await read(); assert.deepEqual(state.proposal, original); assert.equal(state.mutations, 1); assert.equal(state.settlement, 'executed'); await deny(client); assert.equal((await read()).mutations, 1); assert(!JSON.stringify(state).includes('secret-access-token')); await close(); }
+{ const { client, close } = await session(); const tools = await client.listTools(); const names = tools.tools.map((tool) => tool.name); assert(names.includes('google-ads.list-campaigns') && names.includes('google-ads.create-keyword.prepare') && names.includes('google-ads.create-keyword.execute')); assert(!names.includes('google-ads.prepare-mutation')); await call(client, 'google-ads.list-campaigns', { accountId: '8810770460' }); await prepare(client); const original = (await read()).proposal; let state = await read(); assert.equal(state.requests.filter((request) => request.body.includes('"validateOnly":true')).length, 1); assert.equal(state.requests.filter((request) => request.body.includes('"validateOnly":false')).length, 0); assert(state.requests.every((request) => request.method === 'POST' && request.path.startsWith('/v26/customers/8810770460/'))); await deny(client); assert.equal((await read()).claimed, false); state = await read(); await write({ ...state, approved: true }); const executed = await call(client, 'google-ads.create-keyword.execute', { approvalId: 'approval-1' }); assert.equal(JSON.parse(text(executed)).outcome, 'executed'); state = await read(); assert.deepEqual(state.proposal, original); assert.equal(state.mutations, 1); assert.equal(state.settlement, 'executed'); await deny(client); assert.equal((await read()).mutations, 1); assert(!JSON.stringify(state).includes('secret-access-token')); await close(); }
 for (const alter of [(state) => ({ ...state, proposal: { ...state.proposal, actorId: 'attacker' } }), (state) => ({ ...state, proposal: { ...state.proposal, accountId: 'other' } }), (state) => ({ ...state, proposal: { ...state.proposal, payload: { ...state.proposal.payload, serialized: state.proposal.payload.serialized.replace('airport taxi', 'tampered') } } })]) { await initialize(); const { client, close } = await session(); await prepare(client); const state = await read(); await write({ ...alter(state), approved: true }); await deny(client); assert.equal((await read()).mutations, 0); await close(); }
 await initialize(true);
 { const { client, close } = await session(); await prepare(client); const state = await read(); await write({ ...state, approved: true }); const result = await call(client, 'google-ads.create-keyword.execute', { approvalId: 'approval-1' }); assert.equal(JSON.parse(text(result)).outcome, 'indeterminate'); const after = await read(); assert.equal(after.mutations, 1); assert.equal(after.settlement, 'indeterminate'); await deny(client); assert.equal((await read()).mutations, 1); await close(); }

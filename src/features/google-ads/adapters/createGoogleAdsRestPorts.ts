@@ -1,4 +1,5 @@
 import type {
+  GoogleAdsHttpTransport,
   GoogleAdsMutation,
   GoogleAdsMutationResult,
   GoogleAdsProviderConfiguration,
@@ -10,12 +11,14 @@ import type {
 } from '../ports/googleAdsPorts.js';
 import { assertGoogleAdsMutationResourceKind } from './assertGoogleAdsMutationResourceKind.js';
 import { createGoogleAdsDiscoveryQuery } from './createGoogleAdsDiscoveryQuery.js';
+import { sanitizeGoogleAdsRequestFailureAsync } from './sanitizeGoogleAdsRequestFailureAsync.js';
 
 /*** Create v26 REST ports scoped to one configured Google Ads customer. */
 export function createGoogleAdsRestPorts(
   configuration: GoogleAdsProviderConfiguration,
+  transport: GoogleAdsHttpTransport = globalThis.fetch,
 ): GoogleAdsDiscoveryPort & GoogleAdsReadPort & GoogleAdsMutationPort {
-  const requestAsync = createGoogleAdsRequestAsync(configuration);
+  const requestAsync = createGoogleAdsRequestAsync(configuration, transport);
   return {
     async listResourcesAsync({ customerId, kind }) {
       assertCustomer(configuration, customerId);
@@ -69,17 +72,22 @@ interface GoogleAdsMutationRequest {
 /*** Create the one authenticated request boundary without exposing secret values in errors. */
 function createGoogleAdsRequestAsync(
   configuration: GoogleAdsProviderConfiguration,
+  transport: GoogleAdsHttpTransport,
 ): GoogleAdsRequestAsync {
-  const apiVersion = configuration.apiVersion ?? 'v26';
   return async (path, body) => {
-    const response = await fetch(`https://googleads.googleapis.com/${apiVersion}/${path}`, {
-      body: JSON.stringify(body),
-      headers: await createHeadersAsync(configuration),
-      method: 'POST',
-    });
+    const headers = await sanitizeGoogleAdsRequestFailureAsync(() =>
+      createHeadersAsync(configuration),
+    );
+    const response = await sanitizeGoogleAdsRequestFailureAsync(() =>
+      transport(`https://googleads.googleapis.com/${configuration.apiVersion ?? 'v26'}/${path}`, {
+        body: JSON.stringify(body),
+        headers,
+        method: 'POST',
+      }),
+    );
     if (!response.ok)
       throw new Error(`Google Ads API request failed with HTTP ${response.status}.`);
-    return await response.json();
+    return sanitizeGoogleAdsRequestFailureAsync(() => response.json());
   };
 }
 /*** Refuse every customer except the explicitly configured account. */
@@ -215,8 +223,7 @@ function createUpdateRequest(
   };
 }
 
-/*** Escape a GAQL string literal. */
-function escapeGaql(value: string): string {
+/*** Escape a GAQL string literal. */ function escapeGaql(value: string): string {
   return value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
 }
 /*** Build a resource-scoped GAQL lookup for a supported mutable resource name. */
@@ -272,16 +279,11 @@ function decodeResources(value: unknown): readonly {
   readonly values: Readonly<Record<string, unknown>>;
 }[] {
   if (!Array.isArray(value)) return [];
-  return value.flatMap(decodeSearchStreamBatch);
-}
-
-/*** Decode one REST search-stream batch into provider read values. */
-function decodeSearchStreamBatch(batch: unknown): readonly {
-  readonly resourceName: string;
-  readonly values: Readonly<Record<string, unknown>>;
-}[] {
-  if (!isRecord(batch) || !Array.isArray(batch['results'])) return [];
-  return batch['results'].flatMap(decodeSearchStreamResult);
+  return value.flatMap((batch) =>
+    isRecord(batch) && Array.isArray(batch['results'])
+      ? batch['results'].flatMap(decodeSearchStreamResult)
+      : [],
+  );
 }
 
 /*** Decode one resource record while retaining the selected provider state. */
@@ -289,17 +291,10 @@ function decodeSearchStreamResult(result: unknown): readonly {
   readonly resourceName: string;
   readonly values: Readonly<Record<string, unknown>>;
 }[] {
-  if (!isRecord(result)) return [];
-  const resourceName = findResourceName(result);
-  return resourceName === undefined ? [] : [{ resourceName, values: extractReadValues(result) }];
-}
-
-/*** Retain JSON-compatible selected resource fields without preserving untrusted envelopes. */
-function extractReadValues(
-  result: Readonly<Record<string, unknown>>,
-): Readonly<Record<string, unknown>> {
-  const resource = Object.values(result).find(isRecord);
-  return resource ?? {};
+  const resourceName = isRecord(result) ? findResourceName(result) : undefined;
+  return resourceName === undefined || !isRecord(result)
+    ? []
+    : [{ resourceName, values: Object.values(result).find(isRecord) ?? {} }];
 }
 
 /*** Decode a validation acknowledgement or the exact result of one productive mutation. */
