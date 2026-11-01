@@ -14,7 +14,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.4.0",
+      "value": "v1.0.0",
       "color": "cb3837"
     },
     {
@@ -147,6 +147,18 @@
       ]
     },
     {
+      "path": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "executePreparedGoogleAdsMutationAsync"
+      ]
+    },
+    {
       "path": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -213,6 +225,18 @@
       ],
       "exports": [
         "reconcileApprovedGoogleAdsMutationAsync"
+      ]
+    },
+    {
+      "path": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/features/google-ads/ports/googleAdsPorts.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "verifyGoogleAdsMutationProposalAsync"
       ]
     },
     {
@@ -291,6 +315,22 @@
       ]
     },
     {
+      "path": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "src/mcp/googleAdsMcpToolUtils.ts",
+        "src/types/googleAds.ts"
+      ],
+      "exports": [
+        "createGoogleAdsMcpWriteTools"
+      ]
+    },
+    {
       "path": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -327,7 +367,7 @@
         "src/types/googleAds.ts"
       ],
       "exports": [
-        "isIndeterminateGoogleAdsMcpOutcome",
+        "isExecutedGoogleAdsMcpOutcome",
         "isSameGoogleAdsMcpChange",
         "toGoogleAdsMcpChangeDescriptor"
       ]
@@ -345,10 +385,7 @@
       "isEntrypoint": false,
       "dependencies": [
         "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
-        "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts",
-        "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
-        "src/features/google-ads/ports/googleAdsPorts.ts",
-        "src/mcp/googleAdsMcpToolUtils.ts",
+        "src/mcp/createGoogleAdsMcpWriteTools.ts",
         "src/types/googleAds.ts"
       ],
       "exports": [
@@ -356,6 +393,20 @@
         "createGoogleAdsServiceAccountAccessTokenResolver",
         "createIntegrationAsync"
       ]
+    },
+    {
+      "path": "src/mcp/preparedWriteLifecycle.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/mcp/index.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/standalone.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": []
     },
     {
       "path": "src/types/googleAds.ts",
@@ -1634,6 +1685,24 @@
       }
     },
     {
+      "name": "executePreparedGoogleAdsMutationAsync",
+      "description": "Invoke one already host-claimed Google Ads proposal and report only verified completion.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "line": 9,
+        "column": 1
+      }
+    },
+    {
+      "name": "indeterminateResult",
+      "description": "Keep all post-provider uncertainty reconciliation-only under the MCP host lifecycle.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "line": 33,
+        "column": 1
+      }
+    },
+    {
       "name": "getGoogleAdsMutationEvidenceAsync",
       "description": "Return applied only for an acknowledged result identity whose approved post-state is readable.",
       "sourceLocation": {
@@ -1949,6 +2018,42 @@
       }
     },
     {
+      "name": "verifyGoogleAdsMutationProposalAsync",
+      "description": "Verify that an approved proposal still describes the current provider state without mutating it.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "line": 6,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertProposalIntegrity",
+      "description": "Reject an altered proposal before it can be used at the provider boundary.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "line": 17,
+        "column": 1
+      }
+    },
+    {
+      "name": "hasExpectedBeforeStateAsync",
+      "description": "Require the persisted before-state to remain unchanged before an approved update can run.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "line": 24,
+        "column": 1
+      }
+    },
+    {
+      "name": "hasNoDuplicateAsync",
+      "description": "Preserve the keyword uniqueness invariant at execution time without consuming any approval.",
+      "sourceLocation": {
+        "filePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "line": 36,
+        "column": 1
+      }
+    },
+    {
       "name": "createGoogleAdsProvider",
       "description": "Compose the real v26 REST adapter behind the approval-gated public provider boundary.",
       "sourceLocation": {
@@ -1981,6 +2086,159 @@
       "sourceLocation": {
         "filePath": "src/features/google-ads/domain/createMutationFingerprint.ts",
         "line": 20,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGoogleAdsMcpWriteTools",
+      "description": "Create MCP write tools that preserve a single provider proposal through host approval and execution.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 26,
+        "column": 1
+      }
+    },
+    {
+      "name": "createWriteTool",
+      "description": "Bind one mutation grammar to the MCP prepared-write lifecycle.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 37,
+        "column": 1
+      }
+    },
+    {
+      "name": "prepareGoogleAdsMcpWriteAsync",
+      "description": "Prepare one provider proposal and serialize it for the trusted MCP host without regenerating it later.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 70,
+        "column": 1
+      }
+    },
+    {
+      "name": "executeStoredGoogleAdsProposalAsync",
+      "description": "Execute one host-claimed stored proposal through the Google Ads boundary.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 89,
+        "column": 1
+      }
+    },
+    {
+      "name": "verifyStoredGoogleAdsProposalAsync",
+      "description": "Check a stored proposal against current provider state before the one permitted provider write.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 105,
+        "column": 1
+      }
+    },
+    {
+      "name": "toMcpPreparedWrite",
+      "description": "Serialize the complete immutable provider proposal in the versioned MCP persisted payload.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 120,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseStoredGoogleAdsProposal",
+      "description": "Decode and cross-check the host-persisted original proposal before any provider boundary action.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 133,
+        "column": 1
+      }
+    },
+    {
+      "name": "parsePreparedPayload",
+      "description": "Parse only the versioned serialized payload produced by this integration.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 150,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertOriginalProposal",
+      "description": "Enforce immutable account, resource, operation, change, timestamp, and provider-fingerprint bindings.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 168,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertExecutionClaim",
+      "description": "Require the trusted MCP execution claim that owns approval consumption and intent identity.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 187,
+        "column": 1
+      }
+    },
+    {
+      "name": "isGoogleAdsProposal",
+      "description": "Narrow JSON payload values before reconstructing the serializable Google Ads proposal.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 192,
+        "column": 1
+      }
+    },
+    {
+      "name": "isRecord",
+      "description": "Recognize a JSON object without coercing values from the untrusted persisted payload.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 207,
+        "column": 1
+      }
+    },
+    {
+      "name": "requiredAccountId",
+      "description": "Require a nonempty account identity for a write proposal.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 233,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseMutation",
+      "description": "Parse exactly the mutation grammar bound to a single write tool.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 240,
+        "column": 1
+      }
+    },
+    {
+      "name": "requiredString",
+      "description": "Read a required JSON string without coercion.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 258,
+        "column": 1
+      }
+    },
+    {
+      "name": "valueForRequiredStringKey",
+      "description": "Select from the finite write grammar without a caller-controlled object lookup.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 268,
+        "column": 1
+      }
+    },
+    {
+      "name": "matchType",
+      "description": "Restrict matches to the core Google Ads contract.",
+      "sourceLocation": {
+        "filePath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "line": 286,
         "column": 1
       }
     },
@@ -2147,7 +2405,7 @@
       }
     },
     {
-      "name": "isIndeterminateGoogleAdsMcpOutcome",
+      "name": "isExecutedGoogleAdsMcpOutcome",
       "description": null,
       "sourceLocation": {
         "filePath": "src/mcp/googleAdsMcpToolUtils.ts",
@@ -2157,118 +2415,190 @@
     },
     {
       "name": "createGoogleAdsMcpIntegration",
-      "description": null,
+      "description": "Compose account-isolated discovery and optionally host-bound prepared-write tools.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 22,
+        "line": 11,
         "column": 1
       }
     },
     {
       "name": "createReadResourceTool",
-      "description": null,
+      "description": "Expose one resource lookup without accepting credentials or a caller-selected account scope.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 68,
+        "line": 51,
         "column": 1
       }
     },
     {
       "name": "createDiscoveryTool",
-      "description": null,
+      "description": "Expose a bounded discovery collection so an agent can find canonical resource names.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 89,
-        "column": 1
-      }
-    },
-    {
-      "name": "createWriteTools",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 107,
-        "column": 1
-      }
-    },
-    {
-      "name": "createWriteTool",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 117,
-        "column": 1
-      }
-    },
-    {
-      "name": "proposalAsync",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 124,
-        "column": 9
-      }
-    },
-    {
-      "name": "createPrepareAsync",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 168,
+        "line": 73,
         "column": 1
       }
     },
     {
       "name": "accountId",
-      "description": null,
+      "description": "Derive scope only from the canonical account argument.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 222,
-        "column": 1
-      }
-    },
-    {
-      "name": "parseMutationRequest",
-      "description": null,
-      "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 227,
+        "line": 104,
         "column": 1
       }
     },
     {
       "name": "requiredAccountId",
-      "description": null,
+      "description": "Require a nonempty account identity before scope and provider checks.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 256,
+        "line": 110,
         "column": 1
       }
     },
     {
       "name": "stringAt",
-      "description": null,
+      "description": "Read one required nonempty JSON string without coercion.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 263,
+        "line": 116,
         "column": 1
       }
     },
     {
-      "name": "valueForKey",
-      "description": null,
+      "name": "valueForStringKey",
+      "description": "Select from the finite public grammar without a caller-controlled object lookup.",
       "sourceLocation": {
         "filePath": "src/mcp/index.ts",
-        "line": 271,
+        "line": 126,
         "column": 1
       }
     },
     {
-      "name": "keywordMatchType",
+      "name": "createHost",
       "description": null,
       "sourceLocation": {
-        "filePath": "src/mcp/index.ts",
-        "line": 283,
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 109,
+        "column": 1
+      }
+    },
+    {
+      "name": "createStore",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 136,
+        "column": 1
+      }
+    },
+    {
+      "name": "stored",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 178,
+        "column": 1
+      }
+    },
+    {
+      "name": "fingerprint",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 188,
+        "column": 1
+      }
+    },
+    {
+      "name": "sort",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 195,
+        "column": 1
+      }
+    },
+    {
+      "name": "createRegistry",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 206,
+        "column": 1
+      }
+    },
+    {
+      "name": "installGoogleAdsTransport",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 224,
+        "column": 1
+      }
+    },
+    {
+      "name": "requestBody",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 256,
+        "column": 1
+      }
+    },
+    {
+      "name": "assertRejectedAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 261,
+        "column": 1
+      }
+    },
+    {
+      "name": "json",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "line": 270,
+        "column": 1
+      }
+    },
+    {
+      "name": "acceptanceTmpdir",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/standalone.test.ts",
+        "line": 44,
+        "column": 1
+      }
+    },
+    {
+      "name": "packAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/standalone.test.ts",
+        "line": 49,
+        "column": 1
+      }
+    },
+    {
+      "name": "runAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/standalone.test.ts",
+        "line": 61,
+        "column": 1
+      }
+    },
+    {
+      "name": "writeConsumerFilesAsync",
+      "description": null,
+      "sourceLocation": {
+        "filePath": "src/standalone.test.ts",
+        "line": 75,
         "column": 1
       }
     }
@@ -2358,6 +2688,41 @@
         "sourcePath": "src/index.ts"
       },
       {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toPath": "src/mcp/googleAdsMcpToolUtils.ts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
         "fromPath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
         "toPath": "src/features/google-ads/adapters/createGoogleAdsRestPorts.ts",
         "sourcePath": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts"
@@ -2399,27 +2764,12 @@
       },
       {
         "fromPath": "src/mcp/index.ts",
-        "toPath": "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromPath": "src/mcp/index.ts",
-        "toPath": "src/features/google-ads/application/prepareGoogleAdsMutationAsync.ts",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromPath": "src/mcp/index.ts",
-        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromPath": "src/mcp/index.ts",
         "toPath": "src/types/googleAds.ts",
         "sourcePath": "src/mcp/index.ts"
       },
       {
         "fromPath": "src/mcp/index.ts",
-        "toPath": "src/mcp/googleAdsMcpToolUtils.ts",
+        "toPath": "src/mcp/createGoogleAdsMcpWriteTools.ts",
         "sourcePath": "src/mcp/index.ts"
       },
       {
@@ -2431,6 +2781,11 @@
         "fromPath": "src/mcp/index.ts",
         "toPath": "src/mcp/createIntegrationAsync.ts",
         "sourcePath": "src/mcp/index.ts"
+      },
+      {
+        "fromPath": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toPath": "src/mcp/index.ts",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
       },
       {
         "fromPath": "src/features/google-ads/adapters/assertGoogleAdsMutationResourceKind.ts",
@@ -2518,6 +2873,21 @@
         "sourcePath": "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts"
       },
       {
+        "fromPath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts",
+        "toPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
         "fromPath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts",
         "toPath": "src/types/googleAds.ts",
         "sourcePath": "src/features/google-ads/application/getGoogleAdsMutationEvidenceAsync.ts"
@@ -2608,6 +2978,21 @@
         "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
       },
       {
+        "fromPath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "toPath": "src/types/googleAds.ts",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "toPath": "src/features/google-ads/domain/createMutationFingerprint.ts",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromPath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts",
+        "toPath": "src/features/google-ads/ports/googleAdsPorts.ts",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
         "fromPath": "src/features/google-ads/composition/createGoogleAdsProvider.ts",
         "toPath": "src/types/googleAds.ts",
         "sourcePath": "src/features/google-ads/composition/createGoogleAdsProvider.ts"
@@ -2678,6 +3063,282 @@
         "toSymbol": "expect",
         "callExpression": "expect",
         "sourcePath": "src/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "mkdtemp",
+        "callExpression": "mkdtemp",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "acceptanceTmpdir",
+        "callExpression": "acceptanceTmpdir",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "runAsync",
+        "callExpression": "runAsync",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "packAsync",
+        "callExpression": "packAsync",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "writeFile",
+        "callExpression": "writeFile",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "writeConsumerFilesAsync",
+        "callExpression": "writeConsumerFilesAsync",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/standalone.test.ts",
+        "toSymbol": "rm",
+        "callExpression": "rm",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "acceptanceTmpdir",
+        "toSymbol": "tmpdir",
+        "callExpression": "tmpdir",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "packAsync",
+        "toSymbol": "runAsync",
+        "callExpression": "runAsync",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "packAsync",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "writeConsumerFilesAsync",
+        "toSymbol": "writeFile",
+        "callExpression": "writeFile",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "writeConsumerFilesAsync",
+        "toSymbol": "join",
+        "callExpression": "join",
+        "sourcePath": "src/standalone.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/createGoogleAdsMcpWriteTools.ts",
+        "toSymbol": "createWriteTool",
+        "callExpression": "createWriteTool",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "auditOutcome",
+        "toSymbol": "isExecutedGoogleAdsMcpOutcome",
+        "callExpression": "isExecutedGoogleAdsMcpOutcome",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "executePreparedWriteAsync",
+        "toSymbol": "executeStoredGoogleAdsProposalAsync",
+        "callExpression": "executeStoredGoogleAdsProposalAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareWriteAsync",
+        "toSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "callExpression": "prepareGoogleAdsMcpWriteAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "verifyPreparedWriteAsync",
+        "toSymbol": "verifyStoredGoogleAdsProposalAsync",
+        "callExpression": "verifyStoredGoogleAdsProposalAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "toSymbol": "toMcpPreparedWrite",
+        "callExpression": "toMcpPreparedWrite",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "toSymbol": "prepareGoogleAdsMutationAsync",
+        "callExpression": "prepareGoogleAdsMutationAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "toSymbol": "requiredAccountId",
+        "callExpression": "requiredAccountId",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "prepareGoogleAdsMcpWriteAsync",
+        "toSymbol": "parseMutation",
+        "callExpression": "parseMutation",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "executeStoredGoogleAdsProposalAsync",
+        "toSymbol": "assertExecutionClaim",
+        "callExpression": "assertExecutionClaim",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "executeStoredGoogleAdsProposalAsync",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "executeStoredGoogleAdsProposalAsync",
+        "toSymbol": "executePreparedGoogleAdsMutationAsync",
+        "callExpression": "executePreparedGoogleAdsMutationAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "executeStoredGoogleAdsProposalAsync",
+        "toSymbol": "parseStoredGoogleAdsProposal",
+        "callExpression": "parseStoredGoogleAdsProposal",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "verifyStoredGoogleAdsProposalAsync",
+        "toSymbol": "assertExecutionClaim",
+        "callExpression": "assertExecutionClaim",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "verifyStoredGoogleAdsProposalAsync",
+        "toSymbol": "createGoogleAdsRestPorts",
+        "callExpression": "createGoogleAdsRestPorts",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "verifyStoredGoogleAdsProposalAsync",
+        "toSymbol": "verifyGoogleAdsMutationProposalAsync",
+        "callExpression": "verifyGoogleAdsMutationProposalAsync",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "verifyStoredGoogleAdsProposalAsync",
+        "toSymbol": "parseStoredGoogleAdsProposal",
+        "callExpression": "parseStoredGoogleAdsProposal",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "toMcpPreparedWrite",
+        "toSymbol": "toGoogleAdsMcpChangeDescriptor",
+        "callExpression": "toGoogleAdsMcpChangeDescriptor",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parseStoredGoogleAdsProposal",
+        "toSymbol": "parsePreparedPayload",
+        "callExpression": "parsePreparedPayload",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parseStoredGoogleAdsProposal",
+        "toSymbol": "assertOriginalProposal",
+        "callExpression": "assertOriginalProposal",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parsePreparedPayload",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parsePreparedPayload",
+        "toSymbol": "isGoogleAdsProposal",
+        "callExpression": "isGoogleAdsProposal",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "assertOriginalProposal",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "assertOriginalProposal",
+        "toSymbol": "isSameGoogleAdsMcpChange",
+        "callExpression": "isSameGoogleAdsMcpChange",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "assertOriginalProposal",
+        "toSymbol": "toGoogleAdsMcpChangeDescriptor",
+        "callExpression": "toGoogleAdsMcpChangeDescriptor",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "isGoogleAdsProposal",
+        "toSymbol": "isRecord",
+        "callExpression": "isRecord",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parseMutation",
+        "toSymbol": "requiredString",
+        "callExpression": "requiredString",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "parseMutation",
+        "toSymbol": "matchType",
+        "callExpression": "matchType",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "requiredString",
+        "toSymbol": "valueForRequiredStringKey",
+        "callExpression": "valueForRequiredStringKey",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
+      },
+      {
+        "fromSymbol": "matchType",
+        "toSymbol": "requiredString",
+        "callExpression": "requiredString",
+        "sourcePath": "src/mcp/createGoogleAdsMcpWriteTools.ts"
       },
       {
         "fromSymbol": "src/mcp/createGoogleAdsServiceAccountAccessTokenResolver.test.ts",
@@ -2969,12 +3630,6 @@
       },
       {
         "fromSymbol": "createGoogleAdsMcpIntegration",
-        "toSymbol": "createPrepareAsync",
-        "callExpression": "createPrepareAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createGoogleAdsMcpIntegration",
         "toSymbol": "createReadResourceTool",
         "callExpression": "createReadResourceTool",
         "sourcePath": "src/mcp/index.ts"
@@ -2987,8 +3642,8 @@
       },
       {
         "fromSymbol": "createGoogleAdsMcpIntegration",
-        "toSymbol": "createWriteTools",
-        "callExpression": "createWriteTools",
+        "toSymbol": "createGoogleAdsMcpWriteTools",
+        "callExpression": "createGoogleAdsMcpWriteTools",
         "sourcePath": "src/mcp/index.ts"
       },
       {
@@ -3016,120 +3671,6 @@
         "sourcePath": "src/mcp/index.ts"
       },
       {
-        "fromSymbol": "src/mcp/index.ts",
-        "toSymbol": "createWriteTool",
-        "callExpression": "createWriteTool",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createWriteTool",
-        "toSymbol": "createPrepareAsync",
-        "callExpression": "createPrepareAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "proposalAsync",
-        "toSymbol": "prepareAsync",
-        "callExpression": "prepareAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "approvalFingerprintAsync",
-        "toSymbol": "proposalAsync",
-        "callExpression": "proposalAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "auditOutcome",
-        "toSymbol": "isIndeterminateGoogleAdsMcpOutcome",
-        "callExpression": "isIndeterminateGoogleAdsMcpOutcome",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "describeChangeAsync",
-        "toSymbol": "toGoogleAdsMcpChangeDescriptor",
-        "callExpression": "toGoogleAdsMcpChangeDescriptor",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "describeChangeAsync",
-        "toSymbol": "proposalAsync",
-        "callExpression": "proposalAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "executeAsync",
-        "toSymbol": "proposalAsync",
-        "callExpression": "proposalAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "executeAsync",
-        "toSymbol": "createGoogleAdsRestPorts",
-        "callExpression": "createGoogleAdsRestPorts",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "executeAsync",
-        "toSymbol": "executePersistedGoogleAdsMutationAsync",
-        "callExpression": "executePersistedGoogleAdsMutationAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "verifyExpectedStateAsync",
-        "toSymbol": "isSameGoogleAdsMcpChange",
-        "callExpression": "isSameGoogleAdsMcpChange",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "verifyExpectedStateAsync",
-        "toSymbol": "toGoogleAdsMcpChangeDescriptor",
-        "callExpression": "toGoogleAdsMcpChangeDescriptor",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "verifyExpectedStateAsync",
-        "toSymbol": "proposalAsync",
-        "callExpression": "proposalAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "createPrepareAsync",
-        "toSymbol": "createGoogleAdsRestPorts",
-        "callExpression": "createGoogleAdsRestPorts",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "src/mcp/index.ts",
-        "toSymbol": "parseMutationRequest",
-        "callExpression": "parseMutationRequest",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "src/mcp/index.ts",
-        "toSymbol": "prepareGoogleAdsMutationAsync",
-        "callExpression": "prepareGoogleAdsMutationAsync",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "parseMutationRequest",
-        "toSymbol": "requiredAccountId",
-        "callExpression": "requiredAccountId",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "parseMutationRequest",
-        "toSymbol": "stringAt",
-        "callExpression": "stringAt",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
-        "fromSymbol": "parseMutationRequest",
-        "toSymbol": "keywordMatchType",
-        "callExpression": "keywordMatchType",
-        "sourcePath": "src/mcp/index.ts"
-      },
-      {
         "fromSymbol": "requiredAccountId",
         "toSymbol": "accountId",
         "callExpression": "accountId",
@@ -3137,15 +3678,129 @@
       },
       {
         "fromSymbol": "stringAt",
-        "toSymbol": "valueForKey",
-        "callExpression": "valueForKey",
+        "toSymbol": "valueForStringKey",
+        "callExpression": "valueForStringKey",
         "sourcePath": "src/mcp/index.ts"
       },
       {
-        "fromSymbol": "keywordMatchType",
-        "toSymbol": "stringAt",
-        "callExpression": "stringAt",
-        "sourcePath": "src/mcp/index.ts"
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "createHost",
+        "callExpression": "createHost",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "installGoogleAdsTransport",
+        "callExpression": "installGoogleAdsTransport",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "createRegistry",
+        "callExpression": "createRegistry",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "requestBody",
+        "callExpression": "requestBody",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "assertRejectedAsync",
+        "callExpression": "assertRejectedAsync",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "createHost",
+        "toSymbol": "createStore",
+        "callExpression": "createStore",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "createPreparedWriteAsync",
+        "toSymbol": "stored",
+        "callExpression": "stored",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "claimApprovedWriteAndCreateIntentAsync",
+        "toSymbol": "alter",
+        "callExpression": "alter",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "claimApprovedWriteAndCreateIntentAsync",
+        "toSymbol": "stored",
+        "callExpression": "stored",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "stored",
+        "toSymbol": "fingerprint",
+        "callExpression": "fingerprint",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "fingerprint",
+        "toSymbol": "createHash",
+        "callExpression": "createHash",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "fingerprint",
+        "toSymbol": "sort",
+        "callExpression": "sort",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "sort",
+        "callExpression": "sort",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "createRegistry",
+        "toSymbol": "createMcpRegistry",
+        "callExpression": "createMcpRegistry",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "createRegistry",
+        "toSymbol": "createGoogleAdsMcpIntegration",
+        "callExpression": "createGoogleAdsMcpIntegration",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "src/mcp/preparedWriteLifecycle.test.ts",
+        "toSymbol": "json",
+        "callExpression": "json",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "installGoogleAdsTransport",
+        "toSymbol": "spyOn",
+        "callExpression": "spyOn",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
+      },
+      {
+        "fromSymbol": "assertRejectedAsync",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/mcp/preparedWriteLifecycle.test.ts"
       },
       {
         "fromSymbol": "assertGoogleAdsMutationResourceKind",
@@ -3736,6 +4391,24 @@
         "sourcePath": "src/features/google-ads/application/executePersistedGoogleAdsMutationAsync.ts"
       },
       {
+        "fromSymbol": "executePreparedGoogleAdsMutationAsync",
+        "toSymbol": "mutateAsync",
+        "callExpression": "input.mutations.mutateAsync",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executePreparedGoogleAdsMutationAsync",
+        "toSymbol": "indeterminateResult",
+        "callExpression": "indeterminateResult",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "executePreparedGoogleAdsMutationAsync",
+        "toSymbol": "getGoogleAdsMutationEvidenceAsync",
+        "callExpression": "getGoogleAdsMutationEvidenceAsync",
+        "sourcePath": "src/features/google-ads/application/executePreparedGoogleAdsMutationAsync.ts"
+      },
+      {
         "fromSymbol": "getGoogleAdsMutationEvidenceAsync",
         "toSymbol": "matchesMutationResult",
         "callExpression": "matchesMutationResult",
@@ -4070,6 +4743,42 @@
         "toSymbol": "completeReconciliationAsync",
         "callExpression": "attempts.completeReconciliationAsync",
         "sourcePath": "src/features/google-ads/application/reconcileApprovedGoogleAdsMutationAsync.ts"
+      },
+      {
+        "fromSymbol": "verifyGoogleAdsMutationProposalAsync",
+        "toSymbol": "assertProposalIntegrity",
+        "callExpression": "assertProposalIntegrity",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromSymbol": "verifyGoogleAdsMutationProposalAsync",
+        "toSymbol": "hasNoDuplicateAsync",
+        "callExpression": "hasNoDuplicateAsync",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromSymbol": "verifyGoogleAdsMutationProposalAsync",
+        "toSymbol": "hasExpectedBeforeStateAsync",
+        "callExpression": "hasExpectedBeforeStateAsync",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromSymbol": "assertProposalIntegrity",
+        "toSymbol": "createProposalFingerprint",
+        "callExpression": "createProposalFingerprint",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromSymbol": "hasExpectedBeforeStateAsync",
+        "toSymbol": "readResourceAsync",
+        "callExpression": "reads.readResourceAsync",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
+      },
+      {
+        "fromSymbol": "hasNoDuplicateAsync",
+        "toSymbol": "findKeywordDuplicatesAsync",
+        "callExpression": "reads.findKeywordDuplicatesAsync",
+        "sourcePath": "src/features/google-ads/application/verifyGoogleAdsMutationProposalAsync.ts"
       },
       {
         "fromSymbol": "createGoogleAdsProvider",
