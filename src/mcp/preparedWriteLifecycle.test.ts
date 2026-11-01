@@ -166,7 +166,6 @@ function createStore(
         executionClaim: { approvalId, intentId: 'intent-1' },
       });
     },
-    reconcilePreparedWriteAsync: () => Promise.resolve({ outcome: 'indeterminate' as const }),
     settlePreparedWriteAsync: (settlement: McpPreparedWriteSettlement) => {
       state.settlements.push(settlement.outcome);
       return Promise.resolve();
