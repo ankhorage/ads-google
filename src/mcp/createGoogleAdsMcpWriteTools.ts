@@ -15,7 +15,7 @@ import type {
   GoogleAdsProviderConfiguration,
 } from '../types/googleAds.js';
 import {
-  isIndeterminateGoogleAdsMcpOutcome,
+  isExecutedGoogleAdsMcpOutcome,
   isSameGoogleAdsMcpChange,
   toGoogleAdsMcpChangeDescriptor,
 } from './googleAdsMcpToolUtils.js';
@@ -43,9 +43,7 @@ function createWriteTool(input: {
   return {
     accountId: input.accountId,
     auditOutcome: (output: unknown) =>
-      isIndeterminateGoogleAdsMcpOutcome(output)
-        ? ('indeterminate' as const)
-        : ('executed' as const),
+      isExecutedGoogleAdsMcpOutcome(output) ? ('executed' as const) : ('indeterminate' as const),
     description: `Execute one host-approved Google Ads ${input.kind} mutation.`,
     executePreparedWriteAsync: async (
       stored: McpPreparedWriteProposal,
@@ -98,7 +96,7 @@ async function executeStoredGoogleAdsProposalAsync(
   const ports = createGoogleAdsRestPorts(configuration);
   return await executePreparedGoogleAdsMutationAsync({
     mutations: ports,
-    proposal: parseStoredGoogleAdsProposal(stored, kind),
+    proposal: parseStoredGoogleAdsProposal(stored, kind, configuration),
     reads: ports,
   });
 }
@@ -113,7 +111,7 @@ async function verifyStoredGoogleAdsProposalAsync(
   assertExecutionClaim(context);
   const ports = createGoogleAdsRestPorts(configuration);
   return await verifyGoogleAdsMutationProposalAsync({
-    proposal: parseStoredGoogleAdsProposal(stored, kind),
+    proposal: parseStoredGoogleAdsProposal(stored, kind, configuration),
     reads: ports,
   });
 }
@@ -135,6 +133,7 @@ function toMcpPreparedWrite(proposal: GoogleAdsMutationProposal): McpPreparedWri
 function parseStoredGoogleAdsProposal(
   stored: McpPreparedWriteProposal,
   operation: GoogleAdsMutation['kind'],
+  configuration: GoogleAdsProviderConfiguration,
 ): GoogleAdsMutationProposal {
   if (
     stored.operation !== operation ||
@@ -144,7 +143,7 @@ function parseStoredGoogleAdsProposal(
   const envelope = parsePreparedPayload(stored.payload.serialized);
   if (envelope.version !== GOOGLE_ADS_PREPARED_WRITE_VERSION)
     throw new Error('Google Ads prepared write payload version is invalid.');
-  assertOriginalProposal(envelope.proposal, stored, operation);
+  assertOriginalProposal(envelope.proposal, stored, operation, configuration);
   return envelope.proposal;
 }
 /*** Parse only the versioned serialized payload produced by this integration. */
@@ -170,10 +169,13 @@ function assertOriginalProposal(
   proposal: GoogleAdsMutationProposal,
   stored: McpPreparedWriteProposal,
   operation: GoogleAdsMutation['kind'],
+  configuration: GoogleAdsProviderConfiguration,
 ): void {
   const { fingerprint: _, ...immutableProposal } = proposal;
   if (
+    proposal.fingerprint !== stored.fingerprint ||
     proposal.fingerprint !== createProposalFingerprint(immutableProposal) ||
+    proposal.accountId !== configuration.allowedCustomerId ||
     proposal.accountId !== stored.accountId ||
     proposal.createdAt !== stored.createdAt ||
     proposal.mutation.kind !== operation ||

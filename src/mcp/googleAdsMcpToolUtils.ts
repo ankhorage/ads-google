@@ -21,11 +21,11 @@ export function isSameGoogleAdsMcpChange(
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-/** Identify the only non-terminal provider result that must be reconciliation-only. */
-export function isIndeterminateGoogleAdsMcpOutcome(value: unknown): boolean {
+/** Recognize only the exact post-read-back evidence result as a successful provider execution. */
+export function isExecutedGoogleAdsMcpOutcome(value: unknown): boolean {
   return (
     typeof value === 'object' &&
     value !== null &&
-    (value as { outcome?: unknown }).outcome === 'indeterminate'
+    (value as { outcome?: unknown }).outcome === 'executed'
   );
 }
