@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "adapter",
+  "title": "Ankhorage Google Ads Provider",
+  "summary": "Google Ads provider for account-scoped reads and externally approved, durable mutations.",
+  "purpose": "Connect Google Ads to Ankhorage workflows while keeping every mutation reviewable, explicitly approved, retry-safe, and reconcilable.",
+  "domain": "Google Ads integration",
+  "responsibilities": [
+    "Create provider instances for Google Ads reads and mutations.",
+    "Prepare mutation proposals before execution.",
+    "Persist, claim, execute, and reconcile approved mutation attempts.",
+    "Expose the provider through the published MCP integration boundary."
+  ],
+  "boundaries": [
+    "Does not autonomously approve or execute unapproved advertising changes.",
+    "Does not own generic MCP hosting or approval policy.",
+    "Does not expose provider credentials or raw provider failures through portable results."
+  ],
+  "audience": [
+    "Applications and automation that need governed access to Google Ads accounts.",
+    "Operators reviewing and approving proposed Google Ads mutations."
+  ],
+  "useCases": [
+    "Read account-scoped Google Ads data through a configured transport.",
+    "Prepare a campaign mutation for external review.",
+    "Execute or reconcile a previously approved mutation without duplicate effects."
+  ],
+  "architecture": {
+    "role": "Provider adapter whose Google-specific transport and authentication sit outside approval-oriented application operations.",
+    "invariants": [
+      "A mutation crosses the provider boundary only after an explicit approval fact.",
+      "Durable claims and reconciliation make retried mutation processing observable and bounded."
+    ]
+  },
+  "constraints": {
+    "configuration": [
+      "Requires Google authentication and account-scoped transport configuration supplied by the host."
+    ],
+    "security": [
+      "Mutations require external approval and must not leak credentials or raw provider error payloads."
+    ]
+  }
+}
